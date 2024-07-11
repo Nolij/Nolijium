@@ -1,11 +1,17 @@
 package dev.nolij.nolijium.mixin.neoforge;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.nolij.nolijium.impl.Nolijium;
+import dev.nolij.nolijium.impl.util.RGBHelper;
 import dev.nolij.nolijium.neoforge.NolijiumNeoForge;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -34,6 +40,28 @@ public class LevelRendererMixin {
 		
 		if (NolijiumNeoForge.blockedParticleTypeIDs.contains(key))
 			cir.setReturnValue(null);
+	}
+	
+	@WrapOperation(
+		method = "renderHitOutline", 
+		at = @At(
+			value = "INVOKE", 
+			target = "Lnet/minecraft/client/renderer/LevelRenderer;renderShape(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraft/world/phys/shapes/VoxelShape;DDDFFFF)V"
+		)
+	)
+	public void nolijium$renderHitOutline$renderShape(PoseStack poseStack, VertexConsumer vertexConsumer, VoxelShape shape, double x, double y, double z, float red, float green, float blue, float alpha, Operation<Void> original) {
+		if (Nolijium.config.enableChromaBlockOutlines) {
+			final double timestamp = System.nanoTime() * 1E-9D;
+			
+			red = (float) RGBHelper.chromaRed(timestamp, Nolijium.config.chromaSpeed, 0);
+			green = (float) RGBHelper.chromaGreen(timestamp, Nolijium.config.chromaSpeed, 0);
+			blue = (float) RGBHelper.chromaBlue(timestamp, Nolijium.config.chromaSpeed, 0);
+			alpha = 1F;
+		} else if (Nolijium.config.enableOpaqueBlockOutlines) {
+			alpha = 1F;
+		}
+		
+		original.call(poseStack, vertexConsumer, shape, x, y, z, red, green, blue, alpha);
 	}
 	
 }

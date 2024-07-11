@@ -4,6 +4,7 @@ import dev.nolij.nolijium.impl.INolijiumImplementation;
 import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.config.NolijiumConfigImpl;
 import dev.nolij.nolijium.impl.util.MethodHandleHelper;
+import dev.nolij.nolijium.impl.util.RGBHelper;
 import dev.nolij.nolijium.integration.embeddium.NolijiumEmbeddiumConfigScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.toasts.AdvancementToast;
@@ -21,6 +22,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import net.neoforged.neoforge.client.event.ToastAddEvent;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
@@ -55,6 +57,7 @@ public class NolijiumNeoForge implements INolijiumImplementation {
 		
 		modEventBus.addListener(this::onRegisterGuiLayers);
 		NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, this::onAddToast);
+		NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::onRenderToolTip);
 		
 		if (METHOD_HANDLE_HELPER.getClassOrNull("org.embeddedt.embeddium.api.OptionGUIConstructionEvent") != null)
 			new NolijiumEmbeddiumConfigScreen();
@@ -92,6 +95,18 @@ public class NolijiumNeoForge implements INolijiumImplementation {
 			case TutorialToast tutorialToast -> event.setCanceled(Nolijium.config.hideTutorialToasts);
 			default -> {}
 		}
+	}
+	
+	private void onRenderToolTip(RenderTooltipEvent.Color event) {
+		if (!Nolijium.config.enableChromaToolTips)
+			return;
+		
+		final double timestamp = System.nanoTime() * 1E-9D;
+		
+		event.setBorderStart(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, 2));
+		event.setBorderEnd(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, 1));
+		event.setBackgroundStart(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, 2, 0.25D));
+		event.setBackgroundEnd(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, 1, 0.25D));
 	}
 	
 }

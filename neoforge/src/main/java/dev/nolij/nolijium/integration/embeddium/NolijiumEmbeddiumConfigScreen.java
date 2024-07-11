@@ -43,6 +43,7 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 		final List<OptionGroup> utilitiesPage = new ArrayList<>();
 		final List<OptionGroup> togglesPage = new ArrayList<>();
 		final List<OptionGroup> particlesPage = new ArrayList<>();
+		final List<OptionGroup> chromaPage = new ArrayList<>();
 		
 		utilitiesPage.add(OptionGroup.createBuilder()
 			.setId(id("utilities"))
@@ -195,6 +196,13 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 					config -> config.revertDamageCameraTilt)
 				.build())
 			.add(OptionImpl.createBuilder(boolean.class, storage)
+				.setId(id("enable_opaque_block_outlines", boolean.class))
+				.setControl(TickBoxControl::new)
+				.setBinding(
+					(config, value) -> config.enableOpaqueBlockOutlines = value,
+					config -> config.enableOpaqueBlockOutlines)
+				.build())
+			.add(OptionImpl.createBuilder(boolean.class, storage)
 				.setId(id("disable_block_animations", boolean.class))
 				.setControl(TickBoxControl::new)
 				.setBinding(
@@ -285,6 +293,32 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 		
 		particlesPage.add(particlesByIdBuilder.build());
 		
+		chromaPage.add(OptionGroup.createBuilder()
+			.setId(id("chroma"))
+			.add(OptionImpl.createBuilder(int.class, storage)
+				.setId(id("chroma_speed", int.class))
+				.setControl(option -> 
+					new SliderControl(option, 1, 30, 1, v -> Component.literal("%.1f".formatted(v * 0.1D))))
+				.setBinding(
+					(config, value) -> config.chromaSpeed = value * 0.1D,
+					config -> (int) (config.chromaSpeed * 10))
+				.build())
+			.add(OptionImpl.createBuilder(boolean.class, storage)
+				.setId(id("enable_chroma_block_outlines", boolean.class))
+				.setControl(TickBoxControl::new)
+				.setBinding(
+					(config, value) -> config.enableChromaBlockOutlines = value,
+					config -> config.enableChromaBlockOutlines)
+				.build())
+			.add(OptionImpl.createBuilder(boolean.class, storage)
+				.setId(id("enable_chroma_tooltips", boolean.class))
+				.setControl(TickBoxControl::new)
+				.setBinding(
+					(config, value) -> config.enableChromaToolTips = value,
+					config -> config.enableChromaToolTips)
+				.build())
+			.build());
+		
 		event.getPages().add(new OptionPage(
 			id("utilities"),
 			Component.translatable("nolijium.utilities"),
@@ -299,6 +333,11 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 			id("particles"),
 			Component.translatable("nolijium.particles"),
 			ImmutableList.copyOf(particlesPage)
+		));
+		event.getPages().add(new OptionPage(
+			id("chroma"),
+			Component.translatable("nolijium.chroma"),
+			ImmutableList.copyOf(chromaPage)
 		));
 	}
 	

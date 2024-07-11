@@ -20,100 +20,155 @@ public class NolijiumConfigImpl implements Cloneable {
 	
 	//region Options
 	@ZsonField(comment = """
+		Removes darkness and all client-side lighting calculations, resulting in a decent performance boost on some systems.
+		May cause issues with shaders, dynamic lighting, and light overlay mods.
 		DEFAULT: `false`""")
 	public boolean enableGamma = false;
 	
 	@ZsonField(comment = """
-		DEFAULT: `false`""")
-	public boolean hideAllToasts = false;
-	
-	@ZsonField(comment = """
-		DEFAULT: `false`""")
-	public boolean hideAdvancementToasts = false;
-	
-	@ZsonField(comment = """
-		DEFAULT: `false`""")
-	public boolean hideRecipeToasts = false;
-	
-	@ZsonField(comment = """
-		DEFAULT: `false`""")
-	public boolean hideSystemToasts = false;
-	
-	@ZsonField(comment = """
-		DEFAULT: `false`""")
-	public boolean hideTutorialToasts = false;
-	
-	@ZsonField(comment = """
-		DEFAULT: `false`""")
-	public boolean hideParticles = false;
-	
-	@ZsonField(comment = """
-		DEFAULT: `[ ]`""")
-	public ArrayList<String> hideParticlesByID = new ArrayList<>();
-	
-	@ZsonField(comment = """
-		DEFAULT: `false`""")
-	public boolean disableTextureAnimations = false;
-	
-	@ZsonField(comment = """
-		DEFAULT: `false`""")
-	public boolean revertDamageCameraTilt = false;
-	
-	@ZsonField(comment = """
+		Changes the number of messages kept in chat history (100 in vanilla).
 		DEFAULT: `100`""")
 	public int maxChatHistory = 100;
 	
 	@ZsonField(comment = """
+		If enabled, a HUD will be drawn on the screen showing useful performance statistics.
 		DEFAULT: `false`""")
 	public boolean hudEnabled = false;
 	
 	@ZsonField(comment = """
+		The horizontal alignment of the HUD.
+		OPTIONS: `LEFT`, `RIGHT`
 		DEFAULT: `LEFT`""")
 	public Alignment.X hudAlignmentX = Alignment.X.LEFT;
 	
 	@ZsonField(comment = """
+		The vertical alignment of the HUD.
+		OPTIONS: `TOP`, `BOTTOM`
 		DEFAULT: `TOP`""")
 	public Alignment.Y hudAlignmentY = Alignment.Y.TOP;
 	
 	@ZsonField(comment = """
+		The HUD will be offset this many pixels horizontally from the screen edge.
 		DEFAULT: `5`""")
 	public int hudMarginX = 5;
 	
 	@ZsonField(comment = """
+		The HUD will be offset this many pixels vertically from the screen edge.
 		DEFAULT: `5`""")
 	public int hudMarginY = 5;
 	
 	@ZsonField(comment = """
+		If enabled, a background will be drawn behind HUD text.
 		DEFAULT: `true`""")
 	public boolean hudBackground = true;
 	
 	@ZsonField(comment = """
+		If enabled, HUD text will be drawn with a shadow.
 		DEFAULT: `true`""")
 	public boolean hudShadow = true;
 	
 	@ZsonField(comment = """
+		The HUD refresh rate (in ticks). `0` will refresh it every frame.
+		Lower values may reduce performance.
 		DEFAULT: `5`""")
 	public int hudRefreshRateTicks = 5;
 	
 	@ZsonField(comment = """
+		Determines much information about FPS should be displayed in the HUD.
+		OPTIONS:
+			`NONE`: No FPS information will be displayed in the HUD.
+			`SIMPLE`: HUD will display a simple, accurate FPS value.
+			`EXTENDED`: HUD will display FPS, as well as a MIN (0.1% low), MAX (high), and AVG (average) FPS value.
 		DEFAULT: `SIMPLE`""")
 	public DetailLevel hudShowFPS = DetailLevel.SIMPLE;
 	
 	@ZsonField(comment = """
+		The amount of frame time history to keep (in seconds).
+		Larger values will result in smoother average values, at the cost of higher memory usage if average FPS is very high.
+		Only applicable if `hudShowFPS` is set to `EXTENDED`.
 		DEFAULT: `10.0`""")
 	public double hudFrameTimeBufferSize = 10D;
 	
 	@ZsonField(comment = """
+		If enabled, the HUD will show CPU usage.
 		DEFAULT: `false`""")
 	public boolean hudShowCPU = false;
 	
 	@ZsonField(comment = """
+		If enabled, the HUD will show Memory usage.
 		DEFAULT: `false`""")
 	public boolean hudShowMemory = false;
 	
 	@ZsonField(comment = """
+		If enabled, the HUD will show the player's coordinates.
 		DEFAULT: `false`""")
 	public boolean hudShowCoordinates = false;
+	
+	@ZsonField(comment = """
+		Reverts the fix for MC-26678.
+		DEFAULT: `false`""")
+	public boolean revertDamageCameraTilt = false;
+	
+	@ZsonField(comment = """
+		Removes transparency from block outlines.
+		DEFAULT: `false`""")
+	public boolean enableOpaqueBlockOutlines = false;
+	
+	@ZsonField(comment = """
+		Disables animations for water, lava, fire, etc.
+		DEFAULT: `false`""")
+	public boolean disableTextureAnimations = false;
+	
+	@ZsonField(comment = """
+		Disables all toast messages.
+		DEFAULT: `false`""")
+	public boolean hideAllToasts = false;
+	
+	@ZsonField(comment = """
+		Disables toast messages for receiving Advancements.
+		DEFAULT: `false`""")
+	public boolean hideAdvancementToasts = false;
+	
+	@ZsonField(comment = """
+		Disables toast messages for unlocking Recipes.
+		DEFAULT: `false`""")
+	public boolean hideRecipeToasts = false;
+	
+	@ZsonField(comment = """
+		Disables toasts for System messages.
+		DEFAULT: `false`""")
+	public boolean hideSystemToasts = false;
+	
+	@ZsonField(comment = """
+		Disables the Tutorial.
+		DEFAULT: `false`""")
+	public boolean hideTutorialToasts = false;
+	
+	@ZsonField(comment = """
+		Prevents all particles from rendering.
+		DEFAULT: `false`""")
+	public boolean hideParticles = false;
+	
+	@ZsonField(comment = """
+		Prevents specific particles from rendering based on their ID. For example, `minecraft:block`.
+		Also supports modded particles.
+		DEFAULT: `[ ]`""")
+	public ArrayList<String> hideParticlesByID = new ArrayList<>();
+	
+	@ZsonField(comment = """
+		Higher values cycle faster. Lower values cycle slower.
+		DEFAULT: `0.5`""")
+	public double chromaSpeed = 0.5D;
+	
+	@ZsonField(comment = """
+		Enable Chroma on block outlines.
+		DEFAULT: `false`""")
+	public boolean enableChromaBlockOutlines = false;
+	
+	@ZsonField(comment = """
+		Enable Chroma on tooltip outlines.
+		DEFAULT: `false`""")
+	public boolean enableChromaToolTips = false;
 	//endregion
 	
 	private static final int EXPECTED_VERSION = 1;
