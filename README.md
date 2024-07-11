@@ -16,8 +16,8 @@ A collection of various QoL enhancements with (optional) Embeddium support and i
 A: Inspiration was taken from a few sources, but 100% of the code in this mod was written by me. The only parts of 
 this mod that were not entirely written by me are the parts of [Zume](https://github.com/Nolij/Zume)'s buildscript 
 contributed by @rhysdh540, which I used for the buildscript of this mod, and the icon, which 100% of the credit for 
-goes to the amazing @CelestialAbyss, who also made the equally amazing icons for [Embeddium](https://github.
-com/embeddedt/embeddium) and [TauMC](https://github.com/TauMC).
+goes to the amazing @CelestialAbyss, who also made the equally amazing icons for [Embeddium](https://github.com/embeddedt/embeddium)
+and [TauMC](https://github.com/TauMC).
 
 #### Q: Where is the config?
 
