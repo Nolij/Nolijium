@@ -433,6 +433,8 @@ afterEvaluate {
                 projectId = "KstN3eSL"
 
                 minecraftVersions.add("1.21")
+
+	            optional("zume", "embeddium")
             }
 
             curseforge {
@@ -442,6 +444,8 @@ afterEvaluate {
                 projectSlug = "nolijium"
 
 	            minecraftVersions.add("1.21")
+	            
+	            optional("zume", "embeddium")
             }
 
             discord {
