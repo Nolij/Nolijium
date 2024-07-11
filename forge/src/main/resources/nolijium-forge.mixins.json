@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.nolij.nolijium.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "forge.ChatComponentMixin",
+    "forge.GameRendererMixin",
+    "forge.LevelLightEngineMixin",
+    "forge.LevelRendererMixin",
+    "forge.LightTextureMixin",
+    "forge.TextureAtlasMixin",
+    "forge.ToastComponentMixin",
+    "integration.embeddium.EmbeddiumPagesMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+	}
+}

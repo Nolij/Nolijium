@@ -12,4 +12,4 @@ rootProject.name = "nolijium"
 
 include("stubs")
 include("api")
-include("neoforge")
+include("forge")

@@ -95,7 +95,7 @@ fun squishJar(jar: File, jsonProcessing: JsonShrinkingType, mappingsFile: File?)
 
 @Suppress("UNCHECKED_CAST")
 private fun remapMixinConfig(bytes: ByteArray, mappings: MemoryMappingTree): ByteArray {
-	val json = (JsonSlurper().parse(bytes) as Map<String, Any>).toMutableMap()
+	val json = if (bytes.isEmpty()) (hashMapOf()) else (JsonSlurper().parse(bytes) as Map<String, Any>).toMutableMap()
 	if (json.containsKey("plugin")) {
 		val old = json["plugin"] as String
 		val obf = mappings.obfuscate(old)
