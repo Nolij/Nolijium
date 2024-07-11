@@ -4,6 +4,8 @@ import org.jetbrains.annotations.Contract;
 
 public final class MathHelper {
 	
+	private MathHelper() {}
+	
 	@Contract(pure = true)
 	public static int sign(final int input) {
 		return input >> (Integer.SIZE - 1) | 1;

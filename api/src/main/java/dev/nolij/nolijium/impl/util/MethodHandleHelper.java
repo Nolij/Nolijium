@@ -9,7 +9,7 @@ import java.lang.invoke.MethodType;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class MethodHandleHelper {
+public final class MethodHandleHelper {
 	
 	public static final MethodHandleHelper PUBLIC =
 		new MethodHandleHelper(MethodHandleHelper.class.getClassLoader(), MethodHandles.lookup());
