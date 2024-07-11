@@ -1,1 +1,13 @@
+- initial release
+- added gamma brightness
+- added max chat history customization
+- added HUD
+- added accurate & efficient FPS tracking
+- added MC-26678 revert
+- added opaque block outlines
+- added animation toggles
+- added toast toggles
+- added particle toggles
+- added chroma
+- added Embeddium integration
 - further improvements to overall system stability and other minor adjustments have been made to enhance the user experience
