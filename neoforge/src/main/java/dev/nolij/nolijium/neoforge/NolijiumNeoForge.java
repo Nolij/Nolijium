@@ -14,16 +14,19 @@ import net.minecraft.client.gui.components.toasts.TutorialToast;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.EventPriority;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.loading.FMLPaths;
-import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
-import net.neoforged.neoforge.client.event.ToastAddEvent;
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
-import net.neoforged.neoforge.common.NeoForge;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.ConfigScreenHandler;
+import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.client.event.ToastAddEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLLoader;
+import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.lang.invoke.MethodHandles;
 import java.util.Set;
@@ -31,30 +34,35 @@ import java.util.stream.Collectors;
 
 import static dev.nolij.nolijium.impl.NolijiumConstants.*;
 
-@Mod(value = MOD_ID, dist = Dist.CLIENT)
+@Mod(value = MOD_ID)
 public class NolijiumNeoForge implements INolijiumImplementation {
 	
 	private static final MethodHandleHelper METHOD_HANDLE_HELPER =
 		new MethodHandleHelper(NolijiumNeoForge.class.getClassLoader(), MethodHandles.lookup());
 	
-	public NolijiumNeoForge(IEventBus modEventBus, ModContainer modContainer) {
+	public NolijiumNeoForge() {
+		if(FMLLoader.getDist() != Dist.CLIENT) {
+			return;
+		}
+		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		ModContainer modContainer = ModList.get().getModContainerById(MOD_ID).orElseThrow();
 		Nolijium.LOGGER.info("Loading Nolijium...");
 		
 		modContainer.registerExtensionPoint(
-			IConfigScreenFactory.class, 
-			(minecraft, parent) -> 
+			ConfigScreenHandler.ConfigScreenFactory.class,
+			() -> new ConfigScreenHandler.ConfigScreenFactory((minecraft, parent) -> 
 				new Screen(Component.empty()) {
 					@Override
 					protected void init() {
 						NolijiumConfigImpl.openConfigFile();
 						Minecraft.getInstance().setScreen(parent);
 					}
-				});
+				}));
 		
 		Nolijium.registerImplementation(this, FMLPaths.CONFIGDIR.get());
 		
 		modEventBus.addListener(this::onRegisterGuiLayers);
-		NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, this::onAddToast);
+		MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, this::onAddToast);
 		
 		if (METHOD_HANDLE_HELPER.getClassOrNull("org.embeddedt.embeddium.api.OptionGUIConstructionEvent") != null)
 			new NolijiumEmbeddiumConfigScreen();
@@ -66,12 +74,12 @@ public class NolijiumNeoForge implements INolijiumImplementation {
 	public void onConfigReload(NolijiumConfigImpl config) {
 		blockedParticleTypeIDs = config.hideParticlesByID
 			.stream()
-			.map(ResourceLocation::parse)
+			.map(ResourceLocation::new)
 			.collect(Collectors.toUnmodifiableSet());
 	}
 	
-	private void onRegisterGuiLayers(RegisterGuiLayersEvent event) {
-		event.registerAboveAll(ResourceLocation.fromNamespaceAndPath(MOD_ID, "hud"), new NolijiumHUDRenderLayer());
+	private void onRegisterGuiLayers(RegisterGuiOverlaysEvent event) {
+		event.registerAboveAll("hud", new NolijiumHUDRenderLayer());
 	}
 	
 	private void onAddToast(ToastAddEvent event) {
@@ -85,12 +93,14 @@ public class NolijiumNeoForge implements INolijiumImplementation {
 		
 		final Toast toast = event.getToast();
 		
-		switch (toast) {
-			case AdvancementToast advancementToast -> event.setCanceled(Nolijium.config.hideAdvancementToasts);
-			case RecipeToast recipeToast -> event.setCanceled(Nolijium.config.hideRecipeToasts);
-			case SystemToast systemToast -> event.setCanceled(Nolijium.config.hideSystemToasts);
-			case TutorialToast tutorialToast -> event.setCanceled(Nolijium.config.hideTutorialToasts);
-			default -> {}
+		if(toast instanceof AdvancementToast) {
+			event.setCanceled(Nolijium.config.hideAdvancementToasts);
+		} else if(toast instanceof RecipeToast) {
+			event.setCanceled(Nolijium.config.hideRecipeToasts);
+		} else if(toast instanceof SystemToast) {
+			event.setCanceled(Nolijium.config.hideSystemToasts);
+		} else if(toast instanceof TutorialToast) {
+			event.setCanceled(Nolijium.config.hideTutorialToasts);
 		}
 	}
 	

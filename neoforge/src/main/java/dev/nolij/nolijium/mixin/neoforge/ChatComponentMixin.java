@@ -10,9 +10,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 public class ChatComponentMixin {
 	
 	@ModifyConstant(method = {
-			"addMessageToDisplayQueue", 
-			"addMessageToQueue",
-			"addRecentChat",
+			"addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;ILnet/minecraft/client/GuiMessageTag;Z)V"
 		}, constant = @Constant(intValue = 100))
 	public int nolijium$MAX_CHAT_HISTORY(int constant) {
 		return Nolijium.config.maxChatHistory > 0 

@@ -2,7 +2,7 @@ package dev.nolij.nolijium.integration.embeddium;
 
 import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.config.NolijiumConfigImpl;
-import org.embeddedt.embeddium.api.options.structure.OptionStorage;
+import me.jellysquid.mods.sodium.client.gui.options.storage.OptionStorage;
 
 public class NolijiumOptionsStorage implements OptionStorage<NolijiumConfigImpl> {
 	

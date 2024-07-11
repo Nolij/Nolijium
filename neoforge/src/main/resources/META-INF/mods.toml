@@ -1,10 +1,7 @@
 modLoader="javafml"
-loaderVersion="[1,)"
+loaderVersion="[47,48)"
 license="OSL-3.0"
 issueTrackerURL="${issue_url}"
-
-[[mixins]]
-config="nolijium-neoforge.mixins.json"
 
 [[mods]]
 modId="nolijium"
@@ -18,22 +15,22 @@ ${mod_description}
 """
 
 [[dependencies.nolijium]]
-modId="neoforge"
-type="required"
+modId="forge"
+mandatory=true
 versionRange="${neoforge_neoforge_range}"
 ordering="NONE"
 side="CLIENT"
 
 [[dependencies.nolijium]]
 modId="minecraft"
-type="required"
+mandatory=true
 versionRange="${neoforge_minecraft_range}"
 ordering="NONE"
 side="CLIENT"
 
 [[dependencies.nolijium]]
 modId="embeddium"
-type="optional"
+mandatory=false
 versionRange="${embeddium_range}"
 ordering="AFTER"
 side="CLIENT"

@@ -164,10 +164,10 @@ allprojects {
     tasks.withType<JavaCompile> {
         if (name !in arrayOf("compileMcLauncherJava", "compilePatchedMcJava")) {
             options.encoding = "UTF-8"
-            sourceCompatibility = "21"
-            options.release = 21
+            sourceCompatibility = "17"
+            options.release = 17
             javaCompiler = javaToolchains.compilerFor {
-                languageVersion = JavaLanguageVersion.of(21)
+                languageVersion = JavaLanguageVersion.of(17)
             }
             options.compilerArgs.addAll(arrayOf("-Xplugin:Manifold no-bootstrap"))
         }
@@ -195,7 +195,7 @@ allprojects {
             .mapValues { entry -> entry.value as String })
         props["mod_version"] = ZumeGradle.version
 
-        filesMatching(immutableListOf("fabric.mod.json", "META-INF/neoforge.mods.toml")) {
+        filesMatching(immutableListOf("fabric.mod.json", "META-INF/mods.toml")) {
             expand(props)
         }
     }
@@ -217,7 +217,7 @@ subprojects {
     }
 
     dependencies {
-        implementation("dev.nolij:zson:${"zson_version"()}")
+        implementation("dev.nolij:zson:${"zson_version"()}:downgraded-17")
     }
 
     if (implName in uniminedImpls) {
@@ -270,7 +270,7 @@ unimined.minecraft {
 
     runs.off = true
 
-    neoForge {
+    minecraftForge {
         loader("neoforge_version"())
     }
 
@@ -432,7 +432,7 @@ afterEvaluate {
                 accessToken = providers.environmentVariable("MODRINTH_TOKEN")
                 projectId = "KstN3eSL"
 
-                minecraftVersions.add("1.21")
+                minecraftVersions.add("1.20.1")
             }
 
             curseforge {
@@ -441,7 +441,7 @@ afterEvaluate {
                 projectId = "969602"
                 projectSlug = "nolijium"
 
-	            minecraftVersions.add("1.21")
+	            minecraftVersions.add("1.20.1")
             }
 
             discord {

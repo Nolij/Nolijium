@@ -6,19 +6,19 @@ import dev.nolij.nolijium.impl.util.Alignment;
 import dev.nolij.nolijium.impl.util.DetailLevel;
 import dev.nolij.nolijium.impl.util.MathHelper;
 import dev.nolij.nolijium.impl.util.SlidingLongBuffer;
-import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
+import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NolijiumHUDRenderLayer implements LayeredDraw.Layer {
+public class NolijiumHUDRenderLayer implements IGuiOverlay {
 	
 	private static final boolean DEBUG = false;
 	
@@ -220,11 +220,11 @@ public class NolijiumHUDRenderLayer implements LayeredDraw.Layer {
 		return 
 			!Nolijium.config.hudEnabled ||
 			Minecraft.getInstance().options.hideGui ||
-			(Nolijium.config.hudAlignmentY == Alignment.Y.TOP && Minecraft.getInstance().getDebugOverlay().showDebugScreen());
+			(Nolijium.config.hudAlignmentY == Alignment.Y.TOP && Minecraft.getInstance().options.renderDebug);
 	}
 	
 	@Override
-	public void render(@NotNull GuiGraphics guiGraphics, @NotNull DeltaTracker deltaTracker) {
+	public void render(@NotNull ForgeGui gui, @NotNull GuiGraphics guiGraphics, float tick, int mouseX, int mouseY) {
 		if (isHidden())
 			return;
 		
