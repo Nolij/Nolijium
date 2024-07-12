@@ -39,6 +39,8 @@
 	"nolijium.toggles": "Toggles",
 	"nolijium.options.revert_damage_camera_tilt.name": "Revert Damage Tilt Fix",
 	"nolijium.options.revert_damage_camera_tilt.tooltip": "Reverts the fix for MC-26678.",
+	"nolijium.options.revert_potions.name": "Revert Potions",
+	"nolijium.options.revert_potions.tooltip": "Restores potions effects to their original form.\nRe-joining the server in multiplayer or closing and opening the world in singleplayer may be necessary to affect particles.",
 	"nolijium.options.enable_opaque_block_outlines.name": "Enable Opaque Block Outlines",
 	"nolijium.options.enable_opaque_block_outlines.tooltip": "Removes transparency from block outlines.",
 	"nolijium.options.disable_block_animations.name": "Disable Texture Animations",

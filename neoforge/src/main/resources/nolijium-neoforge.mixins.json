@@ -9,6 +9,8 @@
 		"neoforge.LevelLightEngineMixin",
 		"neoforge.LevelRendererMixin",
 		"neoforge.LightTextureMixin",
+		"neoforge.MobEffectMixin",
+		"neoforge.PotionItemMixin",
 		"neoforge.TextureAtlasMixin"
 	],
 	"injectors": {

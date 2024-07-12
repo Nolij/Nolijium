@@ -196,6 +196,13 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 					config -> config.revertDamageCameraTilt)
 				.build())
 			.add(OptionImpl.createBuilder(boolean.class, storage)
+				.setId(id("revert_potions", boolean.class))
+				.setControl(TickBoxControl::new)
+				.setBinding(
+					(config, value) -> config.revertPotions = value,
+					config -> config.revertPotions)
+				.build())
+			.add(OptionImpl.createBuilder(boolean.class, storage)
 				.setId(id("enable_opaque_block_outlines", boolean.class))
 				.setControl(TickBoxControl::new)
 				.setBinding(

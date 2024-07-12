@@ -110,6 +110,12 @@ public class NolijiumConfigImpl implements Cloneable {
 	public boolean revertDamageCameraTilt = false;
 	
 	@ZsonField(comment = """
+		Restores potions effects to their original form.
+		Re-joining the server in multiplayer or closing and opening the world in singleplayer may be necessary to affect particles.
+		DEFAULT: `false`""")
+	public boolean revertPotions = false;
+	
+	@ZsonField(comment = """
 		Removes transparency from block outlines.
 		DEFAULT: `false`""")
 	public boolean enableOpaqueBlockOutlines = false;
