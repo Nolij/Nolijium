@@ -64,18 +64,17 @@ public class NolijiumHUDRenderLayer implements LayeredDraw.Layer {
 	private void resizeFrameTimeBuffer() {
 		lastResizeTimestamp = System.nanoTime();
 		
-		if (!frameTimeBuffer.isFull())
+		if (frameTimeBuffer.isEmpty())
 			return;
 		
 		var duration = 0L;
-		
 		for (int i = 0; i < frameTimeBuffer.size(); i++) {
 			duration += frameTimeBuffer.get(i);
 		}
 		
 		final long target = (long) (Nolijium.config.hudFrameTimeBufferSize * 1E9);
 		final int newSize = (int) MathHelper.clamp(
-			(frameTimeBuffer.maxSize() * (double) target / duration),
+			(frameTimeBuffer.size() * (double) target / duration),
 			FRAME_TIME_BUFFER_SIZE_MIN,
 			FRAME_TIME_BUFFER_SIZE_MAX);
 		
