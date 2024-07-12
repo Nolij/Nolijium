@@ -1,9 +1,10 @@
 - initial release
-- added gamma brightness
+- added fullbright
 - added max chat history customization
 - added HUD
 - added accurate & efficient FPS tracking
 - added MC-26678 revert
+- added potion revert
 - added opaque block outlines
 - added animation toggles
 - added toast toggles
