@@ -12,4 +12,6 @@ rootProject.name = "nolijium"
 
 include("stubs")
 include("api")
+include("common")
 include("neoforge")
+include("lexforge20")

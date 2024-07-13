@@ -3,6 +3,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import dev.nolij.zumegradle.DeflateAlgorithm
 import dev.nolij.zumegradle.JsonShrinkingType
 import dev.nolij.zumegradle.MixinConfigMergingTransformer
+import dev.nolij.zumegradle.MixinConfigCommonRedirectTransformer
 import dev.nolij.zumegradle.CompressJarTask
 import kotlinx.serialization.encodeToString
 import me.modmuss50.mpp.HttpUtils
@@ -41,7 +42,8 @@ enum class ReleaseChannel(
     DEV_BUILD(
         suffix = "dev",
         deflation = DeflateAlgorithm.SEVENZIP,
-        json = JsonShrinkingType.PRETTY_PRINT
+        json = JsonShrinkingType.PRETTY_PRINT,
+		proguard = true
     ),
     PRE_RELEASE("pre"),
     RELEASE_CANDIDATE("rc"),
@@ -137,7 +139,9 @@ fun arrayOfProjects(vararg projectNames: String): Array<String> {
     return listOf(*projectNames).filter { p -> findProject(p) != null }.toTypedArray()
 }
 val uniminedImpls = arrayOfProjects(
+	"common",
     "neoforge",
+	"lexforge20",
 )
 
 allprojects {
@@ -195,7 +199,7 @@ allprojects {
             .mapValues { entry -> entry.value as String })
         props["mod_version"] = ZumeGradle.version
 
-        filesMatching(immutableListOf("fabric.mod.json", "META-INF/neoforge.mods.toml")) {
+        filesMatching(immutableListOf("fabric.mod.json", "META-INF/neoforge.mods.toml", "META-INF/mods.toml")) {
             expand(props)
         }
     }
@@ -224,59 +228,90 @@ subprojects {
         apply(plugin = "xyz.wagyourtail.unimined")
         apply(plugin = "com.github.johnrengelman.shadow")
 
+	    unimined.footgunChecks = false
+	    
         unimined.minecraft(sourceSets["main"], lateApply = true) {
             combineWith(project(":api").sourceSets.main.get())
 
-            if (implName != "primitive") {
-                runs.config("server") {
-                    disabled = true
-                }
+            runs.config("server") {
+                enabled = false
+            }
 
-                runs.config("client") {
-                    jvmArgs += "-Dnolijium.configPathOverride=${rootProject.file("nolijium.json5").absolutePath}"
-                }
+            runs.config("client") {
+                jvmArguments.add("-Dnolijium.configPathOverride=${rootProject.file("nolijium.json5").absolutePath}")
             }
 
             defaultRemapJar = true
         }
+	    
+	    tasks.jar {
+			duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	    }
 
-        val outputJar = tasks.register<ShadowJar>("outputJar") {
-            group = "build"
+	    if (implName != "common") {
+		    val outputJar = tasks.register<ShadowJar>("outputJar") {
+			    group = "build"
 
-            val remapJarTasks = tasks.withType<RemapJarTask>()
-            dependsOn(remapJarTasks)
-            mustRunAfter(remapJarTasks)
-            remapJarTasks.forEach { remapJar ->
-                remapJar.archiveFile.also { archiveFile ->
-                    from(zipTree(archiveFile))
-                    inputs.file(archiveFile)
-                }
-            }
+			    transform(MixinConfigCommonRedirectTransformer::class.java) {
+				    modId = "mod_id"()
+					this.implName = implName
+				    commonImplName = "common"
+				    packageName = "dev.nolij.nolijium.mixin"
+			    }
+			    
+			    val remapJarTasks = tasks.withType<RemapJarTask>()
+			    dependsOn(remapJarTasks)
+			    mustRunAfter(remapJarTasks)
+			    remapJarTasks.forEach { remapJar ->
+				    remapJar.archiveFile.also { archiveFile ->
+					    from(zipTree(archiveFile)) {
+							rename { fileName ->
+								if (fileName.endsWith(".jar"))
+									return@rename fileName + "_"
+								
+								return@rename fileName
+							}
+					    }
+					    inputs.file(archiveFile)
+				    }
+			    }
 
-            configurations = emptyList()
-            archiveClassifier = "output"
-            isPreserveFileTimestamps = false
-            isReproducibleFileOrder = true
-        }
+			    configurations = emptyList()
+			    archiveClassifier = "output"
+			    isPreserveFileTimestamps = false
+			    isReproducibleFileOrder = true
 
-        tasks.assemble {
-            dependsOn(outputJar)
-        }
+			    relocate("dev.nolij.nolijium.mixin.common", "dev.nolij.nolijium.mixin.${implName}")
+			    relocate("dev.nolij.nolijium.common", "dev.nolij.nolijium.${implName}.common")
+			    
+			    exclude("nolijium-common.mixins.json", "mods.toml", "neoforge.mods.toml")
+		    }
+
+		    tasks.assemble {
+			    dependsOn(outputJar)
+		    }
+	    }
+
+	    tasks.withType<RemapJarTask> {
+		    mixinRemap {
+			    enableMixinExtra()
+			    disableRefmap()
+		    }
+	    }
     }
 }
 
 unimined.minecraft {
-    version("minecraft_version"())
+    version("neoforge21_minecraft_version"())
 
     runs.off = true
 
     neoForge {
-        loader("neoforge_version"())
+        loader("neoforge21_neoforge_version"())
     }
 
     mappings {
         mojmap()
-	    parchment(mcVersion = "minecraft_version"(), version = "parchment_version"())
     }
 
     defaultRemapJar = false
@@ -336,6 +371,7 @@ tasks.shadowJar {
     transform(MixinConfigMergingTransformer::class.java) {
         modId = "mod_id"()
         packageName = "dev.nolij.nolijium.mixin"
+	    mixinPlugin = "dev.nolij.nolijium.NolijiumMixinPlugin"
     }
 
     from("LICENSE") {
@@ -354,11 +390,11 @@ tasks.shadowJar {
     dependsOn(apiJar)
     from(zipTree(apiJar.get().archiveFile.get())) { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
 
-    uniminedImpls.map { project(it).tasks.named<ShadowJar>("outputJar").get() }.forEach { implJarTask ->
+    uniminedImpls.mapNotNull { project(it).tasks.findByName("outputJar") as ShadowJar? }.forEach { implJarTask ->
         dependsOn(implJarTask)
         from(zipTree(implJarTask.archiveFile.get())) {
             duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-            exclude("fabric.mod.json", "pack.mcmeta")
+	        exclude("fabric.mod.json", "mcmod.info", "META-INF/mods.toml", "pack.mcmeta")
         }
     }
 
@@ -366,6 +402,12 @@ tasks.shadowJar {
     if (releaseChannel.proguard) {
         relocate("dev.nolij.nolijium.mixin", "nolijium.mixin")
     }
+	
+	manifest {
+		attributes(
+			"MixinConfigs" to "nolijium.mixins.json"
+		)
+	}
 }
 
 val compressJar = tasks.register<CompressJarTask>("compressJar") {

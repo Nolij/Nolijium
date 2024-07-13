@@ -14,20 +14,21 @@ val mod: Configuration by configurations.creating {
 unimined.minecraft {
 	combineWith(project(":common").sourceSets.main.get())
 	
-	version("neoforge21_minecraft_version"())
+	version("lexforge20_minecraft_version"())
 	
-	neoForge {
-		loader("neoforge21_neoforge_version"())
-		mixinConfig("nolijium-neoforge.mixins.json")
+	runs.config("client") {
+		javaVersion = JavaVersion.VERSION_21
 	}
-
-	source {
-		sourceGenerator.jvmArgs = listOf("-Xmx4G")
+	
+	minecraftForge {
+		loader("lexforge20_lexforge_version"())
+		mixinConfig("nolijium-lexforge20.mixins.json")
 	}
 
 	mappings {
 		mojmap()
-		parchment(mcVersion = "neoforge21_minecraft_version"(), version = "neoforge21_parchment_version"())
+		parchment(mcVersion = "lexforge20_minecraft_version"(), version = "lexforge20_parchment_version"())
+		devFallbackNamespace("official")
 	}
 
 	mods {
@@ -43,13 +44,14 @@ repositories {
 
 dependencies {
 	compileOnly(project(":stubs"))
-	
+
 	minecraftLibraries("dev.nolij:zson:${"zson_version"()}")
 	
-	modCompileOnly("org.embeddedt:embeddium-1.21:${"neoforge21_embeddium_version"()}:api")
-	modRuntimeOnly("org.embeddedt:embeddium-1.21:${"neoforge21_embeddium_version"()}") {
-		isTransitive = false
-	}
+	mod("org.embeddedt:embeddium-1.20.1:${"lexforge20_embeddium_version"()}")
 
-	modRuntimeOnly("dev.nolij:zume:${"zume_version"()}")
+	// breaks NeoForge
+//	"include"("io.github.llamalad7:mixinextras-forge:${"mixinextras_version"()}")
+
+	// Unimined >:(
+//	modRuntimeOnly("dev.nolij:zume:${"zume_version"()}")
 }

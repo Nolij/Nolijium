@@ -1,22 +1,21 @@
-package dev.nolij.nolijium.neoforge;
+package dev.nolij.nolijium.lexforge20;
 
 import dev.nolij.nolijium.common.NolijiumHUD;
 import dev.nolij.nolijium.impl.Nolijium;
-import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.LayeredDraw;
-import org.jetbrains.annotations.NotNull;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
+import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
-public class NolijiumHUDRenderLayer extends NolijiumHUD implements LayeredDraw.Layer {
+public class NolijiumHUDOverlay extends NolijiumHUD implements IGuiOverlay {
 	
 	@Override
 	protected boolean isDebugScreenOpen() {
-		return Minecraft.getInstance().getDebugOverlay().showDebugScreen();
+		return Minecraft.getInstance().options.renderDebug;
 	}
 	
 	@Override
-	public void render(@NotNull GuiGraphics guiGraphics, @NotNull DeltaTracker deltaTracker) {
+	public void render(ForgeGui forgeGui, GuiGraphics guiGraphics, float f, int i, int j) {
 		if (isHidden())
 			return;
 		
@@ -43,5 +42,4 @@ public class NolijiumHUDRenderLayer extends NolijiumHUD implements LayeredDraw.L
 			}
 		});
 	}
-	
 }

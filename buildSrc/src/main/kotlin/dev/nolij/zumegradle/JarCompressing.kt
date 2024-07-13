@@ -64,7 +64,6 @@ fun squishJar(jar: File, jsonProcessing: JsonShrinkingType, mappingsFile: File?)
 	JarOutputStream(jar.outputStream()).use { out ->
 		out.setLevel(Deflater.BEST_COMPRESSION)
 		contents.forEach { var (name, bytes) = it
-
 			if (name.endsWith("mixins.json") && isObfuscating) {
 				bytes = remapMixinConfig(bytes, mappings!!)
 			}
@@ -85,7 +84,10 @@ fun squishJar(jar: File, jsonProcessing: JsonShrinkingType, mappingsFile: File?)
 				bytes = processClassFile(bytes, mappings!!)
 			}
 
-			out.putNextEntry(JarEntry(name))
+			if (name.endsWith(".jar_"))
+				out.putNextEntry(JarEntry(name.removeSuffix("_")))
+			else
+				out.putNextEntry(JarEntry(name))
 			out.write(bytes)
 			out.closeEntry()
 		}
@@ -161,6 +163,11 @@ private fun processClassFile(bytes: ByteArray, mappings: MemoryMappingTree): Byt
 
 	if (classNode.invisibleAnnotations?.any { it.desc == "Lorg/spongepowered/asm/mixin/Mixin;" } == true) {
 		classNode.methods.removeAll { it.name == "<init>" && it.instructions.size() <= 3 } // ALOAD, super(), RETURN
+	}
+	
+	classNode.visibleAnnotations?.removeAll {
+		it.desc == "Lnet/minecraftforge/fml/common/Mod;" &&
+			it.values[it.values.indexOf("value") + 1] == "nolijium_common"
 	}
 
 	val writer = ClassWriter(0)

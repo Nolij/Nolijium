@@ -1,4 +1,4 @@
-package dev.nolij.nolijium.integration.embeddium;
+package dev.nolij.nolijium.neoforge.integration.embeddium;
 
 import com.google.common.collect.ImmutableList;
 import dev.nolij.nolijium.impl.util.Alignment;

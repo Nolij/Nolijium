@@ -3,9 +3,6 @@ loaderVersion="[1,)"
 license="OSL-3.0"
 issueTrackerURL="${issue_url}"
 
-[[mixins]]
-config="nolijium.mixins.json"
-
 [[mods]]
 modId="nolijium"
 version="${mod_version}"
@@ -18,22 +15,29 @@ ${mod_description}
 """
 
 [[dependencies.nolijium]]
-modId="neoforge"
-type="required"
-versionRange="${neoforge21_neoforge_range}"
+modId="forge"
+mandatory=true
+versionRange="${lexforge20_lexforge_range}"
 ordering="NONE"
 side="CLIENT"
 
 [[dependencies.nolijium]]
 modId="minecraft"
-type="required"
-versionRange="${neoforge21_minecraft_range}"
+mandatory=true
+versionRange="${lexforge20_minecraft_range}"
 ordering="NONE"
 side="CLIENT"
 
 [[dependencies.nolijium]]
+modId="mixinextras"
+mandatory=true
+versionRange="${lexforge20_mixinextras_range}"
+ordering="AFTER"
+side="CLIENT"
+
+[[dependencies.nolijium]]
 modId="embeddium"
-type="optional"
-versionRange="${neoforge21_embeddium_range}"
+mandatory=false
+versionRange="${lexforge20_embeddium_range}"
 ordering="AFTER"
 side="CLIENT"

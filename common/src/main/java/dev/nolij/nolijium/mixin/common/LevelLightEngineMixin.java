@@ -1,4 +1,4 @@
-package dev.nolij.nolijium.mixin.neoforge;
+package dev.nolij.nolijium.mixin.common;
 
 import dev.nolij.nolijium.impl.Nolijium;
 import net.minecraft.client.multiplayer.ClientLevel;

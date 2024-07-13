@@ -8,18 +8,18 @@ import org.gradle.api.file.FileTreeElement
 import org.gradle.api.tasks.Input
 import org.apache.tools.zip.ZipOutputStream
 import org.apache.tools.zip.ZipEntry
-import org.gradle.api.tasks.Optional
 
-class MixinConfigMergingTransformer : Transformer {
+class MixinConfigCommonRedirectTransformer : Transformer {
 	
 	private val JSON = JsonSlurper()
 
 	@Input lateinit var modId: String
+	@Input lateinit var implName: String
+	@Input lateinit var commonImplName: String
 	@Input lateinit var packageName: String
-	@Input @Optional var mixinPlugin: String? = null
 
 	override fun getName(): String {
-		return "MixinConfigMergingTransformer"
+		return "MixinConfigCommonRedirectTransformer"
 	}
 
 	override fun canTransformResource(element: FileTreeElement?): Boolean {
@@ -48,7 +48,7 @@ class MixinConfigMergingTransformer : Transformer {
 	}
 
 	override fun modifyOutputStream(os: ZipOutputStream?, preserveFileTimestamps: Boolean) {
-		val mixinConfigEntry = ZipEntry("${modId}.mixins.json")
+		val mixinConfigEntry = ZipEntry("${modId}-${implName}.mixins.json")
 		os!!.putNextEntry(mixinConfigEntry)
 		
 		val mixinConfigJson = mutableMapOf(
@@ -56,14 +56,13 @@ class MixinConfigMergingTransformer : Transformer {
 			"minVersion" to "0.8",
 			"package" to packageName,
 			"compatibilityLevel" to "JAVA_8",
-			"client" to mixins,
+			"client" to mixins
+				.map { it.replaceFirst("${commonImplName}.", "${implName}.") }
+				.toList(),
 			"injectors" to mapOf(
 				"defaultRequire" to 1,
 			)
 		)
-		if (mixinPlugin != null)
-			mixinConfigJson["plugin"] = mixinPlugin!!
-		
 
 		os.write(JsonOutput.prettyPrint(JsonOutput.toJson(mixinConfigJson)).toByteArray())
 

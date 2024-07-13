@@ -1,12 +1,12 @@
-package dev.nolij.nolijium.mixin.neoforge;
+package dev.nolij.nolijium.mixin.common;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import dev.nolij.nolijium.common.NolijiumCommon;
 import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.util.RGBHelper;
-import dev.nolij.nolijium.neoforge.NolijiumNeoForge;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.core.particles.ParticleOptions;
@@ -31,14 +31,14 @@ public class LevelRendererMixin {
 			return;
 		}
 		
-		if (NolijiumNeoForge.blockedParticleTypeIDs.isEmpty())
+		if (NolijiumCommon.blockedParticleTypeIDs.isEmpty())
 			return;
 		
 		var key = BuiltInRegistries.PARTICLE_TYPE.getKey(particleOptions.getType());
 		if (key == null)
 			return;
 		
-		if (NolijiumNeoForge.blockedParticleTypeIDs.contains(key))
+		if (NolijiumCommon.blockedParticleTypeIDs.contains(key))
 			cir.setReturnValue(null);
 	}
 	
