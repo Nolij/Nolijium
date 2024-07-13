@@ -55,7 +55,7 @@ class MixinConfigMergingTransformer : Transformer {
 			"required" to true,
 			"minVersion" to "0.8",
 			"package" to packageName,
-			"compatibilityLevel" to "JAVA_8",
+			"compatibilityLevel" to "JAVA_17",
 			"client" to mixins,
 			"injectors" to mapOf(
 				"defaultRequire" to 1,
