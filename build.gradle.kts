@@ -462,7 +462,7 @@ afterEvaluate {
         version = ZumeGradle.version
         changelog = getChangelog()
 
-        modLoaders.addAll("neoforge")
+        modLoaders.addAll("neoforge", "forge")
         dryRun = !isRelease
 
         github {
@@ -477,6 +477,8 @@ afterEvaluate {
                 accessToken = providers.environmentVariable("MODRINTH_TOKEN")
                 projectId = "KstN3eSL"
 
+	            minecraftVersions.add("1.20.1")
+	            minecraftVersions.add("1.20.4")
                 minecraftVersions.add("1.21")
 
 	            optional("zume", "embeddium")
@@ -487,7 +489,9 @@ afterEvaluate {
                 accessToken = cfAccessToken
                 projectId = "969602"
                 projectSlug = "nolijium"
-
+	            
+	            minecraftVersions.add("1.20.1")
+	            minecraftVersions.add("1.20.4")
 	            minecraftVersions.add("1.21")
 	            
 	            optional("zume", "embeddium")
