@@ -169,17 +169,20 @@ allprojects {
         if (name !in arrayOf("compileMcLauncherJava", "compilePatchedMcJava")) {
             options.encoding = "UTF-8"
             sourceCompatibility = "21"
-            options.release = 21
+            options.release = 17
             javaCompiler = javaToolchains.compilerFor {
                 languageVersion = JavaLanguageVersion.of(21)
             }
-            options.compilerArgs.addAll(arrayOf("-Xplugin:Manifold no-bootstrap"))
+            options.compilerArgs.addAll(arrayOf("-Xplugin:Manifold no-bootstrap", "-Xplugin:jabel"))
         }
     }
 
     dependencies {
         compileOnly("org.jetbrains:annotations:${"jetbrains_annotations_version"()}")
 
+	    annotationProcessor("com.pkware.jabel:jabel-javac-plugin:${"jabel_version"()}")
+	    testAnnotationProcessor("com.pkware.jabel:jabel-javac-plugin:${"jabel_version"()}")
+	    
         compileOnly("systems.manifold:manifold-rt:${"manifold_version"()}")
         annotationProcessor("systems.manifold:manifold-exceptions:${"manifold_version"()}")
 
@@ -323,7 +326,7 @@ val shade: Configuration by configurations.creating {
 }
 
 dependencies {
-    shade("dev.nolij:zson:${"zson_version"()}")
+    shade("dev.nolij:zson:${"zson_version"()}:downgraded-17")
 
     compileOnly("org.apache.logging.log4j:log4j-core:${"log4j_version"()}")
 

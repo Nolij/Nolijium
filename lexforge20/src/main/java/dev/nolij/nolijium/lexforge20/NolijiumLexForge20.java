@@ -72,13 +72,15 @@ public class NolijiumLexForge20 implements INolijiumImplementation {
 		
 		final Toast toast = event.getToast();
 		
-		switch (toast) {
-			case AdvancementToast advancementToast -> event.setCanceled(Nolijium.config.hideAdvancementToasts);
-			case RecipeToast recipeToast -> event.setCanceled(Nolijium.config.hideRecipeToasts);
-			case SystemToast systemToast -> event.setCanceled(Nolijium.config.hideSystemToasts);
-			case TutorialToast tutorialToast -> event.setCanceled(Nolijium.config.hideTutorialToasts);
-			default -> {}
-		}
+		//noinspection IfCanBeSwitch
+		if (toast instanceof AdvancementToast)
+			event.setCanceled(Nolijium.config.hideAdvancementToasts);
+		else if (toast instanceof RecipeToast)
+			event.setCanceled(Nolijium.config.hideRecipeToasts);
+		else if (toast instanceof SystemToast)
+			event.setCanceled(Nolijium.config.hideSystemToasts);
+		else if (toast instanceof TutorialToast)
+			event.setCanceled(Nolijium.config.hideTutorialToasts);
 	}
 	
 	private void onRenderTooltip(RenderTooltipEvent.Color event) {
