@@ -175,6 +175,11 @@ public class NolijiumConfigImpl implements Cloneable {
 		Enable Chroma on tooltip outlines.
 		DEFAULT: `false`""")
 	public boolean enableChromaToolTips = false;
+	
+	@ZsonField(comment = """
+		Enable Chroma on HUD text.
+		DEFAULT: `false`""")
+	public boolean enableChromaHUD = false;
 	//endregion
 	
 	private static final int EXPECTED_VERSION = 1;

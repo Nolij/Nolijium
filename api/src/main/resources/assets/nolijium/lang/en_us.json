@@ -65,5 +65,7 @@
 	"nolijium.options.enable_chroma_block_outlines.name": "Enable Chroma Block Outlines",
 	"nolijium.options.enable_chroma_block_outlines.tooltip": "Enable Chroma on block outlines.",
 	"nolijium.options.enable_chroma_tooltips.name": "Enable Chroma Tool Tips",
-	"nolijium.options.enable_chroma_tooltips.tooltip": "Enable Chroma on tool tips."
+	"nolijium.options.enable_chroma_tooltips.tooltip": "Enable Chroma on tool tips.",
+	"nolijium.options.enable_chroma_hud.name": "Enable Chroma HUD",
+	"nolijium.options.enable_chroma_hud.tooltip": "Enable Chroma on HUD text."
 }

@@ -5,6 +5,7 @@ import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.util.Alignment;
 import dev.nolij.nolijium.impl.util.DetailLevel;
 import dev.nolij.nolijium.impl.util.MathHelper;
+import dev.nolij.nolijium.impl.util.RGBHelper;
 import dev.nolij.nolijium.impl.util.SlidingLongBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -18,13 +19,13 @@ import java.util.List;
 
 public abstract class NolijiumHUD {
 	
-	protected static final boolean DEBUG = false;
+	private static final boolean DEBUG = false;
 	
-	protected static final int TEXT_COLOUR = 0xFFFFFFFF;
-	protected static final int BACKGROUND_COLOUR = 0x90505050;
+	private static final int TEXT_COLOUR = 0xFFFFFFFF;
+	private static final int BACKGROUND_COLOUR = 0x90505050;
 	
-	protected static final Font FONT = Minecraft.getInstance().font;
-	protected static final int LINE_HEIGHT = FONT.lineHeight + 3;
+	private static final Font FONT = Minecraft.getInstance().font;
+	private static final int LINE_HEIGHT = FONT.lineHeight + 3;
 	
 	private static final OperatingSystemMXBean OS_BEAN = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
 	
@@ -36,7 +37,7 @@ public abstract class NolijiumHUD {
 	private long lastUpdateTimestamp = 0L;
 	private int screenWidth = 0, screenHeight = 0;
 	
-	protected static class Line {
+	private static class Line {
 		
 		public String text;
 		public int posX;
@@ -50,9 +51,9 @@ public abstract class NolijiumHUD {
 		
 	}
 	
-	protected List<Line> lines = List.of();
-	protected int posY = 0;
-	protected boolean background = false;
+	private List<Line> lines = List.of();
+	private int posY = 0;
+	private boolean background = false;
 	
 	private final SlidingLongBuffer frameTimeBuffer = new SlidingLongBuffer(FRAME_TIME_BUFFER_SIZE_MIN);
 	private long lastResizeTimestamp = 0L;
@@ -165,35 +166,7 @@ public abstract class NolijiumHUD {
 			.toList();
 	}
 	
-	protected void onFrame(@NotNull GuiGraphics guiGraphics) {
-		screenWidth = guiGraphics.guiWidth();
-		screenHeight = guiGraphics.guiHeight();
-		
-		if (Nolijium.config.hudShowFPS != DetailLevel.NONE) {
-			final long timestamp = System.nanoTime();
-			
-			if (lastFrameTimestamp != 0L) {
-				lastFrameTime = timestamp - lastFrameTimestamp;
-				if (Nolijium.config.hudShowFPS == DetailLevel.EXTENDED) {
-					if (timestamp - lastResizeTimestamp > FRAME_TIME_BUFFER_RESIZE_INTERVAL) {
-						resizeFrameTimeBuffer();
-					}
-					
-					frameTimeBuffer.push(lastFrameTime);
-				}
-			} else {
-				lastResizeTimestamp = System.nanoTime();
-			}
-			
-			lastFrameTimestamp = timestamp;
-		}
-		
-		if (Nolijium.config.hudRefreshRateTicks == 0 ||
-			System.nanoTime() - lastUpdateTimestamp > Nolijium.config.hudRefreshRateTicks * 50E6)
-			update();
-	}
-	
-	protected void update() {
+	private void update() {
 		lastUpdateTimestamp = System.nanoTime();
 		
 		lines = getLines();
@@ -219,11 +192,69 @@ public abstract class NolijiumHUD {
 	
 	protected abstract boolean isDebugScreenOpen();
 	
-	protected boolean isHidden() {
+	private boolean isHidden() {
 		return
 			!Nolijium.config.hudEnabled ||
-			Minecraft.getInstance().options.hideGui ||
-			(Nolijium.config.hudAlignmentY == Alignment.Y.TOP && isDebugScreenOpen());
+				Minecraft.getInstance().options.hideGui ||
+				(Nolijium.config.hudAlignmentY == Alignment.Y.TOP && isDebugScreenOpen());
+	}
+	
+	protected void onFrame(@NotNull GuiGraphics guiGraphics) {
+		if (isHidden())
+			return;
+		
+		screenWidth = guiGraphics.guiWidth();
+		screenHeight = guiGraphics.guiHeight();
+		
+		if (Nolijium.config.hudShowFPS != DetailLevel.NONE) {
+			final long timestamp = System.nanoTime();
+			
+			if (lastFrameTimestamp != 0L) {
+				lastFrameTime = timestamp - lastFrameTimestamp;
+				if (Nolijium.config.hudShowFPS == DetailLevel.EXTENDED) {
+					if (timestamp - lastResizeTimestamp > FRAME_TIME_BUFFER_RESIZE_INTERVAL) {
+						resizeFrameTimeBuffer();
+					}
+					
+					frameTimeBuffer.push(lastFrameTime);
+				}
+			} else {
+				lastResizeTimestamp = System.nanoTime();
+			}
+			
+			lastFrameTimestamp = timestamp;
+		}
+		
+		if (Nolijium.config.hudRefreshRateTicks == 0 ||
+			System.nanoTime() - lastUpdateTimestamp > Nolijium.config.hudRefreshRateTicks * 50E6)
+			update();
+		
+		//noinspection deprecation
+		guiGraphics.drawManaged(() -> {
+			final double timestamp = lastFrameTimestamp * 1E-9D;
+			
+			var linePosY = posY;
+			for (int i = 0; i < lines.size(); i++) {
+				final Line line = lines.get(i);
+				if (!line.text.isEmpty()) {
+					if (background)
+						guiGraphics.fill(
+							line.posX - 2, linePosY,
+							line.posX + line.width + (Nolijium.config.hudShadow ? 2 : 1), linePosY + LINE_HEIGHT,
+							BACKGROUND_COLOUR);
+					
+					guiGraphics.drawString(
+						FONT, line.text,
+						line.posX, linePosY + 2,
+						Nolijium.config.enableChromaHUD 
+							? RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, -i)
+							: TEXT_COLOUR, 
+						Nolijium.config.hudShadow);
+				}
+				
+				linePosY += LINE_HEIGHT;
+			}
+		});
 	}
 	
 }

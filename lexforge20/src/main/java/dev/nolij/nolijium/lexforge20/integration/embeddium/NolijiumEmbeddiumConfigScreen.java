@@ -325,6 +325,14 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 					(config, value) -> config.enableChromaToolTips = value,
 					config -> config.enableChromaToolTips)
 				.build())
+			.add(OptionImpl.createBuilder(boolean.class, storage)
+				.setId(id("enable_chroma_hud", boolean.class))
+				.setControl(TickBoxControl::new)
+				.setBinding(
+					(config, value) -> config.enableChromaHUD = value,
+					config -> config.enableChromaHUD)
+				.setEnabledPredicate(hudEnabledOption::getValue)
+				.build())
 			.build());
 		
 		event.getPages().add(new OptionPage(
