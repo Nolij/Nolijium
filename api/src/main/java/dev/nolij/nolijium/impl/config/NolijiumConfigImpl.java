@@ -277,11 +277,13 @@ public class NolijiumConfigImpl implements Cloneable {
 	private static final Path GLOBAL_CONFIG_PATH;
 	
 	static {
-		final Path dotMinecraft = switch (HOST_PLATFORM) {
-			case LINUX, UNKNOWN -> Paths.get(System.getProperty("user.home"), ".minecraft");
-			case WINDOWS -> Paths.get(System.getenv("APPDATA"), ".minecraft");
-			case MAC_OS -> Paths.get(System.getProperty("user.home"), "Library", "Application Support", "minecraft");
-		};
+		final Path dotMinecraft;
+		if (HOST_PLATFORM == HostPlatform.LINUX || HOST_PLATFORM == HostPlatform.UNKNOWN)
+			dotMinecraft = Paths.get(System.getProperty("user.home"), ".minecraft");
+		else if (HOST_PLATFORM == HostPlatform.WINDOWS)
+			dotMinecraft = Paths.get(System.getenv("APPDATA"), ".minecraft");
+		else
+			dotMinecraft = Paths.get(System.getProperty("user.home"), "Library", "Application Support", "minecraft");
 		
 		GLOBAL_CONFIG_PATH = dotMinecraft.resolve("global");
 		if (Files.notExists(GLOBAL_CONFIG_PATH)) {
