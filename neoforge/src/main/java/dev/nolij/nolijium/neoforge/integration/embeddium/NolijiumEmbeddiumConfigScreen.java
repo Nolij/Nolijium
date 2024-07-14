@@ -47,14 +47,6 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 		
 		utilitiesPage.add(OptionGroup.createBuilder()
 			.setId(id("utilities"))
-			.add(OptionImpl.createBuilder(boolean.class, storage)
-				.setId(id("enable_gamma", boolean.class))
-				.setControl(TickBoxControl::new)
-				.setBinding(
-					(config, value) -> config.enableGamma = value,
-					config -> config.enableGamma
-				)
-				.build())
 			.add(OptionImpl.createBuilder(int.class, storage)
 				.setId(id("max_chat_history", int.class))
 				.setControl(option -> new SliderControl(option, 0, 2000, 100,
