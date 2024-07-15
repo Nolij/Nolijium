@@ -6,11 +6,11 @@
 	"client": [
 		"neoforge.ChatComponentMixin",
 		"common.GameRendererMixin",
+		"common.ItemMixin",
 		"common.LevelLightEngineMixin",
 		"common.LevelRendererMixin",
 		"common.LightTextureMixin",
 		"common.MobEffectMixin",
-		"common.PotionItemMixin",
 		"common.TextureAtlasMixin"
 	],
 	"injectors": {

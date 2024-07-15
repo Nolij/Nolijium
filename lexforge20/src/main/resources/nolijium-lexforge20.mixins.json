@@ -6,11 +6,11 @@
 	"client": [
 		"lexforge20.ChatComponentMixin",
 		"common.GameRendererMixin",
+		"common.ItemMixin",
 		"common.LevelLightEngineMixin",
 		"common.LevelRendererMixin",
 		"common.LightTextureMixin",
 		"common.MobEffectMixin",
-		"common.PotionItemMixin",
 		"common.TextureAtlasMixin"
 	],
 	"injectors": {
