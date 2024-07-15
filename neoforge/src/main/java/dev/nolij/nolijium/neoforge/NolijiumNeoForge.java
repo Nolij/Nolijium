@@ -14,7 +14,6 @@ import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.TutorialToast;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
@@ -28,7 +27,6 @@ import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import net.neoforged.neoforge.client.event.ToastAddEvent;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.entity.living.EffectParticleModificationEvent;
 
 import java.lang.invoke.MethodHandles;
 
@@ -57,7 +55,6 @@ public class NolijiumNeoForge implements INolijiumImplementation {
 		modEventBus.addListener(this::onRegisterGuiLayers);
 		NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::onAddToast);
 		NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::onRenderTooltip);
-		NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::onEffectParticle);
 		
 		if (METHOD_HANDLE_HELPER.getClassOrNull("org.embeddedt.embeddium.api.OptionGUIConstructionEvent") != null)
 			new NolijiumEmbeddiumConfigScreen();
@@ -100,21 +97,4 @@ public class NolijiumNeoForge implements INolijiumImplementation {
 		event.setBackgroundStart(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, 2, 0.25D));
 		event.setBackgroundEnd(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, 1, 0.25D));
 	}
-	
-	private void onEffectParticle(EffectParticleModificationEvent event) {
-		if (Nolijium.config.revertPotions && 
-			event.getParticleOptions() instanceof ColorParticleOption colourOption) {
-			final int colour = RGBHelper.getColour(
-				0, 
-				colourOption.getRed(), 
-				colourOption.getGreen(), 
-				colourOption.getBlue());
-			
-			event.setParticleOptions(ColorParticleOption.create(
-				colourOption.getType(), 
-				NolijiumCommon.oldPotionColours.getOrDefault(colour, colour) | 0xFF << 24
-			));
-		}
-	}
-	
 }

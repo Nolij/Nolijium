@@ -8,6 +8,7 @@
 		"common.LevelLightEngineMixin",
 		"common.LevelRendererMixin",
 		"common.LightTextureMixin",
+		"common.LivingEntityMixin",
 		"common.MobEffectMixin",
 		"common.PotionItemMixin",
 		"common.TextureAtlasMixin"
