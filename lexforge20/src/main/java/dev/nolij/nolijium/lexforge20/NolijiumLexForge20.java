@@ -88,10 +88,10 @@ public class NolijiumLexForge20 implements INolijiumImplementation {
 		
 		final double timestamp = System.nanoTime() * 1E-9D;
 		
-		event.setBorderStart(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, 2));
-		event.setBorderEnd(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, 1));
-		event.setBackgroundStart(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, 2, 0.25D));
-		event.setBackgroundEnd(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, 1, 0.25D));
+		event.setBorderStart(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, 0));
+		event.setBorderEnd(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, -2));
+		event.setBackgroundStart(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, 0, 0.25D));
+		event.setBackgroundEnd(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, -2, 0.25D));
 	}
 	
 }
