@@ -1,7 +1,6 @@
 - initial release
 - added NeoForge 21 support
 - added LexForge 20.1-20.4 support
-- added fullbright
 - added max chat history customization
 - added HUD
 - added accurate & efficient FPS tracking

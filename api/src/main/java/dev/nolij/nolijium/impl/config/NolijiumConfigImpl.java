@@ -20,12 +20,6 @@ public class NolijiumConfigImpl implements Cloneable {
 	
 	//region Options
 	@ZsonField(comment = """
-		Removes darkness and all client-side lighting calculations, resulting in a decent performance boost on some systems.
-		May cause issues with shaders, dynamic lighting, and light overlay mods.
-		DEFAULT: `false`""")
-	public boolean enableGamma = false;
-	
-	@ZsonField(comment = """
 		Changes the number of messages kept in chat history (100 in vanilla).
 		DEFAULT: `100`""")
 	public int maxChatHistory = 100;
@@ -180,6 +174,12 @@ public class NolijiumConfigImpl implements Cloneable {
 		Enable Chroma on HUD text.
 		DEFAULT: `false`""")
 	public boolean enableChromaHUD = false;
+	
+	@ZsonField(comment = """
+		Removes darkness and all client-side lighting calculations, resulting in a decent performance boost on some systems.
+		May cause issues with shaders, dynamic lighting, and light overlay mods.
+		DEFAULT: `false`""")
+	public boolean enableGamma = false;
 	//endregion
 	
 	private static final int EXPECTED_VERSION = 1;
