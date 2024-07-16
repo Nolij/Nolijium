@@ -97,4 +97,5 @@ public class NolijiumNeoForge implements INolijiumImplementation {
 		event.setBackgroundStart(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, 2, 0.25D));
 		event.setBackgroundEnd(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, 1, 0.25D));
 	}
+	
 }

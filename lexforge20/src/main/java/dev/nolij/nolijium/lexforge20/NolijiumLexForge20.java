@@ -51,7 +51,6 @@ public class NolijiumLexForge20 implements INolijiumImplementation {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onRegisterGuiOverlays);
 		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::onAddToast);
 		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::onRenderTooltip);
-//		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::onEffectParticle);
 		
 		if (MethodHandleHelper.PUBLIC.getClassOrNull("org.embeddedt.embeddium.api.OptionGUIConstructionEvent") != null)
 			new NolijiumEmbeddiumConfigScreen();
@@ -94,21 +93,5 @@ public class NolijiumLexForge20 implements INolijiumImplementation {
 		event.setBackgroundStart(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, 2, 0.25D));
 		event.setBackgroundEnd(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, 1, 0.25D));
 	}
-	
-//	private void onEffectParticle(EffectParticleModificationEvent event) {
-//		if (Nolijium.config.revertPotions &&
-//			event.getParticleOptions() instanceof ColorParticleOption colourOption) {
-//			final int colour = RGBHelper.getColour(
-//				0,
-//				colourOption.getRed(),
-//				colourOption.getGreen(),
-//				colourOption.getBlue());
-//			
-//			event.setParticleOptions(ColorParticleOption.create(
-//				colourOption.getType(),
-//				NolijiumCommon.oldPotionColours.getOrDefault(colour, colour) | 0xFF << 24
-//			));
-//		}
-//	}
 	
 }
