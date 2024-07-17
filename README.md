@@ -6,11 +6,19 @@ By using this project in any form, you hereby give your "express assent" for the
 
 A collection of various QoL enhancements with (optional) Embeddium support and integration, written by Nolij.
 
+# Credits (in no particular order)
+
+- [embeddedt](https://github.com/embeddedt): Embeddium (which inspired the name of this mod, and also allowed me to yet again avoid writing a config screen), much behind-the-scenes guidance, help debugging weird errors, and education on Mixin, the JVM, and modding in general
+- [rdh](https://github.com/rhysdh540): Many contributions to the buildscript
+- [CelestialAbyss](https://github.com/CelestialAbyss): The excellent icon (also made the equally amazing icons for [Embeddium](https://github.com/embeddedt/embeddium) and [TauMC](https://github.com/TauMC))
+- [LlamaLad7](https://github.com/LlamaLad7): MixinExtras, which is heavily used by Nolijium and bundled to support monojar
+- [AlexSanech](https://github.com/Alexander317): Russian translation
+
 # FAQ
 
 #### Q: Some of these features seem familiar...
 
-A: Inspiration was taken from a few sources, but 100% of the code in this mod was written by me. The only parts of this mod that were not entirely written by me are the parts of [Zume](https://github.com/Nolij/Zume)'s buildscript contributed by @rhysdh540, which I used for the buildscript of this mod, and the icon, which 100% of the credit for goes to the amazing @CelestialAbyss, who also made the equally amazing icons for [Embeddium](https://github.com/embeddedt/embeddium) and [TauMC](https://github.com/TauMC).
+A: Inspiration was taken from a few sources, but 100% of the code in this mod is either original to this mod (ie written specifically for this mod), or was used with explicit permission from code authors (the only "exception" to this might be bundled MixinExtras, but the README for MixinExtras literally provides instructions for bundling, so I consider it reasonable. LlamaLad7 is of course welcome to request I stop bundling MixinExtras).
 
 #### Q: Where is the config?
 
@@ -21,7 +29,11 @@ A: https://discord.gg/6ZjX4mvCMR
 
 #### Q: What version is this for?
 
-A: Currently this mod only supports 21.x NeoForge. It is built off of [Zume](https://github.com/Nolij/Zume)'s buildscript though, so it should be feasible to add support for Fabric and/or older Minecraft versions. PRs which extend platform support are welcome.
+A: This mod supports LexForge 20.1 and NeoForge 21+. It is built off of [Zume](https://github.com/Nolij/Zume)'s buildscript though, so it should be feasible to add support for Fabric and/or older Minecraft versions. PRs which extend platform support and maintain monojar support are welcome.
+
+#### Q: What's a monojar?
+
+A: Using a lot of buildscript magic, one need not have a different JAR for each supported version. A monojar is a single JAR which can be used on all supported platforms. I started using this concept in [Zume](https://github.com/Nolij/Zume) (which is why 90% of Nolijium's buildscript is a copy of [Zume](https://github.com/Nolij/Zume)'s buildscript). Please note that this is not very feasible for most mods, so I would strongly recommend against asking other mod authors to support monojars. While I'm sure many other mod developers are _capable_ of supporting monojar, it's entirely unreasonable to expect this of those mod developers, as it introduces numerous headaches just working on a small mod. Monojar-ifying large mods (especially content mods) would take far more effort than could be considered even remotely reasonable. That being said, I welcome other mod developers who do want to give it a try to reach out to me if they have any questions.
 
 #### Q: What kind of weird license is this?
 
@@ -31,6 +43,6 @@ A: OSL-3.0 is the closest equivalent to a LAGPL I could find. AGPL and GPL are i
 
 A: This is, and will remain, free, copyleft software. Any requests to change the license other than to make it even stronger will be denied immediately (unfortunately GPL and AGPL aren't compatible with Minecraft due to linking restrictions, as much as I'd like to use them). Even in situations where I use parts of other projects with more "permissive" licenses, I will treat them as copyleft, free software.
 
-## License
+# License
 
 This project is licensed under OSL-3.0. For more information, see [LICENSE](LICENSE).
