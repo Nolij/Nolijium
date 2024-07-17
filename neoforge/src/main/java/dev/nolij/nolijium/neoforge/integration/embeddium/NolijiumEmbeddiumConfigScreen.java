@@ -89,7 +89,7 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 			.add(OptionImpl.createBuilder(int.class, storage)
 				.setId(id("hud_margin_x", int.class))
 				.setControl(option -> 
-					new SliderControl(option, 0, 20, 5, 
+					new SliderControl(option, 0, 100, 5, 
 						v -> Component.translatable("nolijium.pixels", v)))
 				.setBinding(
 					(config, value) -> config.hudMarginX = value,
@@ -99,7 +99,7 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 			.add(OptionImpl.createBuilder(int.class, storage)
 				.setId(id("hud_margin_y", int.class))
 				.setControl(option -> 
-					new SliderControl(option, 0, 20, 5, 
+					new SliderControl(option, 0, 100, 5, 
 						v -> Component.translatable("nolijium.pixels", v)))
 				.setBinding(
 					(config, value) -> config.hudMarginY = value,
