@@ -1,7 +1,5 @@
 {
 	"nolijium.utilities": "Utilities",
-	"nolijium.options.enable_gamma.name": "Enable Fullbright",
-	"nolijium.options.enable_gamma.tooltip": "Removes darkness and all client-side lighting calculations, resulting in a decent performance boost on some systems.\nMay cause issues with shaders, dynamic lighting, and light overlay mods.",
 	"nolijium.options.max_chat_history.name": "Maximum Chat History Size",
 	"nolijium.options.max_chat_history.tooltip": "Changes the number of messages kept in chat history (100 in vanilla).",
 	"nolijium.messages": "%d messages",
