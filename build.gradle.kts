@@ -126,7 +126,7 @@ if (releaseChannel.suffix != null) {
 //endregion
 
 ZumeGradle.version = "${minorVersion}.${patchAndSuffix}"
-println("Zume Version: ${ZumeGradle.version}")
+println("${"mod_name"()} Version: ${ZumeGradle.version}")
 
 rootProject.group = "maven_group"()
 rootProject.version = ZumeGradle.version
