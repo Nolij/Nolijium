@@ -64,8 +64,8 @@ public class NolijiumConfigImpl implements Cloneable {
 	@ZsonField(comment = """
 		The HUD refresh rate (in ticks). `0` will refresh it every frame.
 		Lower values may reduce performance.
-		DEFAULT: `5`""")
-	public int hudRefreshRateTicks = 5;
+		DEFAULT: `1`""")
+	public int hudRefreshRateTicks = 1;
 	
 	@ZsonField(comment = """
 		Determines much information about FPS should be displayed in the HUD.
