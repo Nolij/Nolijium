@@ -9,8 +9,11 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(Item.class)
 public class ItemMixin {
+	
 	@ModifyReturnValue(method = "isFoil", at = @At("RETURN"))
 	private boolean makePotionsEnchantable(boolean original) {
-		return original || (Nolijium.config.revertPotions && (Object)this instanceof PotionItem);
+		//noinspection ConstantValue
+		return original || (Nolijium.config.revertPotions && (Object) this instanceof PotionItem);
 	}
+	
 }

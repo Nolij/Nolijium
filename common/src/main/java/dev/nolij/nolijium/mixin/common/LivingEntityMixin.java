@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin {
+	
 	@ModifyArg(method = "tickEffects", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V"), index = 0)
 	private ParticleOptions useOldEffectColor(ParticleOptions option) {
 		if (Nolijium.config.revertPotions && option instanceof ColorParticleOption colourOption) {
@@ -28,10 +29,11 @@ public class LivingEntityMixin {
 			
 			return ColorParticleOption.create(
 				colourOption.getType(),
-				NolijiumCommon.oldPotionColours.getOrDefault(colour, colour) | ((int)(colourOption.getAlpha() * 255)) << 24
+				NolijiumCommon.oldPotionColours.getOrDefault(colour, colour) | ((int) (colourOption.getAlpha() * 255)) << 24
 			);
 		} else {
 			return option;
 		}
 	}
+	
 }
