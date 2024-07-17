@@ -327,6 +327,7 @@ val shade: Configuration by configurations.creating {
 
 dependencies {
     shade("dev.nolij:zson:${"zson_version"()}:downgraded-17")
+	shade("io.github.llamalad7:mixinextras-common:${"mixinextras_version"()}")
 
     compileOnly("org.apache.logging.log4j:log4j-core:${"log4j_version"()}")
 
@@ -405,12 +406,15 @@ tasks.shadowJar {
     if (releaseChannel.proguard) {
         relocate("dev.nolij.nolijium.mixin", "nolijium.mixin")
     }
+	relocate("com.llamalad7.mixinextras", "nolijium.mixinextras")
 	
 	manifest {
 		attributes(
 			"MixinConfigs" to "nolijium.mixins.json"
 		)
 	}
+	
+	mergeServiceFiles()
 }
 
 val compressJar = tasks.register<CompressJarTask>("compressJar") {

@@ -1,5 +1,6 @@
 package dev.nolij.nolijium;
 
+import com.llamalad7.mixinextras.MixinExtrasBootstrap;
 import dev.nolij.nolijium.impl.util.MethodHandleHelper;
 import dev.nolij.zumegradle.proguard.ProGuardKeep;
 import org.objectweb.asm.tree.ClassNode;
@@ -49,7 +50,9 @@ public final class NolijiumMixinPlugin implements IMixinConfigPlugin {
 	}
 	
 	@Override
-	public void onLoad(String mixinPackage) {}
+	public void onLoad(String mixinPackage) {
+		MixinExtrasBootstrap.init();
+	}
 	
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {

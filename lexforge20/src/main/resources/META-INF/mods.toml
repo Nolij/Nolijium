@@ -29,13 +29,6 @@ ordering="NONE"
 side="CLIENT"
 
 [[dependencies.nolijium]]
-modId="mixinextras"
-mandatory=true
-versionRange="${lexforge20_mixinextras_range}"
-ordering="AFTER"
-side="CLIENT"
-
-[[dependencies.nolijium]]
 modId="embeddium"
 mandatory=false
 versionRange="${lexforge20_embeddium_range}"

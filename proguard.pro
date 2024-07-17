@@ -38,6 +38,12 @@
 -keep,allowoptimization,allowobfuscation class dev.nolij.nolijium.fabric.NolijiumFabric
 -keep,allowoptimization,allowobfuscation class dev.nolij.nolijium.fabric.integration.modmenu.NolijiumModMenuIntegration
 
+# Shaded MixinExtras
+-keep class nolijium.mixinextras.** {
+	*;
+}
+
+# ZumeGradle
 -keep @dev.nolij.zumegradle.proguard.ProGuardKeep class * { *; }
 -keepclassmembers class * { @dev.nolij.zumegradle.proguard.ProGuardKeep *; }
 
