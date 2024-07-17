@@ -44,14 +44,12 @@ repositories {
 
 dependencies {
 	compileOnly(project(":stubs"))
+	compileOnly("io.github.llamalad7:mixinextras-common:${"mixinextras_version"()}")
 
 	minecraftLibraries("dev.nolij:zson:${"zson_version"()}")
 	
 	mod("org.embeddedt:embeddium-1.20.1:${"lexforge20_embeddium_version"()}")
-
-	// breaks NeoForge
-//	"include"("io.github.llamalad7:mixinextras-forge:${"mixinextras_version"()}")
-
+	
 	// Unimined >:(
 //	modRuntimeOnly("dev.nolij:zume:${"zume_version"()}")
 }

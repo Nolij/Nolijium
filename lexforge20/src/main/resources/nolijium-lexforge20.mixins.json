@@ -10,7 +10,7 @@
 		"common.LevelLightEngineMixin",
 		"common.LevelRendererMixin",
 		"common.LightTextureMixin",
-		"common.LivingEntityMixin",
+		"lexforge20.LivingEntityMixin",
 		"common.MobEffectMixin",
 		"common.TextureAtlasMixin"
 	],

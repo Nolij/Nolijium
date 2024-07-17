@@ -10,7 +10,7 @@
 		"common.LevelLightEngineMixin",
 		"common.LevelRendererMixin",
 		"common.LightTextureMixin",
-		"common.LivingEntityMixin",
+		"neoforge.LivingEntityMixin",
 		"common.MobEffectMixin",
 		"common.TextureAtlasMixin"
 	],
