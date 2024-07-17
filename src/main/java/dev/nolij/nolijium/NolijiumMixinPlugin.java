@@ -34,7 +34,7 @@ public final class NolijiumMixinPlugin implements IMixinConfigPlugin {
 			
 			if (lexForgeVersion != null) {
 				final int major = Integer.parseInt(lexForgeVersion.substring(0, lexForgeVersion.indexOf('.')));
-				if (major > 46 && major < 50)
+				if (major == 47)
 					NOLIJIUM_VARIANT = LEXFORGE20;
 				else
 					NOLIJIUM_VARIANT = null;

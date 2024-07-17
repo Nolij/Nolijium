@@ -482,7 +482,6 @@ afterEvaluate {
                 projectId = "KstN3eSL"
 
 	            minecraftVersions.add("1.20.1")
-	            minecraftVersions.add("1.20.4")
                 minecraftVersions.add("1.21")
 
 	            optional("zume", "embeddium")
@@ -495,7 +494,6 @@ afterEvaluate {
                 projectSlug = "nolijium"
 	            
 	            minecraftVersions.add("1.20.1")
-	            minecraftVersions.add("1.20.4")
 	            minecraftVersions.add("1.21")
 	            
 	            optional("zume", "embeddium")
