@@ -6,6 +6,20 @@ By using this project in any form, you hereby give your "express assent" for the
 
 A collection of various QoL enhancements with (optional) Embeddium support and integration, written by Nolij.
 
+# Features
+
+- Maximum chat history customization
+- HUD with accurate & efficient FPS tracking including 0.1% lows
+- [MC-26678](https://bugs.mojang.com/browse/MC-26678) revert
+- Potion revert (adds back potion glint and reverts colours)
+- Opaque block outlines toggle
+- Texture animation toggle
+- Toast toggles
+- Particle toggles
+- Chroma block outlines, tooltips, & HUD
+- Global config file (config is synced between instances on the same machine)
+- Optional Embeddium integration
+
 # Credits (in no particular order)
 
 - [embeddedt](https://github.com/embeddedt): Embeddium (which inspired the name of this mod, and also allowed me to yet again avoid writing a config screen), much behind-the-scenes guidance, help debugging weird errors, and education on Mixin, the JVM, and modding in general
