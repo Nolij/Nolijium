@@ -1,15 +1,2 @@
-- initial release
-- added NeoForge 21 support
-- added LexForge 20.1 support
-- added max chat history customization
-- added HUD
-- added accurate & efficient FPS tracking
-- added MC-26678 revert
-- added potion revert
-- added opaque block outlines
-- added animation toggles
-- added toast toggles
-- added particle toggles
-- added chroma
-- added Embeddium integration
+- sort particles by namespace first and prioritize vanilla particles in config screen
 - further improvements to overall system stability and other minor adjustments have been made to enhance the user experience

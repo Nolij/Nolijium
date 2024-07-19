@@ -1,6 +1,7 @@
 package dev.nolij.nolijium.neoforge.integration.embeddium;
 
 import com.google.common.collect.ImmutableList;
+import dev.nolij.nolijium.common.NolijiumCommon;
 import dev.nolij.nolijium.impl.util.Alignment;
 import dev.nolij.nolijium.impl.util.DetailLevel;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -270,7 +271,10 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 		final OptionGroup.Builder particlesByIdBuilder = OptionGroup.createBuilder().setId(id("particles_by_id"));
 		
 		for (final ResourceLocation particleTypeId :
-			BuiltInRegistries.PARTICLE_TYPE.keySet().stream().sorted().toArray(ResourceLocation[]::new)) {
+			BuiltInRegistries.PARTICLE_TYPE.keySet()
+				.stream()
+				.sorted(NolijiumCommon.ResourceLocationComparator.INSTANCE)
+				.toArray(ResourceLocation[]::new)) {
 			final String name = particleTypeId.toString();
 			particlesByIdBuilder.add(OptionImpl.createBuilder(boolean.class, storage)
 				.setId(id("enable_particle/" + name.replace(':', '/'), boolean.class))

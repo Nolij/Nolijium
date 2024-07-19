@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
 
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -57,6 +58,30 @@ public class NolijiumCommon implements INolijiumImplementation {
 		oldPotionColours.put(0x736156, 0x352A27); // wither
 		oldPotionColours.put(0x59C106, 0x339900); // luck
 		oldPotionColours.put(0xF3CFB9, 0xFFEFD1); // slow_falling
+	}
+	
+	public static class ResourceLocationComparator implements Comparator<ResourceLocation> {
+		
+		public static final ResourceLocationComparator INSTANCE = new ResourceLocationComparator();
+		
+		private static boolean isVanillaLocation(ResourceLocation location) {
+			return location.getNamespace().equals("minecraft");
+		}
+		
+		@Override
+		public int compare(ResourceLocation left, ResourceLocation right) {
+			final boolean leftIsVanilla = isVanillaLocation(left);
+			final boolean rightIsVanilla = isVanillaLocation(right);
+			if (leftIsVanilla ^ rightIsVanilla) {
+				if (leftIsVanilla)
+					return -1;
+				
+				return 1;
+			}
+			
+			return left.compareNamespaced(right);
+		}
+		
 	}
 	
 }
