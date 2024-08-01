@@ -18,6 +18,7 @@ public class NolijiumCommon implements INolijiumImplementation {
 	
 	private final INolijiumImplementation platformImplementation;
 	
+	@SuppressWarnings("unused")
 	public NolijiumCommon() {
 		this.platformImplementation = null;
 	}
@@ -58,20 +59,24 @@ public class NolijiumCommon implements INolijiumImplementation {
 		oldPotionColours.put(0x736156, 0x352A27); // wither
 		oldPotionColours.put(0x59C106, 0x339900); // luck
 		oldPotionColours.put(0xF3CFB9, 0xFFEFD1); // slow_falling
+		
+		for (final int newColour : oldPotionColours.keySet()) {
+			oldPotionColours.put(oldPotionColours.get(newColour), newColour);
+		}
 	}
 	
 	public static class ResourceLocationComparator implements Comparator<ResourceLocation> {
 		
 		public static final ResourceLocationComparator INSTANCE = new ResourceLocationComparator();
 		
-		private static boolean isVanillaLocation(ResourceLocation location) {
+		private static boolean isVanillaNamespace(ResourceLocation location) {
 			return location.getNamespace().equals("minecraft");
 		}
 		
 		@Override
 		public int compare(ResourceLocation left, ResourceLocation right) {
-			final boolean leftIsVanilla = isVanillaLocation(left);
-			final boolean rightIsVanilla = isVanillaLocation(right);
+			final boolean leftIsVanilla = isVanillaNamespace(left);
+			final boolean rightIsVanilla = isVanillaNamespace(right);
 			if (leftIsVanilla ^ rightIsVanilla) {
 				if (leftIsVanilla)
 					return -1;
