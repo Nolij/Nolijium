@@ -16,7 +16,7 @@ public class NolijiumHUDRenderLayer extends NolijiumHUD implements LayeredDraw.L
 	
 	@Override
 	public void render(@NotNull GuiGraphics guiGraphics, @NotNull DeltaTracker deltaTracker) {
-		this.onFrame(guiGraphics);
+		this.render(guiGraphics);
 	}
 	
 }

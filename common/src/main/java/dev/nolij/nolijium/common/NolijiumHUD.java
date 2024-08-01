@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public abstract class NolijiumHUD {
 	
@@ -32,10 +33,15 @@ public abstract class NolijiumHUD {
 	private static final int FRAME_TIME_BUFFER_SIZE_MAX = 2 << 16;
 	private static final int FRAME_TIME_BUFFER_SIZE_MIN = 2 << 6;
 	private static final int FRAME_TIME_BUFFER_RESIZE_THRESHOLD = 2 << 8;
-	private static final long FRAME_TIME_BUFFER_RESIZE_INTERVAL = (long) 1E9;
+	private static final long FRAME_TIME_BUFFER_RESIZE_INTERVAL = TimeUnit.SECONDS.toNanos(1);
 	
 	private long lastUpdateTimestamp = 0L;
 	private int screenWidth = 0, screenHeight = 0;
+	
+	private static final long SYSTEM_STATS_UPDATE_COOLDOWN = TimeUnit.MILLISECONDS.toNanos(100);
+	private long lastSystemStatsUpdateTimestamp;
+	private double cpuUsage, memoryUsage;
+	private long usedMemoryAllocation, memoryAllocation;
 	
 	private static class Line {
 		
@@ -112,40 +118,45 @@ public abstract class NolijiumHUD {
 						result.add("%sMIN: %d".formatted(leftPad, getFrameTimeFPS(max)));
 						result.add("%sMAX: %d".formatted(leftPad, getFrameTimeFPS(min)));
 						result.add("%sAVG: %d".formatted(leftPad, getFrameTimeFPS(avg)));
-						if (DEBUG)
-							result.add("%sSIZE: %d".formatted(leftPad, frameTimeBuffer.maxSize()));
-						result.add("");
 					} else {
 						result.add("%sMIN: ???".formatted(leftPad));
 						result.add("%sMAX: ???".formatted(leftPad));
 						result.add("%sAVG: ???".formatted(leftPad));
-						if (DEBUG)
-							result.add("%sSIZE: %d".formatted(leftPad, frameTimeBuffer.maxSize()));
-						result.add("");
 					}
+					if (DEBUG)
+						result.add("%sSIZE: %d".formatted(leftPad, frameTimeBuffer.maxSize()));
+					result.add("");
 				}
 			}
 		}
 		
-		if (Nolijium.config.hudShowCPU) {
-			var cpuUsage = OS_BEAN.getProcessCpuLoad();
-			if (cpuUsage == -1)
-				cpuUsage = OS_BEAN.getCpuLoad();
+		if (lastFrameTimestamp - lastSystemStatsUpdateTimestamp > SYSTEM_STATS_UPDATE_COOLDOWN) {
+			lastSystemStatsUpdateTimestamp = lastFrameTimestamp;
 			
+			if (Nolijium.config.hudShowCPU) {
+				cpuUsage = OS_BEAN.getProcessCpuLoad();
+				if (cpuUsage == -1)
+					cpuUsage = OS_BEAN.getCpuLoad();
+			}
+			
+			if (Nolijium.config.hudShowMemory) {
+				final long maxMemory = Runtime.getRuntime().maxMemory();
+				final long totalMemory = Runtime.getRuntime().totalMemory();
+				final long freeMemory = Runtime.getRuntime().freeMemory();
+				final long usedMemory = totalMemory - freeMemory;
+				
+				memoryUsage = usedMemory * 100D / maxMemory;
+				usedMemoryAllocation = usedMemory / (1024 * 1024);
+				memoryAllocation = maxMemory / (1024 * 1024);
+			}
+		}
+		
+		if (Nolijium.config.hudShowCPU) {
 			result.add("CPU: %2.2f%%".formatted(cpuUsage * 100D));
 		}
 		
 		if (Nolijium.config.hudShowMemory) {
-			final long maxMemory = Runtime.getRuntime().maxMemory();
-			final long totalMemory = Runtime.getRuntime().totalMemory();
-			final long freeMemory = Runtime.getRuntime().freeMemory();
-			final long usedMemory = totalMemory - freeMemory;
-			
-			result.add("RAM: %2.2f%%  %d/%dMiB"
-				.formatted(
-					usedMemory * 100D / maxMemory,
-					usedMemory / (1024 * 1024),
-					maxMemory / (1024 * 1024)));
+			result.add("RAM: %2.2f%%  %d/%dMiB".formatted(memoryUsage, usedMemoryAllocation, memoryAllocation));
 		}
 		
 		if (Nolijium.config.hudShowCoordinates) {
@@ -174,10 +185,10 @@ public abstract class NolijiumHUD {
 		background = Nolijium.config.hudBackground;
 		
 		if (Nolijium.config.hudAlignmentX == Alignment.X.RIGHT) {
-			lines.parallelStream().forEach(line ->
+			lines.forEach(line ->
 				line.posX = screenWidth - line.width - Nolijium.config.hudMarginX);
 		} else {
-			lines.parallelStream().forEach(line ->
+			lines.forEach(line ->
 				line.posX = Nolijium.config.hudMarginX);
 		}
 		
@@ -199,10 +210,7 @@ public abstract class NolijiumHUD {
 				(Nolijium.config.hudAlignmentY == Alignment.Y.TOP && isDebugScreenOpen());
 	}
 	
-	protected void onFrame(@NotNull GuiGraphics guiGraphics) {
-		if (isHidden())
-			return;
-		
+	private void onFrame(@NotNull GuiGraphics guiGraphics) {
 		screenWidth = guiGraphics.guiWidth();
 		screenHeight = guiGraphics.guiHeight();
 		
@@ -228,6 +236,13 @@ public abstract class NolijiumHUD {
 		if (Nolijium.config.hudRefreshRateTicks == 0 ||
 			System.nanoTime() - lastUpdateTimestamp > Nolijium.config.hudRefreshRateTicks * 50E6)
 			update();
+	}
+	
+	protected void render(@NotNull GuiGraphics guiGraphics) {
+		if (isHidden())
+			return;
+		
+		onFrame(guiGraphics);
 		
 		//noinspection deprecation
 		guiGraphics.drawManaged(() -> {

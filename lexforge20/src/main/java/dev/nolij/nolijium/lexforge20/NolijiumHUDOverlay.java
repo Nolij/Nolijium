@@ -15,6 +15,6 @@ public class NolijiumHUDOverlay extends NolijiumHUD implements IGuiOverlay {
 	
 	@Override
 	public void render(ForgeGui forgeGui, GuiGraphics guiGraphics, float f, int i, int j) {		
-		this.onFrame(guiGraphics);
+		this.render(guiGraphics);
 	}
 }
