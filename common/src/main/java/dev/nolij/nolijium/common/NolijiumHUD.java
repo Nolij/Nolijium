@@ -266,6 +266,11 @@ public abstract class NolijiumHUD {
 	
 	private static class SystemStatsThread extends Thread {
 		private static final int UPDATE_DELAY_MS = 100;
+		/**
+		 * The number of times an invalid CPU usage can be reported before we give up on trying to retrieve it entirely.
+		 * On Windows, calling this function in the errored state seems to be extremely slow. 
+		 */
+		private static final int MAX_INVALID_CPU_USAGE_VALUES = 10;
 		
 		public static final class Stats {
 			private final double cpuUsage;
@@ -298,6 +303,8 @@ public abstract class NolijiumHUD {
 		private final AtomicReference<Stats> statsReference;
 		private volatile boolean running;
 		
+		private int numInvalidCpuUsageValues;
+		
 		public SystemStatsThread() {
 			super("Nolijium system stats thread");
 			this.statsReference = new AtomicReference<>(new Stats(0, 0, 0));
@@ -324,9 +331,18 @@ public abstract class NolijiumHUD {
 		}
 		
 		private Stats collectStats() {
-			double cpuUsage = OS_BEAN.getProcessCpuLoad();
-			if (cpuUsage == -1)
-				cpuUsage = OS_BEAN.getCpuLoad();
+			double cpuUsage;
+			if(numInvalidCpuUsageValues < MAX_INVALID_CPU_USAGE_VALUES) {
+				cpuUsage = OS_BEAN.getProcessCpuLoad();
+				if (cpuUsage < 0) {
+					cpuUsage = OS_BEAN.getCpuLoad();
+					if (cpuUsage < 0) {
+						numInvalidCpuUsageValues++;
+					}
+				}
+			} else {
+				cpuUsage = -1;
+			}
 			
 			final long maxMemory = Runtime.getRuntime().maxMemory();
 			final long totalMemory = Runtime.getRuntime().totalMemory();
