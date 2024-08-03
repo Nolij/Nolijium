@@ -17,6 +17,7 @@ import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class NolijiumHUD {
 	
@@ -37,11 +38,6 @@ public abstract class NolijiumHUD {
 	
 	private long lastUpdateTimestamp = 0L;
 	private int screenWidth = 0, screenHeight = 0;
-	
-	private static final long SYSTEM_STATS_UPDATE_COOLDOWN = TimeUnit.MILLISECONDS.toNanos(100);
-	private long lastSystemStatsUpdateTimestamp;
-	private double cpuUsage, memoryUsage;
-	private long usedMemoryAllocation, memoryAllocation;
 	
 	private static class Line {
 		
@@ -65,6 +61,8 @@ public abstract class NolijiumHUD {
 	private long lastResizeTimestamp = 0L;
 	private long lastFrameTimestamp = 0L;
 	private long lastFrameTime = 0L;
+	
+	private SystemStatsThread systemStatsThread;
 	
 	private void resizeFrameTimeBuffer() {
 		lastResizeTimestamp = System.nanoTime();
@@ -130,33 +128,27 @@ public abstract class NolijiumHUD {
 			}
 		}
 		
-		if (lastFrameTimestamp - lastSystemStatsUpdateTimestamp > SYSTEM_STATS_UPDATE_COOLDOWN) {
-			lastSystemStatsUpdateTimestamp = lastFrameTimestamp;
+		if (Nolijium.config.hudShowCPU || Nolijium.config.hudShowMemory) {
+			// Start thread
+			if (this.systemStatsThread == null) {
+				this.systemStatsThread = new SystemStatsThread();
+			}
+			
+			var stats = this.systemStatsThread.getCurrentStats();
 			
 			if (Nolijium.config.hudShowCPU) {
-				cpuUsage = OS_BEAN.getProcessCpuLoad();
-				if (cpuUsage == -1)
-					cpuUsage = OS_BEAN.getCpuLoad();
+				result.add("CPU: %2.2f%%".formatted(stats.cpuUsage() * 100D));
 			}
 			
 			if (Nolijium.config.hudShowMemory) {
-				final long maxMemory = Runtime.getRuntime().maxMemory();
-				final long totalMemory = Runtime.getRuntime().totalMemory();
-				final long freeMemory = Runtime.getRuntime().freeMemory();
-				final long usedMemory = totalMemory - freeMemory;
-				
-				memoryUsage = usedMemory * 100D / maxMemory;
-				usedMemoryAllocation = usedMemory / (1024 * 1024);
-				memoryAllocation = maxMemory / (1024 * 1024);
+				result.add("RAM: %2.2f%%  %d/%dMiB".formatted(stats.memoryUsage(), stats.usedMemoryMb(), stats.allocatedMemoryMb()));
 			}
-		}
-		
-		if (Nolijium.config.hudShowCPU) {
-			result.add("CPU: %2.2f%%".formatted(cpuUsage * 100D));
-		}
-		
-		if (Nolijium.config.hudShowMemory) {
-			result.add("RAM: %2.2f%%  %d/%dMiB".formatted(memoryUsage, usedMemoryAllocation, memoryAllocation));
+		} else {
+			// Stop thread as it's no longer needed
+			if (this.systemStatsThread != null) {
+				this.systemStatsThread.shutdown();
+				this.systemStatsThread = null;
+			}
 		}
 		
 		if (Nolijium.config.hudShowCoordinates) {
@@ -270,6 +262,102 @@ public abstract class NolijiumHUD {
 				linePosY += LINE_HEIGHT;
 			}
 		});
+	}
+	
+	private static class SystemStatsThread extends Thread {
+		private static final int UPDATE_DELAY_MS = 100;
+		/**
+		 * The number of times an invalid CPU usage can be reported before we give up on trying to retrieve it entirely.
+		 * On Windows, calling this function in the errored state seems to be extremely slow. 
+		 */
+		private static final int MAX_INVALID_CPU_USAGE_VALUES = 10;
+		
+		public static final class Stats {
+			private final double cpuUsage;
+			private final long usedMemoryMb;
+			private final long allocatedMemoryMb;
+			
+			public Stats(double cpuUsage, long usedMemoryMb, long allocatedMemoryMb) {
+				this.cpuUsage = cpuUsage;
+				this.usedMemoryMb = usedMemoryMb;
+				this.allocatedMemoryMb = allocatedMemoryMb;
+			}
+			
+			public double memoryUsage() {
+						return ((double) usedMemoryMb / allocatedMemoryMb) * 100;
+					}
+			
+			public double cpuUsage() {
+				return cpuUsage;
+			}
+			
+			public long usedMemoryMb() {
+				return usedMemoryMb;
+			}
+			
+			public long allocatedMemoryMb() {
+				return allocatedMemoryMb;
+			}
+		}
+		
+		private final AtomicReference<Stats> statsReference;
+		private volatile boolean running;
+		
+		private int numInvalidCpuUsageValues;
+		
+		public SystemStatsThread() {
+			super("Nolijium system stats thread");
+			this.statsReference = new AtomicReference<>(new Stats(0, 0, 0));
+			this.running = true;
+			// Lower priority to reduce contention
+			this.setPriority(Thread.MIN_PRIORITY);
+			this.start();
+		}
+		
+		public void shutdown() {
+			this.running = false;
+		}
+		
+		@Override
+		public void run() {
+			while (this.running) {
+				this.statsReference.set(collectStats());
+				try {
+					Thread.sleep(UPDATE_DELAY_MS);
+				} catch(InterruptedException e) {
+					return;
+				}
+			}
+		}
+		
+		private Stats collectStats() {
+			double cpuUsage;
+			if(numInvalidCpuUsageValues < MAX_INVALID_CPU_USAGE_VALUES) {
+				cpuUsage = OS_BEAN.getProcessCpuLoad();
+				if (cpuUsage < 0) {
+					cpuUsage = OS_BEAN.getCpuLoad();
+					if (cpuUsage < 0) {
+						numInvalidCpuUsageValues++;
+					}
+				}
+			} else {
+				cpuUsage = -1;
+			}
+			
+			final long maxMemory = Runtime.getRuntime().maxMemory();
+			final long totalMemory = Runtime.getRuntime().totalMemory();
+			final long freeMemory = Runtime.getRuntime().freeMemory();
+			final long usedMemory = totalMemory - freeMemory;
+			
+			long usedMemoryAllocation = usedMemory / (1024 * 1024);
+			long memoryAllocation = maxMemory / (1024 * 1024);
+			
+			return new Stats(cpuUsage, usedMemoryAllocation, memoryAllocation);
+		}
+		
+		public Stats getCurrentStats() {
+			return this.statsReference.get();
+		}
 	}
 	
 }
