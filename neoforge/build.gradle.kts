@@ -27,7 +27,7 @@ unimined.minecraft {
 
 	mappings {
 		mojmap()
-		parchment(mcVersion = "neoforge21_minecraft_version"(), version = "neoforge21_parchment_version"())
+//		parchment(mcVersion = "neoforge21_minecraft_version"(), version = "neoforge21_parchment_version"())
 	}
 
 	mods {
@@ -46,8 +46,8 @@ dependencies {
 	
 	minecraftLibraries("dev.nolij:zson:${"zson_version"()}")
 	
-	modCompileOnly("org.embeddedt:embeddium-1.21:${"neoforge21_embeddium_version"()}:api")
-	modRuntimeOnly("org.embeddedt:embeddium-1.21:${"neoforge21_embeddium_version"()}") {
+	modCompileOnly("org.embeddedt:embeddium-1.21.1:${"neoforge21_embeddium_version"()}:api")
+	modRuntimeOnly("org.embeddedt:embeddium-1.21.1:${"neoforge21_embeddium_version"()}") {
 		isTransitive = false
 	}
 
