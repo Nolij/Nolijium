@@ -1,5 +1,6 @@
 package dev.nolij.nolijium.lexforge20;
 
+import dev.nolij.nolijium.common.INolijiumSubImplementation;
 import dev.nolij.nolijium.common.NolijiumCommon;
 import dev.nolij.nolijium.impl.INolijiumImplementation;
 import dev.nolij.nolijium.impl.Nolijium;
@@ -14,7 +15,9 @@ import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.TutorialToast;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentContents;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RenderTooltipEvent;
@@ -30,7 +33,7 @@ import net.minecraftforge.fml.loading.FMLPaths;
 import static dev.nolij.nolijium.impl.NolijiumConstants.*;
 
 @Mod(MOD_ID)
-public class NolijiumLexForge20 implements INolijiumImplementation {
+public class NolijiumLexForge20 implements INolijiumSubImplementation {
 	
 	public NolijiumLexForge20() {
 		if (!FMLEnvironment.dist.isClient())
@@ -92,6 +95,16 @@ public class NolijiumLexForge20 implements INolijiumImplementation {
 		event.setBorderEnd(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, -2));
 		event.setBackgroundStart(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, 0, 0.25D));
 		event.setBackgroundEnd(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, -2, 0.25D));
+	}
+	
+	@Override
+	public String getClickActionName(ClickEvent.Action action) {
+		return action.getName();
+	}
+	
+	@Override
+	public ComponentContents getEmptyComponentContents() {
+		return ComponentContents.EMPTY;
 	}
 	
 }

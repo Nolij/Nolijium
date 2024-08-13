@@ -6,6 +6,7 @@
 	"client": [
 		"lexforge20.ChatComponentMixin",
 		"common.GameRendererMixin",
+		"common.GuiGraphicsMixin",
 		"common.ItemMixin",
 		"common.LevelLightEngineMixin",
 		"common.LevelRendererMixin",

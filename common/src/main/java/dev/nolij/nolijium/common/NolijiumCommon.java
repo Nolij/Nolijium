@@ -5,26 +5,53 @@ import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.config.NolijiumConfigImpl;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
 
 import java.nio.file.Path;
-import java.util.Comparator;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.stream.Collectors;
 
 @Mod("nolijium_common")
 public class NolijiumCommon implements INolijiumImplementation {
 	
-	private final INolijiumImplementation platformImplementation;
+	private static NolijiumCommon instance = null;
+	
+	public static NolijiumCommon getInstance() {
+		return instance;
+	}
+	
+	private final INolijiumSubImplementation platformImplementation;
+	
+	public static INolijiumSubImplementation getImplementation() {
+		if (instance == null)
+			return null;
+		
+		return instance.platformImplementation;
+	}
 	
 	@SuppressWarnings("unused")
 	public NolijiumCommon() {
 		this.platformImplementation = null;
 	}
 	
-	public NolijiumCommon(INolijiumImplementation platformImplementation, Path configPath) {
+	public NolijiumCommon(INolijiumSubImplementation platformImplementation, Path configPath) {
+		if (instance != null)
+			throw new IllegalStateException("Nolijium is already initialized!");
+		
 		Nolijium.LOGGER.info("Loading Nolijium...");
+		instance = this;
 		
 		this.platformImplementation = platformImplementation;
 		
@@ -65,28 +92,60 @@ public class NolijiumCommon implements INolijiumImplementation {
 		}
 	}
 	
-	public static class ResourceLocationComparator implements Comparator<ResourceLocation> {
-		
-		public static final ResourceLocationComparator INSTANCE = new ResourceLocationComparator();
-		
-		private static boolean isVanillaNamespace(ResourceLocation location) {
-			return location.getNamespace().equals("minecraft");
-		}
-		
-		@Override
-		public int compare(ResourceLocation left, ResourceLocation right) {
-			final boolean leftIsVanilla = isVanillaNamespace(left);
-			final boolean rightIsVanilla = isVanillaNamespace(right);
-			if (leftIsVanilla ^ rightIsVanilla) {
-				if (leftIsVanilla)
-					return -1;
+	private static Component getTooltipInfo(ClickEvent clickEvent) {
+		return Component.translatable(
+			"nolijium.tooltip_info",
+			instance.platformImplementation.getClickActionName(clickEvent.getAction()).toUpperCase(),
+			clickEvent.getValue())
+			.withStyle(ChatFormatting.DARK_GRAY);
+	}
+	
+	private static final Map<Style, HoverEvent> hoverEventCache = Collections.synchronizedMap(new WeakHashMap<>());
+	
+	public static HoverEvent getHoverEvent(Style _style) {
+		return hoverEventCache.computeIfAbsent(_style, style -> {
+			final HoverEvent hoverEvent = style.getHoverEvent();
+			final ClickEvent clickEvent = style.getClickEvent();
+			
+			if (clickEvent != null) {
+				final Component tooltipInfo = getTooltipInfo(clickEvent);
+				final MutableComponent newTooltip = MutableComponent.create(instance.platformImplementation.getEmptyComponentContents());
 				
-				return 1;
+				if (hoverEvent == null) {
+					newTooltip.append(tooltipInfo);
+				} else {
+					final Component text = hoverEvent.getValue(HoverEvent.Action.SHOW_TEXT);
+					
+					if (text != null) {
+						newTooltip.append(text).append("\n");
+					} else {
+						final HoverEvent.EntityTooltipInfo entityInfo = hoverEvent.getValue(HoverEvent.Action.SHOW_ENTITY);
+						
+						if (entityInfo != null) {
+							for (var line : entityInfo.getTooltipLines()) {
+								newTooltip.append(line).append("\n");
+							}
+						} else {
+							final HoverEvent.ItemStackInfo itemStackInfo = hoverEvent.getValue(HoverEvent.Action.SHOW_ITEM);
+							
+							if (itemStackInfo != null) {
+								for (var line : Screen.getTooltipFromItem(Minecraft.getInstance(), itemStackInfo.getItemStack())) {
+									newTooltip.append(line).append("\n");
+								}
+							} else {
+								return hoverEvent;
+							}
+						}
+					}
+					
+					newTooltip.append("\n").append(tooltipInfo);
+				}
+				
+				return new HoverEvent(HoverEvent.Action.SHOW_TEXT, newTooltip);
 			}
 			
-			return left.compareNamespaced(right);
-		}
-		
+			return hoverEvent;
+		});
 	}
 	
 }

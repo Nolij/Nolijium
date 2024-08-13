@@ -25,6 +25,11 @@ public class NolijiumConfigImpl implements Cloneable {
 	public int maxChatHistory = 100;
 	
 	@ZsonField(comment = """
+		Adds information about links and clickable text to tooltip.
+		DEFAULT: `false`""")
+	public boolean enableToolTipInfo = false;
+	
+	@ZsonField(comment = """
 		If enabled, a HUD will be drawn on the screen showing useful performance statistics.
 		DEFAULT: `false`""")
 	public boolean hudEnabled = false;

@@ -1,7 +1,7 @@
 package dev.nolij.nolijium.neoforge;
 
+import dev.nolij.nolijium.common.INolijiumSubImplementation;
 import dev.nolij.nolijium.common.NolijiumCommon;
-import dev.nolij.nolijium.impl.INolijiumImplementation;
 import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.config.NolijiumConfigImpl;
 import dev.nolij.nolijium.impl.util.MethodHandleHelper;
@@ -14,7 +14,10 @@ import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.TutorialToast;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentContents;
+import net.minecraft.network.chat.contents.PlainTextContents;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
@@ -33,7 +36,7 @@ import java.lang.invoke.MethodHandles;
 import static dev.nolij.nolijium.impl.NolijiumConstants.*;
 
 @Mod(value = MOD_ID, dist = Dist.CLIENT)
-public class NolijiumNeoForge implements INolijiumImplementation {
+public class NolijiumNeoForge implements INolijiumSubImplementation {
 	
 	private static final MethodHandleHelper METHOD_HANDLE_HELPER =
 		new MethodHandleHelper(NolijiumNeoForge.class.getClassLoader(), MethodHandles.lookup());
@@ -96,6 +99,16 @@ public class NolijiumNeoForge implements INolijiumImplementation {
 		event.setBorderEnd(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, -2));
 		event.setBackgroundStart(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, 0, 0.25D));
 		event.setBackgroundEnd(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, -2, 0.25D));
+	}
+	
+	@Override
+	public String getClickActionName(ClickEvent.Action action) {
+		return action.getSerializedName();
+	}
+	
+	@Override
+	public ComponentContents getEmptyComponentContents() {
+		return PlainTextContents.LiteralContents.EMPTY;
 	}
 	
 }

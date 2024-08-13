@@ -6,6 +6,7 @@
 	"client": [
 		"neoforge.ChatComponentMixin",
 		"common.GameRendererMixin",
+		"common.GuiGraphicsMixin",
 		"common.ItemMixin",
 		"common.LevelLightEngineMixin",
 		"common.LevelRendererMixin",

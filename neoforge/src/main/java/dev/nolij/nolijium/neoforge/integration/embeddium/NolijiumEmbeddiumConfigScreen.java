@@ -1,7 +1,7 @@
 package dev.nolij.nolijium.neoforge.integration.embeddium;
 
 import com.google.common.collect.ImmutableList;
-import dev.nolij.nolijium.common.NolijiumCommon;
+import dev.nolij.nolijium.common.ResourceLocationComparator;
 import dev.nolij.nolijium.impl.util.Alignment;
 import dev.nolij.nolijium.impl.util.DetailLevel;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -57,6 +57,13 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 				.setBinding(
 					(config, value) -> config.maxChatHistory = value,
 					config -> config.maxChatHistory)
+				.build())
+			.add(OptionImpl.createBuilder(boolean.class, storage)
+				.setId(id("enable_tooltip_info", boolean.class))
+				.setControl(TickBoxControl::new)
+				.setBinding(
+					(config, value) -> config.enableToolTipInfo = value,
+					config -> config.enableToolTipInfo)
 				.build())
 			.build());
 		
@@ -273,7 +280,7 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 		for (final ResourceLocation particleTypeId :
 			BuiltInRegistries.PARTICLE_TYPE.keySet()
 				.stream()
-				.sorted(NolijiumCommon.ResourceLocationComparator.INSTANCE)
+				.sorted(ResourceLocationComparator.INSTANCE)
 				.toArray(ResourceLocation[]::new)) {
 			final String name = particleTypeId.toString();
 			particlesByIdBuilder.add(OptionImpl.createBuilder(boolean.class, storage)
