@@ -18,7 +18,7 @@ import net.minecraft.core.SectionPos;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
@@ -30,18 +30,47 @@ import org.joml.Matrix4fStack;
 
 import java.util.Objects;
 
+/**
+ * The core of the light overlay renderer.
+ */
 public class NolijiumLightOverlayRenderer {
+	/**
+	 * The radius of blocks around the camera that a light overlay can be shown on.
+	 */
 	private static final int BLOCK_RADIUS = 48;
+	/**
+	 * Precomputed square of the distance at which light overlays are shown, used in the vertex generation logic.
+	 */
 	private static final int BLOCK_RADIUS_DIST_SQUARED = BLOCK_RADIUS * BLOCK_RADIUS;
 	
+	/**
+	 * The minimum light level at which overlays are not shown.
+	 */
 	private static final int MINIMUM_LIGHT_LEVEL_FOR_INVISIBLE = 8;
 	
+	/**
+	 * The overlay color for light level 0.
+	 */
 	private static final int COLOR_BLOCK_LIGHT_0 = FastColor.ABGR32.color(255, 255, 0, 0);
+	/**
+	 * The overlay color for light levels 1 through 7.
+	 */
 	private static final int COLOR_BLOCK_LIGHT_1_TO_7 = FastColor.ABGR32.color(255, 255, 255, 0);
 	
+	/**
+	 * The current marker version, incremented each time a section is invalidated. This is used to regenerate the
+	 * vertex buffer on the GPU when the overlays need to be re-rendered.
+	 */
 	private static int currentUpdateVersion = -1;
+	/**
+	 * The last block position the camera was inside. This is used to regenerate the vertex buffer on the GPU when
+	 * the camera moves to a new block.
+	 */
 	private static BlockPos lastCameraPosition = BlockPos.ZERO;
 	
+	/**
+	 * A small wrapper class holding the current vertex buffer and the marker version it corresponds to.
+	 */
 	private static final class RenderedLightOverlays implements AutoCloseable {
 		public final VertexBuffer buffer;
 		public final int updateVersion;
@@ -59,8 +88,15 @@ public class NolijiumLightOverlayRenderer {
 		}
 	}
 	
+	/**
+	 * The current GPU-side light overlay buffer.
+	 */
 	private static RenderedLightOverlays currentLightOverlayBuffer = null;
 	
+	/**
+	 * A wrapper class used to store the list of positions and light levels at which overlays should be rendered
+	 * within a given chunk section.
+	 */
 	private static final class SectionLightOverlayData {
 		private final LongArrayList positions;
 		private final ByteArrayList lightLevels;
@@ -71,15 +107,26 @@ public class NolijiumLightOverlayRenderer {
 		}
 		
 		public boolean isEmpty() {
-				return positions.isEmpty();
+			return positions.isEmpty();
 		}
 	}
 	
+	/**
+	 * A cached singleton empty section object used for sections that don't need any light overlays rendered.
+	 */
 	private static final SectionLightOverlayData EMPTY_SECTION = new SectionLightOverlayData(new LongArrayList(), new ByteArrayList());
 	
+	/**
+	 * The cache of section position -> overlay data for that section.
+	 */
 	private static final Long2ObjectOpenHashMap<SectionLightOverlayData> SECTION_CACHE = new Long2ObjectOpenHashMap<>();
 	
-	public static void invalidateChunk(Level level, ChunkPos pos) {
+	/**
+	 * Invalidate all sections within the given chunk. 
+	 * @param level used to find the height of the chunk
+	 * @param pos the chunk position to invalidate
+	 */
+	public static void invalidateChunk(LevelHeightAccessor level, ChunkPos pos) {
 		if (!Nolijium.config.enableLightLevelOverlay) {
 			return;
 		}
@@ -90,6 +137,9 @@ public class NolijiumLightOverlayRenderer {
 		}
 	}
 	
+	/**
+	 * Invalidate the section at the given coordinates.
+	 */
 	public static void invalidateSection(int x, int y, int z) {
 		invalidateSection(SectionPos.asLong(x, y, z));
 	}
@@ -100,7 +150,7 @@ public class NolijiumLightOverlayRenderer {
 		}
 		
 		if (!Minecraft.getInstance().isSameThread()) {
-			Minecraft.getInstance().submit(() -> invalidateSection(key));
+			Minecraft.getInstance().execute(() -> invalidateSection(key));
 			return;
 		}
 		
@@ -108,29 +158,44 @@ public class NolijiumLightOverlayRenderer {
 		currentUpdateVersion++;
 	}
 	
+	/**
+	 * {@return true if the GPU-side vertex buffer should be regenerated, either due to camera movement or section data
+	 * invalidation}
+	 */
 	private static boolean bufferNeedsUpdate(Camera camera) {
 		return currentLightOverlayBuffer == null
 			|| !lastCameraPosition.equals(camera.getBlockPosition())
 			|| currentLightOverlayBuffer.updateVersion != currentUpdateVersion;
 	}
 	
+	/**
+	 * Renders all light overlays for the current world.
+	 * @param camera the player camera
+	 * @param modelViewMatrix the current model view matrix
+	 */
 	public static void render(Camera camera, Matrix4f modelViewMatrix) {
+		// Bail immediately if light overlay is not enabled
 		if (!Nolijium.config.enableLightLevelOverlay) {
+			// Free the GPU-side buffer, we don't need it
 			if(currentLightOverlayBuffer != null) {
 				currentLightOverlayBuffer.close();
 				currentLightOverlayBuffer = null;
 			}
+			// Clear the section cache to save memory and pick up on any changes to section data later 
 			SECTION_CACHE.clear();
 			return;
 		}
 		
 		var level = Objects.requireNonNull(Minecraft.getInstance().level);
 		
+		// Check if we can reuse the previously generated GPU vertex buffer
 		if (bufferNeedsUpdate(camera)) {
 			var bufferBuilder = Tesselator.getInstance().begin(RenderType.lines().mode(), RenderType.lines().format());
 			int camPosX = camera.getBlockPosition().getX();
 			int camPosY = camera.getBlockPosition().getY();
 			int camPosZ = camera.getBlockPosition().getZ();
+			
+			// Loop through all sections needed to capture blocks at the specified radius
 			int camMinSectionX = (camPosX - BLOCK_RADIUS) >> 4;
 			int camMinSectionY = (camPosY - BLOCK_RADIUS) >> 4;
 			int camMinSectionZ = (camPosZ - BLOCK_RADIUS) >> 4;
@@ -142,10 +207,12 @@ public class NolijiumLightOverlayRenderer {
 					for(int x = camMinSectionX; x <= camMaxSectionX; x++) {
 						long key = SectionPos.asLong(x, y, z);
 						SectionLightOverlayData toRender = SECTION_CACHE.get(key);
+						// Check if we have cached light overlay data for this section; if not, generate it
 						if (toRender == null) {
 							toRender = computeLightLevelRendering(level, x, y, z);
 							SECTION_CACHE.put(key, toRender);
 						}
+						// Emit vertices into the buffer builder if the section has at least one light overlay
 						if (!toRender.isEmpty()) {
 							renderLightLevelSection(bufferBuilder, camPosX, camPosY, camPosZ, toRender);
 						}
@@ -153,6 +220,7 @@ public class NolijiumLightOverlayRenderer {
 				}
 			}
 			
+			// Store the necessary cache keys & upload the completed buffer to the GPU if it's not empty
 			lastCameraPosition = camera.getBlockPosition().immutable();
 			
 			if(currentLightOverlayBuffer != null) {
@@ -172,6 +240,7 @@ public class NolijiumLightOverlayRenderer {
 		}
 		
 		if (currentLightOverlayBuffer != null && currentLightOverlayBuffer.buffer != null) {
+			// Render the GPU-side vertex buffer at the appropriate position
 			RenderType.lines().setupRenderState();
 			Matrix4fStack matrix4fstack = RenderSystem.getModelViewStack();
 			matrix4fstack.pushMatrix();
@@ -188,6 +257,9 @@ public class NolijiumLightOverlayRenderer {
 		}
 	}
 	
+	/**
+	 * Compute the light overlay data for the given chunk section.
+	 */
 	private static SectionLightOverlayData computeLightLevelRendering(LevelReader level, int sX, int sY, int sZ) {
 		var chunk = level.getChunk(sX, sZ);
 		
@@ -228,6 +300,7 @@ public class NolijiumLightOverlayRenderer {
 			}
 		}
 		
+		// Return the section data, and use the singleton object if there is no data
 		if(!positions.isEmpty()) {
 			positions.trim();
 			lightValues.trim();
@@ -246,6 +319,7 @@ public class NolijiumLightOverlayRenderer {
 		if(shapeAbove == Shapes.empty() || (shapeAbove != Shapes.block() && shapeAbove.isEmpty())) {
 			byte lightLevel = (byte)Math.max(Math.min(level.getLightEngine().getLayerListener(LightLayer.BLOCK).getLightValue(cursor), 15), 0);
 			if(lightLevel < MINIMUM_LIGHT_LEVEL_FOR_INVISIBLE) {
+				// Mark this position as having an overlay
 				positions.add(key);
 				lightValues.add(lightLevel);
 			}
@@ -254,6 +328,9 @@ public class NolijiumLightOverlayRenderer {
 	
 	private static final float OVERLAY_NORMAL_MAGIC_VALUE = 1 / Mth.sqrt(2);
 	
+	/**
+	 * Render an X shape at the given position.
+	 */
 	private static void renderLightOverlay(BufferBuilder vConsumer, byte lightLevel, float xOff, float yOff, float zOff) {
 		int color;
 		if(lightLevel == 0) {
@@ -278,6 +355,9 @@ public class NolijiumLightOverlayRenderer {
 		vConsumer.setNormal(-OVERLAY_NORMAL_MAGIC_VALUE, 0, OVERLAY_NORMAL_MAGIC_VALUE);
 	}
 	
+	/**
+	 * Loop through the overlay data and render the overlays into the given buffer builder.
+	 */
 	private static void renderLightLevelSection(BufferBuilder buffers, int x, int y, int z, SectionLightOverlayData toRender) {
 		int size = toRender.positions.size();
 		for(int i = 0; i < size; i++) {
@@ -290,6 +370,7 @@ public class NolijiumLightOverlayRenderer {
 			int dy = blockPosY - y;
 			int dz = blockPosZ - z;
 			if ((dx * dx + dy * dy + dz * dz) >= BLOCK_RADIUS_DIST_SQUARED) {
+				// Don't show overlays outside the block radius
 				continue;
 			}
 			renderLightOverlay(buffers, lightLevel, dx, dy + 1.01f, dz);
