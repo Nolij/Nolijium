@@ -12,6 +12,7 @@
 		"common.LevelRendererMixin",
 		"common.LightTextureMixin",
 		"common.LightTextureAccessor",
+		"neoforge.LevelRendererMixin",
 		"neoforge.LivingEntityMixin",
 		"common.MobEffectMixin",
 		"common.TextureAtlasMixin"

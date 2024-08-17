@@ -107,4 +107,8 @@ public class NolijiumLexForge20 implements INolijiumSubImplementation {
 		return ComponentContents.EMPTY;
 	}
 	
+	@Override
+	public boolean supportsLightLevelOverlay() {
+		return false;
+	}
 }

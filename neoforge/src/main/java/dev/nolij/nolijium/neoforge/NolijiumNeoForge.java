@@ -2,7 +2,6 @@ package dev.nolij.nolijium.neoforge;
 
 import dev.nolij.nolijium.common.INolijiumSubImplementation;
 import dev.nolij.nolijium.common.NolijiumCommon;
-import dev.nolij.nolijium.common.NolijiumLightOverlayRenderer;
 import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.config.NolijiumConfigImpl;
 import dev.nolij.nolijium.impl.util.MethodHandleHelper;
@@ -122,10 +121,14 @@ public class NolijiumNeoForge implements INolijiumSubImplementation {
 		}
 	}
 	
-	private void onChunkUnload(ChunkEvent.Unload event) {
-		if(event.getLevel().isClientSide()) {
-			NolijiumCommon.onChunkUnload(event.getChunk().getLevel(), event.getChunk().getPos());
-		}
+	@Override
+	public boolean supportsLightLevelOverlay() {
+		return true;
 	}
 	
+	private void onChunkUnload(ChunkEvent.Unload event) {
+		if(event.getLevel().isClientSide()) {
+			NolijiumLightOverlayRenderer.invalidateChunk(event.getChunk().getLevel(), event.getChunk().getPos());
+		}
+	}
 }

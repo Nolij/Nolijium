@@ -5,7 +5,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.nolij.nolijium.common.NolijiumCommon;
-import dev.nolij.nolijium.common.NolijiumLightOverlayRenderer;
 import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.util.RGBHelper;
 import net.minecraft.client.particle.Particle;
@@ -16,7 +15,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = LevelRenderer.class, priority = 1100)
@@ -64,12 +62,5 @@ public class LevelRendererMixin {
 		}
 		
 		original.call(poseStack, vertexConsumer, shape, x, y, z, red, green, blue, alpha);
-	}
-	
-	@Inject(method = "setSectionDirty(IIIZ)V", at = @At("RETURN"))
-	private void nolijium$triggerLightOverlayUpdate(int x, int y, int z, boolean important, CallbackInfo ci) {
-		NolijiumLightOverlayRenderer.invalidateSection(x, y, z);
-		// Invalidate section below, in case it now needs to show light levels on its topmost blocks
-		NolijiumLightOverlayRenderer.invalidateSection(x, y - 1, z);
 	}
 }

@@ -15,8 +15,6 @@ import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.common.Mod;
 
 import java.nio.file.Path;
@@ -76,10 +74,6 @@ public class NolijiumCommon implements INolijiumImplementation {
 			((LightTextureAccessor) Minecraft.getInstance().gameRenderer.lightTexture()).setUpdateLightTexture(true);
 		
 		platformImplementation.onConfigReload(config);
-	}
-	
-	public static void onChunkUnload(Level level, ChunkPos pos) { 
-		NolijiumLightOverlayRenderer.invalidateChunk(level, pos);
 	}
 	
 	public static final Int2IntMap oldPotionColours = new Int2IntOpenHashMap();
