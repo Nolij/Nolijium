@@ -2,10 +2,10 @@ package dev.nolij.nolijium.common;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.MeshData;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexBuffer;
+import dev.nolij.nolijium.impl.Nolijium;
 import it.unimi.dsi.fastutil.bytes.ByteArrayList;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
@@ -80,6 +80,10 @@ public class NolijiumLightOverlayRenderer {
 	private static final Long2ObjectOpenHashMap<SectionLightOverlayData> SECTION_CACHE = new Long2ObjectOpenHashMap<>();
 	
 	public static void invalidateChunk(Level level, ChunkPos pos) {
+		if (!Nolijium.config.enableLightLevelOverlay) {
+			return;
+		}
+		
 		int minSection = level.getMinSection(), maxSection = level.getMaxSection();
 		for (int i = minSection; i <= maxSection; i++) {
 			invalidateSection(SectionPos.asLong(pos.x, i, pos.z));
@@ -90,7 +94,11 @@ public class NolijiumLightOverlayRenderer {
 		invalidateSection(SectionPos.asLong(x, y, z));
 	}
 	
-	public static void invalidateSection(long key) {
+	private static void invalidateSection(long key) {
+		if (!Nolijium.config.enableLightLevelOverlay) {
+			return;
+		}
+		
 		if (!Minecraft.getInstance().isSameThread()) {
 			Minecraft.getInstance().submit(() -> invalidateSection(key));
 			return;
@@ -107,9 +115,18 @@ public class NolijiumLightOverlayRenderer {
 	}
 	
 	public static void render(Camera camera, Matrix4f modelViewMatrix) {
+		if (!Nolijium.config.enableLightLevelOverlay) {
+			if(currentLightOverlayBuffer != null) {
+				currentLightOverlayBuffer.close();
+				currentLightOverlayBuffer = null;
+			}
+			SECTION_CACHE.clear();
+			return;
+		}
+		
 		var level = Objects.requireNonNull(Minecraft.getInstance().level);
 		
-		if(bufferNeedsUpdate(camera)) {
+		if (bufferNeedsUpdate(camera)) {
 			var bufferBuilder = Tesselator.getInstance().begin(RenderType.lines().mode(), RenderType.lines().format());
 			int camPosX = camera.getBlockPosition().getX();
 			int camPosY = camera.getBlockPosition().getY();

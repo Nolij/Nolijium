@@ -123,6 +123,11 @@ public class NolijiumConfigImpl implements Cloneable {
 		Disables block light flickering.
 		DEFAULT: `false`""")
 	public boolean disableBlockLightFlicker = false;
+
+	@ZsonField(comment = """
+		Show an overlay on blocks if the block light level above them is below 8.
+		DEFAULT: `false`""")
+	public boolean enableLightLevelOverlay = false;
 	
 	@ZsonField(comment = """
 		Disables animations for water, lava, fire, etc.
