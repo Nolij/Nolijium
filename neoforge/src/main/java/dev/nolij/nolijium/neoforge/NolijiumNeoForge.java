@@ -2,6 +2,7 @@ package dev.nolij.nolijium.neoforge;
 
 import dev.nolij.nolijium.common.INolijiumSubImplementation;
 import dev.nolij.nolijium.common.NolijiumCommon;
+import dev.nolij.nolijium.common.NolijiumLightOverlayRenderer;
 import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.config.NolijiumConfigImpl;
 import dev.nolij.nolijium.impl.util.MethodHandleHelper;
@@ -26,10 +27,12 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import net.neoforged.neoforge.client.event.ToastAddEvent;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.level.ChunkEvent;
 
 import java.lang.invoke.MethodHandles;
 
@@ -58,6 +61,8 @@ public class NolijiumNeoForge implements INolijiumSubImplementation {
 		modEventBus.addListener(this::onRegisterGuiLayers);
 		NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::onAddToast);
 		NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::onRenderTooltip);
+		NeoForge.EVENT_BUS.addListener(this::renderLevelStage);
+		NeoForge.EVENT_BUS.addListener(this::onChunkUnload);
 		
 		if (METHOD_HANDLE_HELPER.getClassOrNull("org.embeddedt.embeddium.api.OptionGUIConstructionEvent") != null)
 			new NolijiumEmbeddiumConfigScreen();
@@ -109,6 +114,18 @@ public class NolijiumNeoForge implements INolijiumSubImplementation {
 	@Override
 	public ComponentContents getEmptyComponentContents() {
 		return PlainTextContents.LiteralContents.EMPTY;
+	}
+	
+	private void renderLevelStage(RenderLevelStageEvent event) {
+		if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_CUTOUT_BLOCKS) {
+			NolijiumLightOverlayRenderer.render(event.getCamera());
+		}
+	}
+	
+	private void onChunkUnload(ChunkEvent.Unload event) {
+		if(event.getLevel().isClientSide()) {
+			NolijiumCommon.onChunkUnload(event.getChunk().getLevel(), event.getChunk().getPos());
+		}
 	}
 	
 }
