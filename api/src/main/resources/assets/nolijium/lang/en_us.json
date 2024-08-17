@@ -4,7 +4,7 @@
 	"nolijium.options.max_chat_history.name": "Maximum Chat History Size",
 	"nolijium.options.max_chat_history.tooltip": "Changes the number of messages kept in chat history (100 in vanilla).",
 	"nolijium.options.enable_tooltip_info.name": "Enable Tooltip Info",
-	"nolijium.options.enable_tooltip_info.tooltip": "Adds information about links and clickable text to tooltip.",
+	"nolijium.options.enable_tooltip_info.tooltip": "If enabled, useful information will be shown in the tooltips of links and clickable text in chat and other UIs.",
 	"nolijium.messages": "%d messages",
 	"nolijium.unlimited": "Unlimited",
 	"nolijium.options.hud_enabled.name": "Enable HUD",

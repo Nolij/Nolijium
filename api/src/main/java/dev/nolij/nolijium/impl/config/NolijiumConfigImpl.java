@@ -25,7 +25,7 @@ public class NolijiumConfigImpl implements Cloneable {
 	public int maxChatHistory = 100;
 	
 	@ZsonField(comment = """
-		Adds information about links and clickable text to tooltip.
+		If enabled, useful information will be shown in the tooltips of links and clickable text in chat and other UIs.
 		DEFAULT: `false`""")
 	public boolean enableToolTipInfo = false;
 	
