@@ -11,6 +11,7 @@
 		"common.LevelLightEngineMixin",
 		"common.LevelRendererMixin",
 		"common.LightTextureMixin",
+		"common.LightTextureAccessor",
 		"lexforge20.LivingEntityMixin",
 		"common.MobEffectMixin",
 		"common.TextureAtlasMixin"

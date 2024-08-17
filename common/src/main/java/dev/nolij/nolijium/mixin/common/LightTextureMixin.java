@@ -1,9 +1,11 @@
 package dev.nolij.nolijium.mixin.common;
 
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.nolij.nolijium.impl.Nolijium;
 import net.minecraft.client.renderer.LightTexture;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -31,6 +33,16 @@ public class LightTextureMixin {
 	public void nolijium$calculateDarknessScale$HEAD(CallbackInfoReturnable<Float> cir) {
 		if (Nolijium.config.enableGamma)
 			cir.setReturnValue(0F);
+	}
+	
+	@WrapWithCondition(method = "tick", at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD, target = "Lnet/minecraft/client/renderer/LightTexture;blockLightRedFlicker:F"))
+	public boolean nolijium$tick$blockLightRedFlicker(LightTexture instance, float value) {
+		return !(Nolijium.config.disableBlockLightFlicker || Nolijium.config.enableGamma);
+	}
+	
+	@WrapWithCondition(method = "tick", at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD, target = "Lnet/minecraft/client/renderer/LightTexture;updateLightTexture:Z"))
+	public boolean nolijium$tick$updateLightTexture(LightTexture instance, boolean value) {
+		return !Nolijium.config.enableGamma;
 	}
 	
 }

@@ -210,6 +210,13 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 					config -> config.enableOpaqueBlockOutlines)
 				.build())
 			.add(OptionImpl.createBuilder(boolean.class, storage)
+				.setId(id("disable_block_light_flicker", boolean.class))
+				.setControl(TickBoxControl::new)
+				.setBinding(
+					(config, value) -> config.disableBlockLightFlicker = value,
+					config -> config.disableBlockLightFlicker)
+				.build())
+			.add(OptionImpl.createBuilder(boolean.class, storage)
 				.setId(id("disable_block_animations", boolean.class))
 				.setControl(TickBoxControl::new)
 				.setBinding(

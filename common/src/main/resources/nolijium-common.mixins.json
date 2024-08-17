@@ -9,6 +9,7 @@
 		"common.ItemMixin",
 		"common.LevelLightEngineMixin",
 		"common.LevelRendererMixin",
+		"common.LightTextureAccessor",
 		"common.LightTextureMixin",
 		"common.MobEffectMixin",
 		"common.TextureAtlasMixin"

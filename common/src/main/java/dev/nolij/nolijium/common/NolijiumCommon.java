@@ -3,6 +3,7 @@ package dev.nolij.nolijium.common;
 import dev.nolij.nolijium.impl.INolijiumImplementation;
 import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.config.NolijiumConfigImpl;
+import dev.nolij.nolijium.mixin.common.LightTextureAccessor;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import net.minecraft.ChatFormatting;
@@ -67,6 +68,11 @@ public class NolijiumCommon implements INolijiumImplementation {
 			.stream()
 			.map(ResourceLocation::tryParse)
 			.collect(Collectors.toUnmodifiableSet());
+		
+		//noinspection ConstantValue
+		if (config.enableGamma && Minecraft.getInstance().gameRenderer != null)
+			((LightTextureAccessor) Minecraft.getInstance().gameRenderer.lightTexture()).setUpdateLightTexture(true);
+		
 		platformImplementation.onConfigReload(config);
 	}
 	

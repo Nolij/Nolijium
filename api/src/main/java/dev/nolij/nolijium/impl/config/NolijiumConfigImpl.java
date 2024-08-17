@@ -120,6 +120,11 @@ public class NolijiumConfigImpl implements Cloneable {
 	public boolean enableOpaqueBlockOutlines = false;
 	
 	@ZsonField(comment = """
+		Disables block light flickering.
+		DEFAULT: `false`""")
+	public boolean disableBlockLightFlicker = false;
+	
+	@ZsonField(comment = """
 		Disables animations for water, lava, fire, etc.
 		DEFAULT: `false`""")
 	public boolean disableTextureAnimations = false;
