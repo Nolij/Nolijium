@@ -118,7 +118,7 @@ public class NolijiumNeoForge implements INolijiumSubImplementation {
 	
 	private void renderLevelStage(RenderLevelStageEvent event) {
 		if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_CUTOUT_BLOCKS) {
-			NolijiumLightOverlayRenderer.render(event.getCamera());
+			NolijiumLightOverlayRenderer.render(event.getCamera(), event.getModelViewMatrix());
 		}
 	}
 	
