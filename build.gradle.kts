@@ -284,7 +284,7 @@ subprojects {
 			    isPreserveFileTimestamps = false
 			    isReproducibleFileOrder = true
 
-			    relocate("dev.nolij.nolijium.mixin.common", "dev.nolij.nolijium.mixin.${implName}")
+			    relocate("dev.nolij.nolijium.mixin.common", "dev.nolij.nolijium.mixin.${implName}.common")
 			    relocate("dev.nolij.nolijium.common", "dev.nolij.nolijium.${implName}.common")
 			    
 			    exclude("nolijium-common.mixins.json", "mods.toml", "neoforge.mods.toml")

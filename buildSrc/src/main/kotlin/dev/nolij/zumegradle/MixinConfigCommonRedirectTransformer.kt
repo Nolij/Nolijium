@@ -57,7 +57,12 @@ class MixinConfigCommonRedirectTransformer : Transformer {
 			"package" to packageName,
 			"compatibilityLevel" to "JAVA_17",
 			"client" to mixins
-				.map { it.replaceFirst("${commonImplName}.", "${implName}.") }
+				.map {
+					if (it.startsWith("${commonImplName}."))
+						"${implName}.${it}"
+					else
+						it
+				}
 				.toList(),
 			"injectors" to mapOf(
 				"defaultRequire" to 1,
