@@ -1,3 +1,4 @@
-- add potion revert deduplicating mechanism
-- improve HUD performance
+- added light level overlay (courtesy of @embeddedt)
+- added advanced tooltip info toggle
+- improved performance
 - further improvements to overall system stability and other minor adjustments have been made to enhance the user experience

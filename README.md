@@ -9,6 +9,8 @@ A collection of various QoL enhancements with (optional) Embeddium support and i
 # Features
 
 - Maximum chat history customization
+- Advanced tooltip info toggle
+- Light level overlay toggle (NeoForge 21+ exclusive)
 - HUD with accurate & efficient FPS tracking including 0.1% lows
 - [MC-26678](https://bugs.mojang.com/browse/MC-26678) revert
 - Potion revert (adds back potion glint and reverts colours)
@@ -22,11 +24,12 @@ A collection of various QoL enhancements with (optional) Embeddium support and i
 
 # Credits (in no particular order)
 
-- [embeddedt](https://github.com/embeddedt): Embeddium (which inspired the name of this mod, and also allowed me to yet again avoid writing a config screen), much behind-the-scenes guidance, help debugging weird errors, and education on Mixin, the JVM, and modding in general
+- [embeddedt](https://github.com/embeddedt): Light Level Overlay, Embeddium (which inspired the name of this mod, and also allowed me to yet again avoid writing a config screen), much behind-the-scenes guidance, help debugging weird errors, and education on Mixin, the JVM, and modding in general
 - [rdh](https://github.com/rhysdh540): Many contributions to the buildscript
 - [CelestialAbyss](https://github.com/CelestialAbyss): The excellent icon (also made the equally amazing icons for [Embeddium](https://github.com/embeddedt/embeddium) and [TauMC](https://github.com/TauMC))
 - [LlamaLad7](https://github.com/LlamaLad7): MixinExtras, which is heavily used by Nolijium and bundled to support monojar
 - [AlexSanech](https://github.com/Alexander317): Russian translation
+- [OrzMiku](https://github.com/OrzMiku): Simplified Chinese translation
 
 # FAQ
 
