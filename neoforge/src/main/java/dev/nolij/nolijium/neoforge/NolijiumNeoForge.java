@@ -14,6 +14,7 @@ import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.TutorialToast;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentContents;
@@ -117,7 +118,7 @@ public class NolijiumNeoForge implements INolijiumSubImplementation {
 	
 	private void renderLevelStage(RenderLevelStageEvent event) {
 		if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_CUTOUT_BLOCKS) {
-			NolijiumLightOverlayRenderer.render(event.getCamera(), event.getModelViewMatrix());
+			NolijiumLightOverlayRenderer.render(event.getCamera(), event.getModelViewMatrix(), RenderType.cutout());
 		}
 	}
 	

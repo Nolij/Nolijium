@@ -25,6 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.phys.shapes.Shapes;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fStack;
 
@@ -172,8 +173,9 @@ public class NolijiumLightOverlayRenderer {
 	 * Renders all light overlays for the current world.
 	 * @param camera the player camera
 	 * @param modelViewMatrix the current model view matrix
+	 * @param restoreType the render type to restore if rendering anything   
 	 */
-	public static void render(Camera camera, Matrix4f modelViewMatrix) {
+	public static void render(Camera camera, Matrix4f modelViewMatrix, @Nullable RenderType restoreType) {
 		// Bail immediately if light overlay is not enabled
 		if (!Nolijium.config.enableLightLevelOverlay) {
 			// Free the GPU-side buffer, we don't need it
@@ -254,6 +256,9 @@ public class NolijiumLightOverlayRenderer {
 			RenderType.lines().clearRenderState();
 			matrix4fstack.popMatrix();
 			RenderSystem.applyModelViewMatrix();
+			if (restoreType != null) {
+				restoreType.setupRenderState();
+			}
 		}
 	}
 	
