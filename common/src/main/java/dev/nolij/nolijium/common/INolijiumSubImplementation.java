@@ -10,4 +10,5 @@ public interface INolijiumSubImplementation extends INolijiumImplementation {
 	
 	ComponentContents getEmptyComponentContents();
 	
+	boolean supportsLightLevelOverlay();
 }

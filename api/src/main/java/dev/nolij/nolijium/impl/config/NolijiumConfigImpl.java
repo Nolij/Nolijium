@@ -30,6 +30,12 @@ public class NolijiumConfigImpl implements Cloneable {
 	public boolean enableToolTipInfo = false;
 	
 	@ZsonField(comment = """
+		Show an overlay on blocks if the block light level above them is below 8.
+		Exclusive to NeoForge 21+.
+		DEFAULT: `false`""")
+	public boolean enableLightLevelOverlay = false;
+	
+	@ZsonField(comment = """
 		If enabled, a HUD will be drawn on the screen showing useful performance statistics.
 		DEFAULT: `false`""")
 	public boolean hudEnabled = false;
