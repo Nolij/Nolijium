@@ -65,6 +65,13 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 					(config, value) -> config.enableToolTipInfo = value,
 					config -> config.enableToolTipInfo)
 				.build())
+			.add(OptionImpl.createBuilder(boolean.class, storage)
+				.setId(id("enable_light_level_overlay", boolean.class))
+				.setControl(TickBoxControl::new)
+				.setBinding(
+					(config, value) -> config.enableLightLevelOverlay = value,
+					config -> config.enableLightLevelOverlay)
+				.build())
 			.build());
 		
 		final Option<Boolean> hudEnabledOption;

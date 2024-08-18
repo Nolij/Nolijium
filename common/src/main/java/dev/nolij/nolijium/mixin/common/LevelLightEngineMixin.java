@@ -20,6 +20,7 @@ import java.util.Objects;
 
 @Mixin(LevelLightEngine.class)
 public class LevelLightEngineMixin {
+	
 	@Unique
 	private static final INolijiumSubImplementation NOLIJIUM_IMPL = Objects.requireNonNull(NolijiumCommon.getImplementation()); 
 	

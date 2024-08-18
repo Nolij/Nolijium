@@ -35,6 +35,7 @@ import java.util.Objects;
  * The core of the light overlay renderer.
  */
 public class NolijiumLightOverlayRenderer {
+	
 	/**
 	 * The radius of blocks around the camera that a light overlay can be shown on.
 	 */
@@ -72,6 +73,7 @@ public class NolijiumLightOverlayRenderer {
 	/**
 	 * A small wrapper class holding the current vertex buffer and the marker version it corresponds to.
 	 */
+	@SuppressWarnings("ClassCanBeRecord")
 	private static final class RenderedLightOverlays implements AutoCloseable {
 		public final VertexBuffer buffer;
 		public final int updateVersion;
@@ -98,6 +100,7 @@ public class NolijiumLightOverlayRenderer {
 	 * A wrapper class used to store the list of positions and light levels at which overlays should be rendered
 	 * within a given chunk section.
 	 */
+	@SuppressWarnings("ClassCanBeRecord")
 	private static final class SectionLightOverlayData {
 		private final LongArrayList positions;
 		private final ByteArrayList lightLevels;
@@ -204,9 +207,9 @@ public class NolijiumLightOverlayRenderer {
 			int camMaxSectionX = (camPosX + BLOCK_RADIUS) >> 4;
 			int camMaxSectionY = (camPosY + BLOCK_RADIUS) >> 4;
 			int camMaxSectionZ = (camPosZ + BLOCK_RADIUS) >> 4;
-			for(int y = camMinSectionY; y <= camMaxSectionY; y++) {
-				for(int z = camMinSectionZ; z <= camMaxSectionZ; z++) {
-					for(int x = camMinSectionX; x <= camMaxSectionX; x++) {
+			for (int y = camMinSectionY; y <= camMaxSectionY; y++) {
+				for (int z = camMinSectionZ; z <= camMaxSectionZ; z++) {
+					for (int x = camMinSectionX; x <= camMaxSectionX; x++) {
 						long key = SectionPos.asLong(x, y, z);
 						SectionLightOverlayData toRender = SECTION_CACHE.get(key);
 						// Check if we have cached light overlay data for this section; if not, generate it
@@ -248,9 +251,10 @@ public class NolijiumLightOverlayRenderer {
 			matrix4fstack.pushMatrix();
 			matrix4fstack.mul(modelViewMatrix);
 			var camPos = camera.getPosition();
-			matrix4fstack.translate((float)(lastCameraPosition.getX() - camPos.x), (float)(lastCameraPosition.getY() - camPos.y), (float)(lastCameraPosition.getZ() - camPos.z));
+			matrix4fstack.translate((float) (lastCameraPosition.getX() - camPos.x), (float) (lastCameraPosition.getY() - camPos.y), (float) (lastCameraPosition.getZ() - camPos.z));
 			RenderSystem.applyModelViewMatrix();
 			currentLightOverlayBuffer.buffer.bind();
+			//noinspection DataFlowIssue
 			currentLightOverlayBuffer.buffer.drawWithShader(RenderSystem.getModelViewMatrix(), RenderSystem.getProjectionMatrix(), RenderSystem.getShader());
 			VertexBuffer.unbind();
 			RenderType.lines().clearRenderState();
@@ -289,9 +293,9 @@ public class NolijiumLightOverlayRenderer {
 		LongArrayList positions = new LongArrayList();
 		ByteArrayList lightValues = new ByteArrayList();
 		
-		for(int y = 0; y < 16; y++) {
-			for(int z = 0; z < 16; z++) {
-				for(int x = 0; x < 16; x++) {
+		for (int y = 0; y < 16; y++) {
+			for (int z = 0; z < 16; z++) {
+				for (int x = 0; x < 16; x++) {
 					// Read the state from the section directly to avoid going through the indirection of the chunk
 					BlockState state = section.getBlockState(x, y, z);
 					if (!state.isAir()) {
@@ -306,7 +310,7 @@ public class NolijiumLightOverlayRenderer {
 		}
 		
 		// Return the section data, and use the singleton object if there is no data
-		if(!positions.isEmpty()) {
+		if (!positions.isEmpty()) {
 			positions.trim();
 			lightValues.trim();
 			return new SectionLightOverlayData(positions, lightValues);
@@ -321,8 +325,8 @@ public class NolijiumLightOverlayRenderer {
 		// Try to read the state from the section directly unless this is too high up
 		var shapeAbove = (y == 15 ? chunk.getBlockState(cursor) : section.getBlockState(x, y + 1, z)).getCollisionShape(level, cursor);
 		// Check if block above has empty collision shape
-		if(shapeAbove == Shapes.empty() || (shapeAbove != Shapes.block() && shapeAbove.isEmpty())) {
-			byte lightLevel = (byte)Math.max(Math.min(level.getLightEngine().getLayerListener(LightLayer.BLOCK).getLightValue(cursor), 15), 0);
+		if (shapeAbove == Shapes.empty() || (shapeAbove != Shapes.block() && shapeAbove.isEmpty())) {
+			byte lightLevel = (byte) Math.max(Math.min(level.getLightEngine().getLayerListener(LightLayer.BLOCK).getLightValue(cursor), 15), 0);
 			if(lightLevel < MINIMUM_LIGHT_LEVEL_FOR_INVISIBLE) {
 				// Mark this position as having an overlay
 				positions.add(key);
@@ -338,7 +342,7 @@ public class NolijiumLightOverlayRenderer {
 	 */
 	private static void renderLightOverlay(BufferBuilder vConsumer, byte lightLevel, float xOff, float yOff, float zOff) {
 		int color;
-		if(lightLevel == 0) {
+		if (lightLevel == 0) {
 			color = COLOR_BLOCK_LIGHT_0;
 		} else {
 			color = COLOR_BLOCK_LIGHT_1_TO_7;
@@ -365,7 +369,7 @@ public class NolijiumLightOverlayRenderer {
 	 */
 	private static void renderLightLevelSection(BufferBuilder buffers, int x, int y, int z, SectionLightOverlayData toRender) {
 		int size = toRender.positions.size();
-		for(int i = 0; i < size; i++) {
+		for (int i = 0; i < size; i++) {
 			long key = toRender.positions.getLong(i);
 			byte lightLevel = toRender.lightLevels.getByte(i);
 			var blockPosX = BlockPos.getX(key);
@@ -381,4 +385,5 @@ public class NolijiumLightOverlayRenderer {
 			renderLightOverlay(buffers, lightLevel, dx, dy + 1.01f, dz);
 		}
 	}
+	
 }

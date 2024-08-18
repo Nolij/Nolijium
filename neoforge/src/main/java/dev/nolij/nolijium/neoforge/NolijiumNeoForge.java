@@ -116,15 +116,15 @@ public class NolijiumNeoForge implements INolijiumSubImplementation {
 		return PlainTextContents.LiteralContents.EMPTY;
 	}
 	
+	@Override
+	public boolean supportsLightLevelOverlay() {
+		return true;
+	}
+	
 	private void renderLevelStage(RenderLevelStageEvent event) {
 		if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_CUTOUT_BLOCKS) {
 			NolijiumLightOverlayRenderer.render(event.getCamera(), event.getModelViewMatrix(), RenderType.cutout());
 		}
-	}
-	
-	@Override
-	public boolean supportsLightLevelOverlay() {
-		return true;
 	}
 	
 	private void onChunkUnload(ChunkEvent.Unload event) {
@@ -132,4 +132,5 @@ public class NolijiumNeoForge implements INolijiumSubImplementation {
 			NolijiumLightOverlayRenderer.invalidateChunk(event.getChunk().getLevel(), event.getChunk().getPos());
 		}
 	}
+	
 }
