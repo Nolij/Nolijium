@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(LevelRenderer.class)
+@Mixin(value = LevelRenderer.class, priority = 1100)
 public class LevelRendererMixin {
 	@Inject(method = "setSectionDirty(IIIZ)V", at = @At("RETURN"))
 	private void nolijium$triggerLightOverlayUpdate(int x, int y, int z, boolean important, CallbackInfo ci) {

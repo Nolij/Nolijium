@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(value = LevelRenderer.class, priority = 1100)
+@Mixin(value = LevelRenderer.class)
 public class LevelRendererMixin {
 	
 	@Inject(
@@ -63,4 +63,5 @@ public class LevelRendererMixin {
 		
 		original.call(poseStack, vertexConsumer, shape, x, y, z, red, green, blue, alpha);
 	}
+	
 }
