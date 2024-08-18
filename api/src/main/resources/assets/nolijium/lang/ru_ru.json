@@ -1,12 +1,12 @@
 {
-	"nolijium.tooltip_info": "Действие: %s\nЗначение: %s",
+    "nolijium.tooltip_info": "Действие: %s\nЗначение: %s",
     "nolijium.utilities": "Утилиты",
     "nolijium.options.max_chat_history.name": "Макс. история чата",
     "nolijium.options.max_chat_history.tooltip": "Изменяет количество сообщений, сохраняемых в истории чата (По умолчанию - 100).",
-	"nolijium.options.enable_tooltip_info.name": "Расширенные подсказки",
-	"nolijium.options.enable_tooltip_info.tooltip": "Показывает полезную информацию в подсказках для ссылок и кликабельного текста в чате и других интерфейсах.",
-	"nolijium.options.enable_light_level_overlay.name": "Оверлей уровня освещенности",
-	"nolijium.options.enable_light_level_overlay.tooltip": "Показывает оверлей на блоках, если уровень света над ними ниже 8.",
+    "nolijium.options.enable_tooltip_info.name": "Расширенные подсказки",
+    "nolijium.options.enable_tooltip_info.tooltip": "Показывает полезную информацию в подсказках для ссылок и кликабельного текста в чате и других интерфейсах.",
+    "nolijium.options.enable_light_level_overlay.name": "Оверлей уровня освещенности",
+    "nolijium.options.enable_light_level_overlay.tooltip": "Показывает оверлей на блоках, если уровень света над ними ниже 8.",
     "nolijium.messages": "%d cообщений",
     "nolijium.unlimited": "Без ограничений",
     "nolijium.options.hud_enabled.name": "HUD",
@@ -68,9 +68,9 @@
     "nolijium.options.chroma_speed.name": "Скорость хроматичности",
     "nolijium.options.chroma_speed.tooltip": "Скорость переливания цветов. Чем выше значение, тем быстрее происходит переливание.",
     "nolijium.options.enable_chroma_block_outlines.name": "Хроматичные контуры блоков",
-    "nolijium.options.enable_chroma_block_outlines.tooltip": "Включает переливание цветами для контуров блоков.",
+    "nolijium.options.enable_chroma_block_outlines.tooltip": "Включает переливание цветами контуров блоков.",
     "nolijium.options.enable_chroma_tooltips.name": "Хроматичные подсказки",
-    "nolijium.options.enable_chroma_tooltips.tooltip": "Включает переливание цветами для всплывающих над предметами в инвентаре подсказкок.",
+    "nolijium.options.enable_chroma_tooltips.tooltip": "Включает переливание цветами подсказкок.",
     "nolijium.options.enable_chroma_hud.name": "Хроматичный HUD",
-    "nolijium.options.enable_chroma_hud.tooltip": "Включает переливание цветами для текста HUD."
+    "nolijium.options.enable_chroma_hud.tooltip": "Включает переливание цветами текста HUD."
 }
