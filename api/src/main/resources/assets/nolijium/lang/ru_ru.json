@@ -68,9 +68,9 @@
     "nolijium.options.chroma_speed.name": "Скорость хроматичности",
     "nolijium.options.chroma_speed.tooltip": "Скорость переливания цветов. Чем выше значение, тем быстрее происходит переливание.",
     "nolijium.options.enable_chroma_block_outlines.name": "Хроматичные контуры блоков",
-    "nolijium.options.enable_chroma_block_outlines.tooltip": "Включает переливание цветами контуров блоков.",
+    "nolijium.options.enable_chroma_block_outlines.tooltip": "Включает переливание цветами для контуров блоков.",
     "nolijium.options.enable_chroma_tooltips.name": "Хроматичные подсказки",
-    "nolijium.options.enable_chroma_tooltips.tooltip": "Включает переливание цветами подсказкок.",
+    "nolijium.options.enable_chroma_tooltips.tooltip": "Включает переливание цветами для всплывающих над предметами в инвентаре подсказкок.",
     "nolijium.options.enable_chroma_hud.name": "Хроматичный HUD",
-    "nolijium.options.enable_chroma_hud.tooltip": "Включает переливание цветами текста HUD."
+    "nolijium.options.enable_chroma_hud.tooltip": "Включает переливание цветами для текста HUD."
 }
