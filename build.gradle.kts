@@ -483,6 +483,7 @@ afterEvaluate {
 
 	            minecraftVersions.add("1.20.1")
                 minecraftVersions.add("1.21")
+                minecraftVersions.add("1.21.1")
 
 	            optional("zume", "embeddium")
             }
@@ -495,6 +496,7 @@ afterEvaluate {
 	            
 	            minecraftVersions.add("1.20.1")
 	            minecraftVersions.add("1.21")
+	            minecraftVersions.add("1.21.1")
 	            
 	            optional("zume", "embeddium")
             }
