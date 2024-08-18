@@ -206,9 +206,9 @@ public abstract class NolijiumHUD {
 		screenWidth = guiGraphics.guiWidth();
 		screenHeight = guiGraphics.guiHeight();
 		
+		final long timestamp = System.nanoTime();
+		
 		if (Nolijium.config.hudShowFPS != DetailLevel.NONE) {
-			final long timestamp = System.nanoTime();
-			
 			if (lastFrameTimestamp != 0L) {
 				lastFrameTime = timestamp - lastFrameTimestamp;
 				if (Nolijium.config.hudShowFPS == DetailLevel.EXTENDED) {
@@ -221,13 +221,13 @@ public abstract class NolijiumHUD {
 			} else {
 				lastResizeTimestamp = System.nanoTime();
 			}
-			
-			lastFrameTimestamp = timestamp;
 		}
 		
 		if (Nolijium.config.hudRefreshRateTicks == 0 ||
-			System.nanoTime() - lastUpdateTimestamp > Nolijium.config.hudRefreshRateTicks * 50E6)
+			timestamp - lastUpdateTimestamp > Nolijium.config.hudRefreshRateTicks * 50E6)
 			update();
+		
+		lastFrameTimestamp = timestamp;
 	}
 	
 	protected void render(@NotNull GuiGraphics guiGraphics) {
