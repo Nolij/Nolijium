@@ -1,4 +1,5 @@
 - added light level overlay (courtesy of @embeddedt)
 - added advanced tooltip info toggle
+- fixed bug with HUD refreshing when HUD FPS display is disabled
 - improved performance
 - further improvements to overall system stability and other minor adjustments have been made to enhance the user experience
