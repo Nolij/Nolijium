@@ -2,4 +2,5 @@
 - added advanced tooltip info toggle
 - fixed bug with HUD refreshing when HUD FPS display is disabled
 - improved performance
+- improved Russian translation (thanks @AlexSanech)
 - further improvements to overall system stability and other minor adjustments have been made to enhance the user experience
