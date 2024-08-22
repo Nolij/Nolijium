@@ -145,7 +145,7 @@ public class NolijiumNeoForge implements INolijiumSubImplementation {
 	}
 	
 	private void onChunkUnload(ChunkEvent.Unload event) {
-		if(event.getLevel().isClientSide()) {
+		if (event.getLevel().isClientSide()) {
 			NolijiumLightOverlayRenderer.invalidateChunk(event.getChunk().getLevel(), event.getChunk().getPos());
 		}
 	}

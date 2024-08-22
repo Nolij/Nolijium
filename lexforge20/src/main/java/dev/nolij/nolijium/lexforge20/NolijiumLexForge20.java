@@ -2,7 +2,6 @@ package dev.nolij.nolijium.lexforge20;
 
 import dev.nolij.nolijium.common.INolijiumSubImplementation;
 import dev.nolij.nolijium.common.NolijiumCommon;
-import dev.nolij.nolijium.impl.INolijiumImplementation;
 import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.config.NolijiumConfigImpl;
 import dev.nolij.nolijium.impl.util.MethodHandleHelper;
@@ -111,4 +110,5 @@ public class NolijiumLexForge20 implements INolijiumSubImplementation {
 	public boolean supportsLightLevelOverlay() {
 		return false;
 	}
+	
 }
