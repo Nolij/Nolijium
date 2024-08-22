@@ -305,6 +305,8 @@ subprojects {
     }
 }
 
+unimined.footgunChecks = false
+
 unimined.minecraft {
     version("neoforge21_minecraft_version"())
 

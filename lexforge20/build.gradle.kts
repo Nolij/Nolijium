@@ -28,7 +28,6 @@ unimined.minecraft {
 	mappings {
 		mojmap()
 		parchment(mcVersion = "lexforge20_minecraft_version"(), version = "lexforge20_parchment_version"())
-		devFallbackNamespace("official")
 	}
 
 	mods {
@@ -50,6 +49,5 @@ dependencies {
 	
 	mod("org.embeddedt:embeddium-1.20.1:${"lexforge20_embeddium_version"()}")
 	
-	// Unimined >:(
-//	modRuntimeOnly("dev.nolij:zume:${"zume_version"()}")
+	modRuntimeOnly("dev.nolij:zume:${"zume_version"()}")
 }
