@@ -26,7 +26,9 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLPaths;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import net.neoforged.neoforge.client.event.ToastAddEvent;
@@ -59,13 +61,21 @@ public class NolijiumNeoForge implements INolijiumSubImplementation {
 				});
 		
 		modEventBus.addListener(this::onRegisterGuiLayers);
+		modEventBus.addListener(this::onRegisterKeyMappings);
 		NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::onAddToast);
 		NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::onRenderTooltip);
 		NeoForge.EVENT_BUS.addListener(this::renderLevelStage);
 		NeoForge.EVENT_BUS.addListener(this::onChunkUnload);
+		NeoForge.EVENT_BUS.addListener(this::onTick);
 		
 		if (METHOD_HANDLE_HELPER.getClassOrNull("org.embeddedt.embeddium.api.OptionGUIConstructionEvent") != null)
 			new NolijiumEmbeddiumConfigScreen();
+	}
+	
+	private void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
+		for (var keyBind : NolijiumNeoForgeKeyBind.values()) {
+			event.register(keyBind.value);
+		}
 	}
 	
 	private void onRegisterGuiLayers(RegisterGuiLayersEvent event) {
@@ -104,6 +114,13 @@ public class NolijiumNeoForge implements INolijiumSubImplementation {
 		event.setBorderEnd(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, -2));
 		event.setBackgroundStart(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, 0, 0.25D));
 		event.setBackgroundEnd(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, -2, 0.25D));
+	}
+	
+	private void onTick(ClientTickEvent.Pre event) {
+		if (NolijiumNeoForgeKeyBind.TOGGLE_LIGHT_LEVEL_OVERLAY.wasPressed()) {
+			NolijiumNeoForgeKeyBind.TOGGLE_LIGHT_LEVEL_OVERLAY.flush();
+			Nolijium.config.modify(config -> config.enableLightLevelOverlay = !config.enableLightLevelOverlay);
+		}
 	}
 	
 	@Override

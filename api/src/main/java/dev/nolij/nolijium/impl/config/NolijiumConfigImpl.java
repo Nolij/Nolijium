@@ -280,6 +280,12 @@ public class NolijiumConfigImpl implements Cloneable {
 		}
 	}
 	
+	public void modify(Consumer<NolijiumConfigImpl> modifier) {
+		final NolijiumConfigImpl newConfig = this.clone();
+		modifier.accept(newConfig);
+		replace(newConfig);
+	}
+	
 	
 	private static final HostPlatform HOST_PLATFORM;
 	static {

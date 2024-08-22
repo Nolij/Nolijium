@@ -1,5 +1,7 @@
 {
 	"nolijium.tooltip_info": "Action: %s\nValue: %s",
+	"nolijium": "Nolijium",
+	"nolijium.toggle_light_level_overlay": "Toggle Light Level Overlay",
 	"nolijium.utilities": "Utilities",
 	"nolijium.options.max_chat_history.name": "Maximum Chat History Size",
 	"nolijium.options.max_chat_history.tooltip": "Changes the number of messages kept in chat history (100 in vanilla).",
