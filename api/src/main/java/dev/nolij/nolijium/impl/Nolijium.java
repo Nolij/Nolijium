@@ -15,7 +15,7 @@ public class Nolijium {
 	public static final String CONFIG_FILE_NAME = MOD_ID + ".json5";
 	//endregion
 	
-	public static NolijiumConfigImpl config = new NolijiumConfigImpl();
+	public static volatile NolijiumConfigImpl config = new NolijiumConfigImpl();
 	private static INolijiumImplementation implementation;
 	
 	public static void registerImplementation(final INolijiumImplementation implementation, final Path instanceConfigPath) {
