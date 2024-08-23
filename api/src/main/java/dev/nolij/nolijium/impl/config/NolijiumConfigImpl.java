@@ -36,6 +36,21 @@ public class NolijiumConfigImpl implements Cloneable {
 	public boolean enableLightLevelOverlay = false;
 	
 	@ZsonField(comment = """
+		If enabled, terrain fog will not be rendered.
+		DEFAULT: `false`""")
+	public boolean disableFog = false;
+	
+	@ZsonField(comment = """
+		If set, this option explicitly overrides the fog distance (in chunks).
+		DEFAULT: `0`""")
+	public int fogOverride = 0;
+	
+	@ZsonField(comment = """
+		If set, fog distance is multiplied by this option.
+		DEFAULT: `1.0`""")
+	public float fogMultiplier = 1F;
+	
+	@ZsonField(comment = """
 		If enabled, a HUD will be drawn on the screen showing useful performance statistics.
 		DEFAULT: `false`""")
 	public boolean hudEnabled = false;
@@ -193,7 +208,7 @@ public class NolijiumConfigImpl implements Cloneable {
 	
 	@ZsonField(comment = """
 		Removes darkness and all client-side lighting calculations, resulting in a decent performance boost on some systems.
-		May cause issues with shaders, dynamic lighting, and light overlay mods.
+		May cause issues with shaders, dynamic lighting, and light level overlays (the light level overlay in Nolijium has some mitigations for this, but still expect some weird behaviour).
 		DEFAULT: `false`""")
 	public boolean enableGamma = false;
 	//endregion

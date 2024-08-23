@@ -11,6 +11,7 @@ A collection of various QoL enhancements with (optional) Embeddium support and i
 - Maximum chat history customization
 - Advanced tooltip info toggle
 - Light level overlay toggle (NeoForge 21+ exclusive)
+- Fog customization options
 - HUD with accurate & efficient FPS tracking including 0.1% lows
 - [MC-26678](https://bugs.mojang.com/browse/MC-26678) revert
 - Potion revert (adds back potion glint and reverts colours)

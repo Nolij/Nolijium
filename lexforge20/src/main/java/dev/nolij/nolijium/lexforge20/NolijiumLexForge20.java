@@ -4,6 +4,7 @@ import dev.nolij.nolijium.common.INolijiumSubImplementation;
 import dev.nolij.nolijium.common.NolijiumCommon;
 import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.config.NolijiumConfigImpl;
+import dev.nolij.nolijium.impl.util.MathHelper;
 import dev.nolij.nolijium.impl.util.MethodHandleHelper;
 import dev.nolij.nolijium.impl.util.RGBHelper;
 import dev.nolij.nolijium.lexforge20.integration.embeddium.NolijiumEmbeddiumConfigScreen;
@@ -14,13 +15,16 @@ import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.TutorialToast;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentContents;
+import net.minecraft.world.level.material.FogType;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.client.event.ToastAddEvent;
+import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -53,6 +57,7 @@ public class NolijiumLexForge20 implements INolijiumSubImplementation {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onRegisterGuiOverlays);
 		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::onAddToast);
 		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::onRenderTooltip);
+		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::renderFog);
 		
 		if (MethodHandleHelper.PUBLIC.getClassOrNull("org.embeddedt.embeddium.api.OptionGUIConstructionEvent") != null)
 			new NolijiumEmbeddiumConfigScreen();
@@ -94,6 +99,33 @@ public class NolijiumLexForge20 implements INolijiumSubImplementation {
 		event.setBorderEnd(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, -2));
 		event.setBackgroundStart(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, 0, 0.25D));
 		event.setBackgroundEnd(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, -2, 0.25D));
+	}
+	
+	private void renderFog(ViewportEvent.RenderFog event) {
+		if (event.getType() != FogType.NONE)
+			return;
+		
+		if (Nolijium.config.disableFog) {
+			if (event.getMode() == FogRenderer.FogMode.FOG_SKY)
+				return;
+			
+			event.setCanceled(true);
+			
+			event.setNearPlaneDistance(Float.MAX_VALUE);
+			event.setFarPlaneDistance(Float.MAX_VALUE);
+		} else if (Nolijium.config.fogOverride != 0) {
+			event.setCanceled(true);
+			final float distance = Nolijium.config.fogOverride * 16;
+			
+			if (event.getMode() != FogRenderer.FogMode.FOG_SKY)
+				event.setNearPlaneDistance(distance - (float) MathHelper.clamp(distance * 0.1D, 4D, 64D));
+			event.setFarPlaneDistance(distance);
+		} else if (Nolijium.config.fogMultiplier != 1F) {
+			event.setCanceled(true);
+			
+			event.scaleNearPlaneDistance(Nolijium.config.fogMultiplier);
+			event.scaleFarPlaneDistance(Nolijium.config.fogMultiplier);
+		}
 	}
 	
 	@Override

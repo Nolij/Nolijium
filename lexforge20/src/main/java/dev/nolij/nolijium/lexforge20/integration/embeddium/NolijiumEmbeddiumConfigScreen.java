@@ -67,6 +67,37 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 				.build())
 			.build());
 		
+		final Option<Boolean> disableFogOption;
+		final Option<Integer> fogOverrideOption;
+		utilitiesPage.add(OptionGroup.createBuilder()
+			.setId(id("fog"))
+			.add(disableFogOption = OptionImpl.createBuilder(boolean.class, storage)
+				.setId(id("disable_fog", boolean.class))
+				.setControl(TickBoxControl::new)
+				.setBinding(
+					(config, value) -> config.disableFog = value,
+					config -> config.disableFog)
+				.build())
+			.add(fogOverrideOption = OptionImpl.createBuilder(int.class, storage)
+				.setId(id("fog_override", int.class))
+				.setControl(option -> new SliderControl(option, 0, 32, 1,
+					v -> v == 0 ? Component.translatable("nolijium.none") : Component.translatable("nolijium.chunks", v)))
+				.setBinding(
+					(config, value) -> config.fogOverride = value,
+					config -> config.fogOverride)
+				.setEnabledPredicate(() -> !disableFogOption.getValue())
+				.build())
+			.add(OptionImpl.createBuilder(int.class, storage)
+				.setId(id("fog_multiplier", int.class))
+				.setControl(option -> new SliderControl(option, 10, 200, 10,
+					v -> v == 100 ? Component.translatable("nolijium.none") :  Component.translatable("nolijium.percentage", v)))
+				.setBinding(
+					(config, value) -> config.fogMultiplier = value / 100F,
+					config -> (int) (config.fogMultiplier * 100))
+				.setEnabledPredicate(() -> !disableFogOption.getValue() && fogOverrideOption.getValue() == 0)
+				.build())
+			.build());
+		
 		final Option<Boolean> hudEnabledOption;
 		final Option<DetailLevel> hudShowFPSOption;
 		utilitiesPage.add(OptionGroup.createBuilder()

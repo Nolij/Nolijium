@@ -4,6 +4,7 @@ import dev.nolij.nolijium.common.INolijiumSubImplementation;
 import dev.nolij.nolijium.common.NolijiumCommon;
 import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.config.NolijiumConfigImpl;
+import dev.nolij.nolijium.impl.util.MathHelper;
 import dev.nolij.nolijium.impl.util.MethodHandleHelper;
 import dev.nolij.nolijium.impl.util.RGBHelper;
 import dev.nolij.nolijium.neoforge.integration.embeddium.NolijiumEmbeddiumConfigScreen;
@@ -14,12 +15,14 @@ import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.TutorialToast;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.contents.PlainTextContents;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.material.FogType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
@@ -32,6 +35,7 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import net.neoforged.neoforge.client.event.ToastAddEvent;
+import net.neoforged.neoforge.client.event.ViewportEvent;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.level.ChunkEvent;
@@ -64,6 +68,7 @@ public class NolijiumNeoForge implements INolijiumSubImplementation {
 		modEventBus.addListener(this::onRegisterKeyMappings);
 		NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::onAddToast);
 		NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::onRenderTooltip);
+		NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::renderFog);
 		NeoForge.EVENT_BUS.addListener(this::renderLevelStage);
 		NeoForge.EVENT_BUS.addListener(this::onChunkUnload);
 		NeoForge.EVENT_BUS.addListener(this::onTick);
@@ -116,6 +121,45 @@ public class NolijiumNeoForge implements INolijiumSubImplementation {
 		event.setBackgroundEnd(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, -2, 0.25D));
 	}
 	
+	private void renderFog(ViewportEvent.RenderFog event) {
+		if (event.getType() != FogType.NONE)
+			return;
+		
+		if (Nolijium.config.disableFog) {
+			if (event.getMode() == FogRenderer.FogMode.FOG_SKY)
+				return;
+			
+			event.setCanceled(true);
+			
+			event.setNearPlaneDistance(Float.MAX_VALUE);
+			event.setFarPlaneDistance(Float.MAX_VALUE);
+		} else if (Nolijium.config.fogOverride != 0) {
+			event.setCanceled(true);
+			final float distance = Nolijium.config.fogOverride * 16;
+			
+			if (event.getMode() != FogRenderer.FogMode.FOG_SKY)
+				event.setNearPlaneDistance(distance - (float) MathHelper.clamp(distance * 0.1D, 4D, 64D));
+			event.setFarPlaneDistance(distance);
+		} else if (Nolijium.config.fogMultiplier != 1F) {
+			event.setCanceled(true);
+			
+			event.scaleNearPlaneDistance(Nolijium.config.fogMultiplier);
+			event.scaleFarPlaneDistance(Nolijium.config.fogMultiplier);
+		}
+	}
+	
+	private void renderLevelStage(RenderLevelStageEvent event) {
+		if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_CUTOUT_BLOCKS) {
+			NolijiumLightOverlayRenderer.render(event.getCamera(), event.getModelViewMatrix(), RenderType.cutout());
+		}
+	}
+	
+	private void onChunkUnload(ChunkEvent.Unload event) {
+		if (event.getLevel().isClientSide()) {
+			NolijiumLightOverlayRenderer.invalidateChunk(event.getChunk().getLevel(), event.getChunk().getPos());
+		}
+	}
+	
 	private void onTick(ClientTickEvent.Pre event) {
 		if (NolijiumNeoForgeKeyBind.TOGGLE_LIGHT_LEVEL_OVERLAY.wasPressed()) {
 			NolijiumNeoForgeKeyBind.TOGGLE_LIGHT_LEVEL_OVERLAY.flush();
@@ -136,18 +180,6 @@ public class NolijiumNeoForge implements INolijiumSubImplementation {
 	@Override
 	public boolean supportsLightLevelOverlay() {
 		return true;
-	}
-	
-	private void renderLevelStage(RenderLevelStageEvent event) {
-		if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_CUTOUT_BLOCKS) {
-			NolijiumLightOverlayRenderer.render(event.getCamera(), event.getModelViewMatrix(), RenderType.cutout());
-		}
-	}
-	
-	private void onChunkUnload(ChunkEvent.Unload event) {
-		if (event.getLevel().isClientSide()) {
-			NolijiumLightOverlayRenderer.invalidateChunk(event.getChunk().getLevel(), event.getChunk().getPos());
-		}
 	}
 	
 }
