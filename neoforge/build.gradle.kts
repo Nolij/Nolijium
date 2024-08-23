@@ -46,10 +46,10 @@ dependencies {
 	
 	minecraftLibraries("dev.nolij:zson:${"zson_version"()}")
 	
-	modCompileOnly("org.embeddedt:embeddium-1.21.1:${"neoforge21_embeddium_version"()}:api") {
+	modCompileOnly("org.embeddedt:embeddium-1.21.1:${"neoforge21_embeddium_version"()}:api")
+	modRuntimeOnly("org.embeddedt:embeddium-1.21.1:${"neoforge21_embeddium_version"()}") {
 		isTransitive = false
 	}
-	modRuntimeOnly("org.embeddedt:embeddium-1.21.1:${"neoforge21_embeddium_version"()}")
 
 	modRuntimeOnly("dev.nolij:zume:${"zume_version"()}")
 }
