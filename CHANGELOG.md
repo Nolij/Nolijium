@@ -1,6 +1,7 @@
 - added light level overlay (courtesy of @embeddedt)
 - added advanced tooltip info toggle
 - added fog customization options
+- added sky rendering toggle
 - fixed bug with HUD refreshing when HUD FPS display is disabled
 - improved performance
 - improved Russian translation (thanks @AlexSanech)

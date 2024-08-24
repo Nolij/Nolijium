@@ -270,6 +270,13 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 					(config, value) -> config.disableTextureAnimations = value,
 					config -> config.disableTextureAnimations)
 				.build())
+			.add(OptionImpl.createBuilder(boolean.class, storage)
+				.setId(id("disable_sky_render", boolean.class))
+				.setControl(TickBoxControl::new)
+				.setBinding(
+					(config, value) -> config.disableSkyRender = value,
+					config -> config.disableSkyRender)
+				.build())
 			.build());
 		
 		final Option<Boolean> disableAllToastsOption;

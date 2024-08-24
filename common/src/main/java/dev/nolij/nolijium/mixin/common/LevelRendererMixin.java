@@ -1,5 +1,6 @@
 package dev.nolij.nolijium.mixin.common;
 
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -7,11 +8,13 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.nolij.nolijium.common.NolijiumCommon;
 import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.util.RGBHelper;
+import net.minecraft.client.Camera;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -62,6 +65,17 @@ public class LevelRendererMixin {
 		}
 		
 		original.call(poseStack, vertexConsumer, shape, x, y, z, red, green, blue, alpha);
+	}
+	
+	@WrapWithCondition(
+		method = "renderLevel", 
+		at = @At(
+			value = "INVOKE", 
+			target = "Lnet/minecraft/client/renderer/LevelRenderer;renderSky(Lorg/joml/Matrix4f;Lorg/joml/Matrix4f;FLnet/minecraft/client/Camera;ZLjava/lang/Runnable;)V"
+		)
+	)
+	public boolean nolijium$renderLevel$renderSky(LevelRenderer instance, Matrix4f matrix4f1, Matrix4f matrix4f2, float v, Camera camera, boolean b, Runnable runnable) {
+		return !Nolijium.config.disableSkyRender;
 	}
 	
 }
