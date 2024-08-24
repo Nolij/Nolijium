@@ -65,6 +65,8 @@
 	"nolijium.options.disable_block_animations.tooltip": "Disables animations for water, lava, fire, etc.",
 	"nolijium.options.disable_sky_render.name": "Disable Sky Rendering",
 	"nolijium.options.disable_sky_render.tooltip": "Disables sky rendering.",
+	"nolijium.options.disable_font_shadows.name": "Disable Font Shadows",
+	"nolijium.options.disable_font_shadows.tooltip": "Disables font shadows.",
 	"nolijium.options.disable_all_toasts.name": "Disable All Toasts",
 	"nolijium.options.disable_all_toasts.tooltip": "Disables all toast messages.",
 	"nolijium.options.disable_advancement_toasts.name": "Disable Advancement Toasts",

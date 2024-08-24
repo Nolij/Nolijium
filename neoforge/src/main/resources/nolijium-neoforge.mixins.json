@@ -4,6 +4,7 @@
 	"package": "dev.nolij.nolijium.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
+		"common.FontMixin",
 		"neoforge.ChatComponentMixin",
 		"common.GameRendererMixin",
 		"common.GuiGraphicsMixin",

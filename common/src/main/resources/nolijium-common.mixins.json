@@ -4,6 +4,7 @@
 	"package": "dev.nolij.nolijium.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"client": [
+		"common.FontMixin",
 		"common.GameRendererMixin",
 		"common.GuiGraphicsMixin",
 		"common.ItemMixin",

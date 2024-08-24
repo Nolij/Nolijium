@@ -18,6 +18,7 @@ A collection of various QoL enhancements with (optional) Embeddium support and i
 - Opaque block outlines toggle
 - Texture animation toggle
 - Sky rendering toggle
+- Font shadow toggle
 - Toast toggles
 - Particle toggles
 - Chroma block outlines, tooltips, & HUD
