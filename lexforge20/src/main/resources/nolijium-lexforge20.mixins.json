@@ -4,17 +4,18 @@
 	"package": "dev.nolij.nolijium.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"client": [
-		"lexforge20.ChatComponentMixin",
 		"common.GameRendererMixin",
 		"common.GuiGraphicsMixin",
 		"common.ItemMixin",
 		"common.LevelLightEngineMixin",
 		"common.LevelRendererMixin",
-		"common.LightTextureMixin",
 		"common.LightTextureAccessor",
-		"lexforge20.LivingEntityMixin",
+		"common.LightTextureMixin",
 		"common.MobEffectMixin",
-		"common.TextureAtlasMixin"
+		"common.TextureAtlasMixin",
+		"lexforge20.ChatComponentMixin",
+		"lexforge20.LevelRendererMixin",
+		"lexforge20.LivingEntityMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
