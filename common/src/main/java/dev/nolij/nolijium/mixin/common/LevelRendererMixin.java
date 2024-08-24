@@ -1,5 +1,6 @@
 package dev.nolij.nolijium.mixin.common;
 
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -9,6 +10,7 @@ import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.util.RGBHelper;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -62,6 +64,17 @@ public class LevelRendererMixin {
 		}
 		
 		original.call(poseStack, vertexConsumer, shape, x, y, z, red, green, blue, alpha);
+	}
+	
+	@WrapWithCondition(
+		method = "renderLevel",
+		at = @At(
+			value = "INVOKE", 
+			target = "Lnet/minecraft/client/renderer/LevelRenderer;renderSnowAndRain(Lnet/minecraft/client/renderer/LightTexture;FDDD)V"
+		)
+	)
+	public boolean nolijium$renderLevel$renderSnowAndRain(LevelRenderer instance, LightTexture f2, float d2, double d4, double f3, double f4) {
+		return !Nolijium.config.disableWeather;
 	}
 	
 }

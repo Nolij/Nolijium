@@ -20,7 +20,7 @@ public class LevelRendererMixin {
 		)
 	)
 	public boolean nolijium$renderLevel$renderSky(LevelRenderer instance, PoseStack f8, Matrix4f f9, float j, Camera f3, boolean f4, Runnable f5) {
-		return !Nolijium.config.disableSkyRender;
+		return !Nolijium.config.disableSky;
 	}
 	
 }

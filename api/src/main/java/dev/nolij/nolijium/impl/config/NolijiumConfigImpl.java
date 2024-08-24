@@ -158,7 +158,12 @@ public class NolijiumConfigImpl implements Cloneable {
 	@ZsonField(comment = """
 		Disables sky rendering.
 		DEFAULT: `false`""")
-	public boolean disableSkyRender = false;
+	public boolean disableSky = false;
+	
+	@ZsonField(comment = """
+		Disables weather rendering.
+		DEFAULT: `false`""")
+	public boolean disableWeather = false;
 	
 	@ZsonField(comment = """
 		Disables font shadows.

@@ -264,11 +264,18 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 					config -> config.disableTextureAnimations)
 				.build())
 			.add(OptionImpl.createBuilder(boolean.class, storage)
-				.setId(id("disable_sky_render", boolean.class))
+				.setId(id("disable_sky", boolean.class))
 				.setControl(TickBoxControl::new)
 				.setBinding(
-					(config, value) -> config.disableSkyRender = value,
-					config -> config.disableSkyRender)
+					(config, value) -> config.disableSky = value,
+					config -> config.disableSky)
+				.build())
+			.add(OptionImpl.createBuilder(boolean.class, storage)
+				.setId(id("disable_weather", boolean.class))
+				.setControl(TickBoxControl::new)
+				.setBinding(
+					(config, value) -> config.disableWeather = value,
+					config -> config.disableWeather)
 				.build())
 			.add(OptionImpl.createBuilder(boolean.class, storage)
 				.setId(id("disable_font_shadows", boolean.class))
