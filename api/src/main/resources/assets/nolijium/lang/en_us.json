@@ -24,6 +24,8 @@
 	"nolijium.options.fog_override.tooltip": "If set, this option explicitly overrides the fog distance.",
 	"nolijium.options.fog_multiplier.name": "Fog Multiplier",
 	"nolijium.options.fog_multiplier.tooltip": "If set, fog distance is multiplied by this option.",
+	"nolijium.options.fog_start_multiplier.name": "Fog Start Multiplier",
+	"nolijium.options.fog_start_multiplier.tooltip": "If set, fog start distance is multiplied by this option.",
 	"nolijium.options.hud_enabled.name": "Enable HUD",
 	"nolijium.options.hud_enabled.tooltip": "If enabled, a HUD will be drawn on the screen showing useful performance statistics.",
 	"nolijium.options.hud_alignment_x.name": "HUD X Alignment",

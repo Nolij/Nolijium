@@ -96,6 +96,15 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 					config -> (int) (config.fogMultiplier * 100))
 				.setEnabledPredicate(() -> !disableFogOption.getValue() && fogOverrideOption.getValue() == 0)
 				.build())
+			.add(OptionImpl.createBuilder(int.class, storage)
+				.setId(id("fog_start_multiplier", int.class))
+				.setControl(option -> new SliderControl(option, 0, 100, 10,
+					v -> v == 100 ? Component.translatable("nolijium.none") :  Component.translatable("nolijium.percentage", v)))
+				.setBinding(
+					(config, value) -> config.fogStartMultiplier = value / 100F,
+					config -> (int) (config.fogStartMultiplier * 100))
+				.setEnabledPredicate(() -> !disableFogOption.getValue())
+				.build())
 			.build());
 		
 		final Option<Boolean> hudEnabledOption;

@@ -113,7 +113,10 @@ public class NolijiumLexForge20 implements INolijiumSubImplementation {
 			
 			event.setNearPlaneDistance(Float.MAX_VALUE);
 			event.setFarPlaneDistance(Float.MAX_VALUE);
-		} else if (Nolijium.config.fogOverride != 0) {
+			return;
+		}
+		
+		if (Nolijium.config.fogOverride != 0) {
 			event.setCanceled(true);
 			final float distance = Nolijium.config.fogOverride * 16;
 			
@@ -125,6 +128,13 @@ public class NolijiumLexForge20 implements INolijiumSubImplementation {
 			
 			event.scaleNearPlaneDistance(Nolijium.config.fogMultiplier);
 			event.scaleFarPlaneDistance(Nolijium.config.fogMultiplier);
+		}
+		
+		if (event.getMode() != FogRenderer.FogMode.FOG_SKY &&
+			Nolijium.config.fogStartMultiplier != 1F) {
+			event.setCanceled(true);
+			
+			event.scaleNearPlaneDistance(Nolijium.config.fogStartMultiplier);
 		}
 	}
 	

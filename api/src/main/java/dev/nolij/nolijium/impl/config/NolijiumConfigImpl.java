@@ -51,6 +51,11 @@ public class NolijiumConfigImpl implements Cloneable {
 	public float fogMultiplier = 1F;
 	
 	@ZsonField(comment = """
+		If set, fog start distance is multiplied by this option.
+		DEFAULT: `1.0`""")
+	public float fogStartMultiplier = 1F;
+	
+	@ZsonField(comment = """
 		If enabled, a HUD will be drawn on the screen showing useful performance statistics.
 		DEFAULT: `false`""")
 	public boolean hudEnabled = false;
