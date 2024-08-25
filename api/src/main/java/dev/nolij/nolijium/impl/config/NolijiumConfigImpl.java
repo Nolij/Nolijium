@@ -156,6 +156,21 @@ public class NolijiumConfigImpl implements Cloneable {
 	public boolean disableTextureAnimations = false;
 	
 	@ZsonField(comment = """
+		Disables sky rendering.
+		DEFAULT: `false`""")
+	public boolean disableSky = false;
+	
+	@ZsonField(comment = """
+		Disables weather rendering.
+		DEFAULT: `false`""")
+	public boolean disableWeather = false;
+	
+	@ZsonField(comment = """
+		Disables font shadows.
+		DEFAULT: `false`""")
+	public boolean disableFontShadows = false;
+	
+	@ZsonField(comment = """
 		Disables all toast messages.
 		DEFAULT: `false`""")
 	public boolean hideAllToasts = false;

@@ -17,6 +17,9 @@ A collection of various QoL enhancements with (optional) Embeddium support and i
 - Potion revert (adds back potion glint and reverts colours)
 - Opaque block outlines toggle
 - Texture animation toggle
+- Sky rendering toggle
+- Weather rendering toggle
+- Font shadow toggle
 - Toast toggles
 - Particle toggles
 - Chroma block outlines, tooltips, & HUD
