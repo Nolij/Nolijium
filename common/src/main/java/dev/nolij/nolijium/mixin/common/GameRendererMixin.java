@@ -11,7 +11,10 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(GameRenderer.class)
 public class GameRendererMixin {
 	
-	@WrapOperation(method = "bobHurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getHurtDir()F"))
+	@WrapOperation(
+		method = "bobHurt", 
+		at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getHurtDir()F")
+	)
 	public float nolijium$bobHurt$getHurtDir(LivingEntity instance, Operation<Float> original) {
 		if (Nolijium.config.revertDamageCameraTilt)
 			return 0F;

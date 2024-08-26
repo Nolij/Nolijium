@@ -13,7 +13,10 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(GuiGraphics.class)
 public class GuiGraphicsMixin {
 	
-	@WrapOperation(method = "renderComponentHoverEffect", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/Style;getHoverEvent()Lnet/minecraft/network/chat/HoverEvent;"))
+	@WrapOperation(
+		method = "renderComponentHoverEffect", 
+		at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/Style;getHoverEvent()Lnet/minecraft/network/chat/HoverEvent;")
+	)
 	public HoverEvent nolijium$renderComponentHoverEffect$getHoverEvent(Style instance, Operation<HoverEvent> original) {
 		if (Nolijium.config.enableToolTipInfo)
 			return NolijiumCommon.getHoverEvent(instance);

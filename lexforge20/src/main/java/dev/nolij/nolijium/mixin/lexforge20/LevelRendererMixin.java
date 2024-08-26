@@ -14,10 +14,7 @@ public class LevelRendererMixin {
 	
 	@WrapWithCondition(
 		method = "renderLevel",
-		at = @At(
-			value = "INVOKE",
-			target = "Lnet/minecraft/client/renderer/LevelRenderer;renderSky(Lcom/mojang/blaze3d/vertex/PoseStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/Camera;ZLjava/lang/Runnable;)V"
-		)
+		at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;renderSky(Lcom/mojang/blaze3d/vertex/PoseStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/Camera;ZLjava/lang/Runnable;)V")
 	)
 	public boolean nolijium$renderLevel$renderSky(LevelRenderer instance, PoseStack f8, Matrix4f f9, float j, Camera f3, boolean f4, Runnable f5) {
 		return !Nolijium.config.disableSky;

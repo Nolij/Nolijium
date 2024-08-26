@@ -14,7 +14,10 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin {
 	
-	@WrapOperation(method = "tickEffects", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V"))
+	@WrapOperation(
+		method = "tickEffects", 
+		at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V")
+	)
 	private void nolijium$tickEffects$addParticle(Level instance, ParticleOptions particleData, double x, double y, double z, double red, double green, double blue, Operation<Void> original) {
 		if (Nolijium.config.revertPotions) {
 			final int colour = RGBHelper.getColour(
