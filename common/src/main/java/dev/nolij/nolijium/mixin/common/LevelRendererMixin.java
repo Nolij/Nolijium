@@ -74,7 +74,7 @@ public class LevelRendererMixin {
 		)
 	)
 	public boolean nolijium$renderLevel$renderSnowAndRain(LevelRenderer instance, LightTexture f2, float d2, double d4, double f3, double f4) {
-		return !Nolijium.config.disableWeather;
+		return !Nolijium.config.disableWeatherRendering;
 	}
 	
 }
