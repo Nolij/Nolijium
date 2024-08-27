@@ -9,11 +9,14 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 @Mixin(ChatComponent.class)
 public class ChatComponentMixin {
 	
-	@ModifyConstant(method = {
+	@ModifyConstant(
+		method = {
 			"addMessageToDisplayQueue", 
 			"addMessageToQueue",
 			"addRecentChat",
-		}, constant = @Constant(intValue = 100))
+		}, 
+		constant = @Constant(intValue = 100)
+	)
 	public int nolijium$MAX_CHAT_HISTORY(int constant) {
 		return Nolijium.config.maxChatHistory > 0 
 		       ? Nolijium.config.maxChatHistory 

@@ -21,7 +21,8 @@ public class LightTextureMixin {
 			target = "Ljava/lang/Double;floatValue()F", 
 			remap = false,
 			ordinal = 1
-		))
+		)
+	)
 	public float nolijium$updateLightTexture$floatValue(Double instance, Operation<Float> original) {
 		if (Nolijium.config.enableGamma)
 			return 1E7F;
@@ -35,12 +36,26 @@ public class LightTextureMixin {
 			cir.setReturnValue(0F);
 	}
 	
-	@WrapWithCondition(method = "tick", at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD, target = "Lnet/minecraft/client/renderer/LightTexture;blockLightRedFlicker:F"))
+	@WrapWithCondition(
+		method = "tick", 
+		at = @At(
+			value = "FIELD", 
+			opcode = Opcodes.PUTFIELD, 
+			target = "Lnet/minecraft/client/renderer/LightTexture;blockLightRedFlicker:F"
+		)
+	)
 	public boolean nolijium$tick$blockLightRedFlicker(LightTexture instance, float value) {
 		return !(Nolijium.config.disableBlockLightFlicker || Nolijium.config.enableGamma);
 	}
 	
-	@WrapWithCondition(method = "tick", at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD, target = "Lnet/minecraft/client/renderer/LightTexture;updateLightTexture:Z"))
+	@WrapWithCondition(
+		method = "tick", 
+		at = @At(
+			value = "FIELD", 
+			opcode = Opcodes.PUTFIELD, 
+			target = "Lnet/minecraft/client/renderer/LightTexture;updateLightTexture:Z"
+		)
+	)
 	public boolean nolijium$tick$updateLightTexture(LightTexture instance, boolean value) {
 		return !Nolijium.config.enableGamma;
 	}

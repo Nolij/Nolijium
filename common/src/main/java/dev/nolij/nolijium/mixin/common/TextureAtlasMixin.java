@@ -13,7 +13,10 @@ import java.util.List;
 @Mixin(TextureAtlas.class)
 public class TextureAtlasMixin {
 	
-	@WrapOperation(method = "cycleAnimationFrames", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/texture/TextureAtlas;animatedTextures:Ljava/util/List;"))
+	@WrapOperation(
+		method = "cycleAnimationFrames", 
+		at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/texture/TextureAtlas;animatedTextures:Ljava/util/List;")
+	)
 	public List<TextureAtlasSprite.Ticker> nolijium$cycleAnimationFrames$animatedTextures(TextureAtlas instance, Operation<List<TextureAtlasSprite.Ticker>> original) {
 		if (Nolijium.config.disableTextureAnimations)
 			return List.of();

@@ -3,6 +3,7 @@
 - added fog customization options
 - added sky rendering toggle
 - added weather rendering toggle
+- added weather ticking toggle
 - added font shadow toggle
 - fixed bug with HUD refreshing when HUD FPS display is disabled
 - improved performance
