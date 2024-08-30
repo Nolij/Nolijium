@@ -34,6 +34,7 @@ A collection of various QoL enhancements with (optional) Embeddium support and i
 - [LlamaLad7](https://github.com/LlamaLad7): MixinExtras, which is heavily used by Nolijium and bundled to support monojar
 - [AlexSanech](https://github.com/Alexander317): Russian translation
 - [OrzMiku](https://github.com/OrzMiku): Simplified Chinese translation
+- [cutiegin](https://github.com/cutiegin): Ukrainian translation
 
 # FAQ
 
