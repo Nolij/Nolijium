@@ -90,6 +90,15 @@ public class NolijiumLexForge20 implements INolijiumSubImplementation {
 	}
 	
 	private void onRenderTooltip(RenderTooltipEvent.Color event) {
+		if (Nolijium.config.tooltipColourOverride) {
+			event.setBorderStart(Nolijium.config.tooltipBorderStart);
+			event.setBorderEnd(Nolijium.config.tooltipBorderEnd);
+			event.setBackgroundStart(Nolijium.config.tooltipBackgroundStart);
+			event.setBackgroundEnd(Nolijium.config.tooltipBackgroundEnd);
+			
+			return;
+		}
+		
 		if (!Nolijium.config.enableChromaToolTips)
 			return;
 		

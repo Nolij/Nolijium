@@ -402,6 +402,7 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 				.setBinding(
 					(config, value) -> config.enableChromaToolTips = value,
 					config -> config.enableChromaToolTips)
+				.setEnabledPredicate(() -> !storage.getData().tooltipColourOverride)
 				.build())
 			.add(OptionImpl.createBuilder(boolean.class, storage)
 				.setId(id("enable_chroma_hud", boolean.class))

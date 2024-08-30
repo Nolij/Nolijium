@@ -236,6 +236,23 @@ public class NolijiumConfigImpl implements Cloneable {
 		May cause issues with shaders, dynamic lighting, and light level overlays (the light level overlay in Nolijium has some mitigations for this, but still expect some weird behaviour).
 		DEFAULT: `false`""")
 	public boolean enableGamma = false;
+	
+	@ZsonField(comment = """
+		Intended for advanced users and developers only. Colour format is 0xAARRGGBB.
+		DEFAULT: `false`""")
+	public boolean tooltipColourOverride = false;
+	
+	@ZsonField
+	public int tooltipBorderStart = 0;
+	
+	@ZsonField
+	public int tooltipBorderEnd = 0;
+	
+	@ZsonField
+	public int tooltipBackgroundStart = 0;
+	
+	@ZsonField
+	public int tooltipBackgroundEnd = 0;
 	//endregion
 	
 	private static final int EXPECTED_VERSION = 1;
