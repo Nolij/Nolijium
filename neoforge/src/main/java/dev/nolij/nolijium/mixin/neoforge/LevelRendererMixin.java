@@ -34,6 +34,7 @@ public class LevelRendererMixin {
 		return !Nolijium.config.disableSky;
 	}
 	
+	// fix crash if star count is too low
 	@Inject(
 		method = "drawStars",
 		at = @At(
