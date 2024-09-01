@@ -247,6 +247,11 @@ public class NolijiumConfigImpl implements Cloneable {
 	public boolean enableChromaHUD = false;
 	
 	@ZsonField(comment = """
+		Enable drawing a chroma overlay on the block's surfaces.
+		DEFAULT: `false`""")
+	public boolean enableChromaBlockShapeOverlay = false;
+	
+	@ZsonField(comment = """
 		Removes darkness and all client-side lighting calculations, resulting in a decent performance boost on some systems.
 		May cause issues with shaders, dynamic lighting, and light level overlays (the light level overlay in Nolijium has some mitigations for this, but still expect some weird behaviour).
 		DEFAULT: `false`""")

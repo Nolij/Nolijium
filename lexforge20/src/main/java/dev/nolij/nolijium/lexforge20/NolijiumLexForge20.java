@@ -1,5 +1,7 @@
 package dev.nolij.nolijium.lexforge20;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.nolij.nolijium.common.INolijiumSubImplementation;
 import dev.nolij.nolijium.common.NolijiumCommon;
 import dev.nolij.nolijium.impl.Nolijium;
@@ -162,4 +164,8 @@ public class NolijiumLexForge20 implements INolijiumSubImplementation {
 		return false;
 	}
 	
+	@Override
+	public void addLineVertex(PoseStack.Pose pose, VertexConsumer consumer, float x, float y, float z, int color, float nx, float ny, float nz) {
+		consumer.vertex(pose.pose(), x, y, z).color(color).normal(pose.normal(), nx, ny, nz).endVertex();
+	}
 }

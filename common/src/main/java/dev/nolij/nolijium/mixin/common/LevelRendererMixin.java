@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import dev.nolij.nolijium.common.ChromaShapeRenderer;
 import dev.nolij.nolijium.common.NolijiumCommon;
 import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.util.RGBHelper;
@@ -54,7 +55,7 @@ public class LevelRendererMixin {
 		)
 	)
 	public void nolijium$renderHitOutline$renderShape(PoseStack poseStack, VertexConsumer vertexConsumer, VoxelShape shape, double x, double y, double z, float red, float green, float blue, float alpha, Operation<Void> original) {
-		if (Nolijium.config.enableChromaBlockOutlines) {
+		if (Nolijium.config.enableChromaBlockOutlines || Nolijium.config.enableChromaBlockShapeOverlay) {
 			final double timestamp = System.nanoTime() * 1E-9D;
 			
 			red = (float) RGBHelper.chromaRed(timestamp, Nolijium.config.chromaSpeed, 0);
@@ -65,7 +66,11 @@ public class LevelRendererMixin {
 			alpha = 1F;
 		}
 		
-		original.call(poseStack, vertexConsumer, shape, x, y, z, red, green, blue, alpha);
+		if (Nolijium.config.enableChromaBlockShapeOverlay) {
+			ChromaShapeRenderer.render(poseStack, shape, x, y, z, red, green, blue, alpha);
+		} else {
+			original.call(poseStack, vertexConsumer, shape, x, y, z, red, green, blue, alpha);
+		}
 	}
 	
 	@WrapWithCondition(
