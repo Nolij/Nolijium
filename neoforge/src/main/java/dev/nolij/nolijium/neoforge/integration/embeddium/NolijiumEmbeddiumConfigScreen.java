@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.embeddedt.embeddium.api.OptionGUIConstructionEvent;
 import org.embeddedt.embeddium.api.eventbus.EventHandlerRegistrar;
 import org.embeddedt.embeddium.api.options.OptionIdentifier;
+import org.embeddedt.embeddium.api.options.control.ControlValueFormatter;
 import org.embeddedt.embeddium.api.options.control.CyclingControl;
 import org.embeddedt.embeddium.api.options.control.SliderControl;
 import org.embeddedt.embeddium.api.options.control.TickBoxControl;
@@ -71,6 +72,31 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 				.setBinding(
 					(config, value) -> config.enableLightLevelOverlay = value,
 					config -> config.enableLightLevelOverlay)
+				.build())
+			.build());
+		
+		utilitiesPage.add(OptionGroup.createBuilder()
+			.setId(id("stars"))
+			.add(OptionImpl.createBuilder(int.class, storage)
+				.setId(id("star_count", int.class))
+				.setControl(option -> new SliderControl(option, 0, 50000, 500, ControlValueFormatter.number()))
+				.setBinding(
+					(config, value) -> config.starCount = value,
+					config -> config.starCount)
+				.build())
+			.add(OptionImpl.createBuilder(int.class, storage)
+				.setId(id("star_scale", int.class))
+				.setControl(option -> new SliderControl(option, 0, 100, 5, ControlValueFormatter.percentage()))
+				.setBinding(
+					(config, value) -> config.starScale = value * 0.01F,
+					config -> (int) (config.starScale * 100))
+				.build())
+			.add(OptionImpl.createBuilder(int.class, storage)
+				.setId(id("star_brightness", int.class))
+				.setControl(option -> new SliderControl(option, 0, 100, 5, ControlValueFormatter.percentage()))
+				.setBinding(
+					(config, value) -> config.starBrightness = value * 0.01F,
+					config -> (int) (config.starBrightness * 100))
 				.build())
 			.build());
 		

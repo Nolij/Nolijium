@@ -1,12 +1,2 @@
-- added light level overlay (courtesy of @embeddedt)
-- added advanced tooltip info toggle
-- added fog customization options
-- added sky rendering toggle
-- added weather rendering toggle
-- added weather ticking toggle
-- added font shadow toggle
-- fixed bug with HUD refreshing when HUD FPS display is disabled
-- improved performance
-- added Ukrainian translation (thanks @cutiegin)
-- improved Russian translation (thanks @AlexSanech)
+- added star renderer customization options
 - further improvements to overall system stability and other minor adjustments have been made to enhance the user experience

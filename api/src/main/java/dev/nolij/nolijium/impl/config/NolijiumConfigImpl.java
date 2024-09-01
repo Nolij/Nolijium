@@ -36,6 +36,21 @@ public class NolijiumConfigImpl implements Cloneable {
 	public boolean enableLightLevelOverlay = false;
 	
 	@ZsonField(comment = """
+		Overrides the number of stars rendered.
+		DEFAULT: `1500`""")
+	public int starCount = 1500;
+	
+	@ZsonField(comment = """
+		Overrides the scale of stars.
+		DEFAULT: `0.1`""")
+	public float starScale = 0.1F;
+	
+	@ZsonField(comment = """
+		Overrides the brightness of stars.
+		DEFAULT: `0.5`""")
+	public float starBrightness = 0.5F;
+	
+	@ZsonField(comment = """
 		If enabled, terrain fog will not be rendered.
 		DEFAULT: `false`""")
 	public boolean disableFog = false;

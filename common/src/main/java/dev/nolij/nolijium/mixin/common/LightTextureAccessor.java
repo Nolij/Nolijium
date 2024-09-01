@@ -8,6 +8,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface LightTextureAccessor {
 	
 	@Accessor("updateLightTexture")
-	void setUpdateLightTexture(boolean updateLightTexture);
+	void nolijium$setUpdateLightTexture(boolean updateLightTexture);
 	
 }

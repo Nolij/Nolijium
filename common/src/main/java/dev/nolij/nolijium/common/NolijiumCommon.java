@@ -1,8 +1,10 @@
 package dev.nolij.nolijium.common;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import dev.nolij.nolijium.impl.INolijiumImplementation;
 import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.config.NolijiumConfigImpl;
+import dev.nolij.nolijium.mixin.common.LevelRendererAccessor;
 import dev.nolij.nolijium.mixin.common.LightTextureAccessor;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
@@ -71,7 +73,12 @@ public class NolijiumCommon implements INolijiumImplementation {
 		
 		//noinspection ConstantValue
 		if (config.enableGamma && Minecraft.getInstance().gameRenderer != null)
-			((LightTextureAccessor) Minecraft.getInstance().gameRenderer.lightTexture()).setUpdateLightTexture(true);
+			((LightTextureAccessor) Minecraft.getInstance().gameRenderer.lightTexture()).nolijium$setUpdateLightTexture(true);
+		
+		//noinspection ConstantValue
+		if (Minecraft.getInstance().levelRenderer != null)
+			RenderSystem.recordRenderCall(() ->
+				((LevelRendererAccessor) Minecraft.getInstance().levelRenderer).nolijium$createStars());
 		
 		platformImplementation.onConfigReload(config);
 	}

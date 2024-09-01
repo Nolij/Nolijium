@@ -16,7 +16,9 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LevelRenderer.class)
@@ -75,6 +77,16 @@ public class LevelRendererMixin {
 	)
 	public boolean nolijium$renderLevel$renderSnowAndRain(LevelRenderer instance, LightTexture f2, float d2, double d4, double f3, double f4) {
 		return !Nolijium.config.disableWeatherRendering;
+	}
+	
+	@ModifyConstant(method = "drawStars", constant = @Constant(intValue = 1500))
+	public int nolijium$drawStars$1500(int constant) {
+		return Nolijium.config.starCount;
+	}
+	
+	@ModifyConstant(method = "drawStars", constant = @Constant(floatValue = 0.1F))
+	public float nolijium$drawStars$0_1F(float constant) {
+		return Nolijium.config.starScale;
 	}
 	
 }
