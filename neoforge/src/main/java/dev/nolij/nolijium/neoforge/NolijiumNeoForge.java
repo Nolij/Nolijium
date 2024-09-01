@@ -1,5 +1,7 @@
 package dev.nolij.nolijium.neoforge;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.nolij.nolijium.common.INolijiumSubImplementation;
 import dev.nolij.nolijium.common.NolijiumCommon;
 import dev.nolij.nolijium.impl.Nolijium;
@@ -201,4 +203,8 @@ public class NolijiumNeoForge implements INolijiumSubImplementation {
 		return true;
 	}
 	
+	@Override
+	public void addLineVertex(PoseStack.Pose pose, VertexConsumer consumer, float x, float y, float z, int color, float nx, float ny, float nz) {
+		consumer.addVertex(pose, x, y, z).setColor(color).setNormal(pose, nx, ny, nz);
+	}
 }
