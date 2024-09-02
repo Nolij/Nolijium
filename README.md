@@ -23,7 +23,7 @@ A collection of various QoL enhancements with (optional) Embeddium support and i
 - Font shadow toggle
 - Toast toggles
 - Particle toggles
-- Chroma block outlines, tooltips, & HUD
+- Chroma block outlines, block shape overlay, tooltips, & HUD
 - Global config file (config is synced between instances on the same machine)
 - Optional Embeddium integration
 
