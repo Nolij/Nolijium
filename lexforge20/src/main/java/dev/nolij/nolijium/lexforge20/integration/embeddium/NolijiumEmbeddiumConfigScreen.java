@@ -82,14 +82,14 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 				.setControl(option -> new SliderControl(option, 0, 100, 5, ControlValueFormatter.percentage()))
 				.setBinding(
 					(config, value) -> config.starScale = value * 0.01F,
-					config -> (int) (config.starScale * 100))
+					config -> Math.round(config.starScale * 100))
 				.build())
 			.add(OptionImpl.createBuilder(int.class, storage)
 				.setId(id("star_brightness", int.class))
 				.setControl(option -> new SliderControl(option, 0, 100, 5, ControlValueFormatter.percentage()))
 				.setBinding(
 					(config, value) -> config.starBrightness = value * 0.01F,
-					config -> (int) (config.starBrightness * 100))
+					config -> Math.round(config.starBrightness * 100))
 				.build())
 			.build());
 		
@@ -119,7 +119,7 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 					v -> v == 100 ? Component.translatable("nolijium.none") :  Component.translatable("nolijium.percentage", v)))
 				.setBinding(
 					(config, value) -> config.fogMultiplier = value / 100F,
-					config -> (int) (config.fogMultiplier * 100))
+					config -> Math.round(config.fogMultiplier * 100))
 				.setEnabledPredicate(() -> !disableFogOption.getValue() && fogOverrideOption.getValue() == 0)
 				.build())
 			.add(OptionImpl.createBuilder(int.class, storage)
@@ -128,7 +128,7 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 					v -> v == 100 ? Component.translatable("nolijium.none") :  Component.translatable("nolijium.percentage", v)))
 				.setBinding(
 					(config, value) -> config.fogStartMultiplier = value / 100F,
-					config -> (int) (config.fogStartMultiplier * 100))
+					config -> Math.round(config.fogStartMultiplier * 100))
 				.setEnabledPredicate(() -> !disableFogOption.getValue())
 				.build())
 			.build());
