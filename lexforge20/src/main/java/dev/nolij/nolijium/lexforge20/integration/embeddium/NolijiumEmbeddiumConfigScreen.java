@@ -422,6 +422,17 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 					(config, value) -> config.enableChromaBlockOutlines = value,
 					config -> config.enableChromaBlockOutlines)
 				.build())
+			.add(OptionImpl.createBuilder(int.class, storage)
+				.setId(id("chroma_block_shape_overlay", int.class))
+				.setControl(option -> new SliderControl(option, 0, 80, 10,
+					v -> v == 0
+					     ? Component.translatable("nolijium.disabled")
+					     : Component.translatable("nolijium.percentage", v)))
+				.setBinding(
+					(config, value) -> config.chromaBlockShapeOverlay = value * 0.01F,
+					config -> Math.round(config.chromaBlockShapeOverlay * 100F))
+				.setEnabledPredicate(hudEnabledOption::getValue)
+				.build())
 			.add(OptionImpl.createBuilder(boolean.class, storage)
 				.setId(id("enable_chroma_tooltips", boolean.class))
 				.setControl(TickBoxControl::new)
