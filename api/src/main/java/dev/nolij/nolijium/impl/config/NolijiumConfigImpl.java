@@ -237,6 +237,12 @@ public class NolijiumConfigImpl implements Cloneable {
 	public boolean enableChromaBlockOutlines = false;
 	
 	@ZsonField(comment = """
+		If set, a chroma overlay will be drawn on block surfaces with the specified value used for transparency.
+		Set to `0` to disable.
+		DEFAULT: `0`""")
+	public float chromaBlockShapeOverlay = 0F;
+	
+	@ZsonField(comment = """
 		Enable Chroma on tooltip outlines.
 		DEFAULT: `false`""")
 	public boolean enableChromaToolTips = false;
@@ -245,11 +251,6 @@ public class NolijiumConfigImpl implements Cloneable {
 		Enable Chroma on HUD text.
 		DEFAULT: `false`""")
 	public boolean enableChromaHUD = false;
-	
-	@ZsonField(comment = """
-		Enable drawing a chroma overlay on the block's surfaces.
-		DEFAULT: `false`""")
-	public boolean enableChromaBlockShapeOverlay = false;
 	
 	@ZsonField(comment = """
 		Removes darkness and all client-side lighting calculations, resulting in a decent performance boost on some systems.

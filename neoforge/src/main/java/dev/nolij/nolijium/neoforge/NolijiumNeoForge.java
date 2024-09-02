@@ -207,4 +207,5 @@ public class NolijiumNeoForge implements INolijiumSubImplementation {
 	public void addLineVertex(PoseStack.Pose pose, VertexConsumer consumer, float x, float y, float z, int color, float nx, float ny, float nz) {
 		consumer.addVertex(pose, x, y, z).setColor(color).setNormal(pose, nx, ny, nz);
 	}
+	
 }

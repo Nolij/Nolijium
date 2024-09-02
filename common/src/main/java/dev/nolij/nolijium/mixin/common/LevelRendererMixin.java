@@ -55,7 +55,7 @@ public class LevelRendererMixin {
 		)
 	)
 	public void nolijium$renderHitOutline$renderShape(PoseStack poseStack, VertexConsumer vertexConsumer, VoxelShape shape, double x, double y, double z, float red, float green, float blue, float alpha, Operation<Void> original) {
-		if (Nolijium.config.enableChromaBlockOutlines || Nolijium.config.enableChromaBlockShapeOverlay) {
+		if (Nolijium.config.enableChromaBlockOutlines || Nolijium.config.chromaBlockShapeOverlay > 0) {
 			final double timestamp = System.nanoTime() * 1E-9D;
 			
 			red = (float) RGBHelper.chromaRed(timestamp, Nolijium.config.chromaSpeed, 0);
@@ -66,7 +66,7 @@ public class LevelRendererMixin {
 			alpha = 1F;
 		}
 		
-		if (Nolijium.config.enableChromaBlockShapeOverlay) {
+		if (Nolijium.config.chromaBlockShapeOverlay > 0) {
 			ChromaShapeRenderer.render(poseStack, shape, x, y, z, red, green, blue, alpha);
 		} else {
 			original.call(poseStack, vertexConsumer, shape, x, y, z, red, green, blue, alpha);

@@ -15,4 +15,5 @@ public interface INolijiumSubImplementation extends INolijiumImplementation {
 	boolean supportsLightLevelOverlay();
 	
 	void addLineVertex(PoseStack.Pose pose, VertexConsumer consumer, float x, float y, float z, int color, float nx, float ny, float nz);
+	
 }
