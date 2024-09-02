@@ -1,3 +1,3 @@
 - added star renderer customization options
-- added chroma block shape overlay
+- added chroma block shape overlay (thanks @embeddedt)
 - further improvements to overall system stability and other minor adjustments have been made to enhance the user experience
