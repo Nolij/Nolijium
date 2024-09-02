@@ -437,7 +437,6 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 				.setBinding(
 					(config, value) -> config.chromaBlockShapeOverlay = value * 0.01F,
 					config -> Math.round(config.chromaBlockShapeOverlay * 100F))
-				.setEnabledPredicate(hudEnabledOption::getValue)
 				.build())
 			.add(OptionImpl.createBuilder(boolean.class, storage)
 				.setId(id("enable_chroma_tooltips", boolean.class))
