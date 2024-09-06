@@ -17,6 +17,8 @@ import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fml.common.Mod;
 
 import java.nio.file.Path;
@@ -160,5 +162,8 @@ public class NolijiumCommon implements INolijiumImplementation {
 			return hoverEvent;
 		});
 	}
+	
+	public static volatile Vec3 focusedBlockPosition = null;
+	public static volatile VoxelShape focusedBlockShape = null;
 	
 }

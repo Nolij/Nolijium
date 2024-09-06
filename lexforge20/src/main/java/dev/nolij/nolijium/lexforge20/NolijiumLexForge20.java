@@ -2,6 +2,7 @@ package dev.nolij.nolijium.lexforge20;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import dev.nolij.nolijium.common.ChromaShapeRenderer;
 import dev.nolij.nolijium.common.INolijiumSubImplementation;
 import dev.nolij.nolijium.common.NolijiumCommon;
 import dev.nolij.nolijium.impl.Nolijium;
@@ -24,6 +25,7 @@ import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.world.level.material.FogType;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.client.event.ToastAddEvent;
 import net.minecraftforge.client.event.ViewportEvent;
@@ -60,6 +62,7 @@ public class NolijiumLexForge20 implements INolijiumSubImplementation {
 		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::onAddToast);
 		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::onRenderTooltip);
 		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::renderFog);
+		MinecraftForge.EVENT_BUS.addListener(this::renderLevelStage);
 		
 		if (MethodHandleHelper.PUBLIC.getClassOrNull("org.embeddedt.embeddium.api.OptionGUIConstructionEvent") != null)
 			new NolijiumEmbeddiumConfigScreen();
@@ -146,6 +149,29 @@ public class NolijiumLexForge20 implements INolijiumSubImplementation {
 			event.setCanceled(true);
 			
 			event.scaleNearPlaneDistance(Nolijium.config.fogStartMultiplier);
+		}
+	}
+	
+	private void renderLevelStage(RenderLevelStageEvent event) {
+		if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
+			if (NolijiumCommon.focusedBlockPosition == null || NolijiumCommon.focusedBlockShape == null)
+				return;
+			
+			final double timestamp = System.nanoTime() * 1E-9D;
+			
+			ChromaShapeRenderer.render(
+				event.getPoseStack(),
+				NolijiumCommon.focusedBlockShape,
+				NolijiumCommon.focusedBlockPosition.x,
+				NolijiumCommon.focusedBlockPosition.y,
+				NolijiumCommon.focusedBlockPosition.z,
+				(float) RGBHelper.chromaRed(timestamp, Nolijium.config.chromaSpeed, 0),
+				(float) RGBHelper.chromaGreen(timestamp, Nolijium.config.chromaSpeed, 0),
+				(float) RGBHelper.chromaBlue(timestamp, Nolijium.config.chromaSpeed, 0),
+				1F);
+			
+			NolijiumCommon.focusedBlockPosition = null;
+			NolijiumCommon.focusedBlockShape = null;
 		}
 	}
 	
