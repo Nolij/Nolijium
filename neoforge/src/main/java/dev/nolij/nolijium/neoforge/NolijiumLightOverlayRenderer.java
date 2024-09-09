@@ -2,15 +2,18 @@ package dev.nolij.nolijium.neoforge;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.MeshData;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexBuffer;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import dev.nolij.nolijium.impl.Nolijium;
 import it.unimi.dsi.fastutil.bytes.ByteArrayList;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -69,6 +72,8 @@ public class NolijiumLightOverlayRenderer {
 	 * the camera moves to a new block.
 	 */
 	private static BlockPos lastCameraPosition = BlockPos.ZERO;
+	
+	private static final RenderType LIGHT_OVERLAY = RenderType.create("lines", DefaultVertexFormat.POSITION_COLOR_NORMAL, VertexFormat.Mode.LINES, 1536, RenderType.CompositeState.builder().setShaderState(RenderStateShard.RENDERTYPE_LINES_SHADER).setLineState(RenderStateShard.DEFAULT_LINE).setLayeringState(RenderStateShard.VIEW_OFFSET_Z_LAYERING).setTransparencyState(RenderStateShard.NO_TRANSPARENCY).setOutputState(RenderStateShard.MAIN_TARGET).setWriteMaskState(RenderStateShard.COLOR_DEPTH_WRITE).setCullState(RenderStateShard.NO_CULL).createCompositeState(false));
 	
 	/**
 	 * A small wrapper class holding the current vertex buffer and the marker version it corresponds to.
@@ -195,7 +200,7 @@ public class NolijiumLightOverlayRenderer {
 		
 		// Check if we can reuse the previously generated GPU vertex buffer
 		if (bufferNeedsUpdate(camera)) {
-			var bufferBuilder = Tesselator.getInstance().begin(RenderType.lines().mode(), RenderType.lines().format());
+			var bufferBuilder = Tesselator.getInstance().begin(LIGHT_OVERLAY.mode(), LIGHT_OVERLAY.format());
 			int camPosX = camera.getBlockPosition().getX();
 			int camPosY = camera.getBlockPosition().getY();
 			int camPosZ = camera.getBlockPosition().getZ();
@@ -246,7 +251,8 @@ public class NolijiumLightOverlayRenderer {
 		
 		if (currentLightOverlayBuffer != null && currentLightOverlayBuffer.buffer != null) {
 			// Render the GPU-side vertex buffer at the appropriate position
-			RenderType.lines().setupRenderState();
+			LIGHT_OVERLAY.setupRenderState();
+			RenderSystem.lineWidth(Math.max(2.5F, (float)Minecraft.getInstance().getWindow().getWidth() / 1920.0F * 2.5F));
 			Matrix4fStack matrix4fstack = RenderSystem.getModelViewStack();
 			matrix4fstack.pushMatrix();
 			matrix4fstack.mul(modelViewMatrix);
@@ -257,7 +263,7 @@ public class NolijiumLightOverlayRenderer {
 			//noinspection DataFlowIssue
 			currentLightOverlayBuffer.buffer.drawWithShader(RenderSystem.getModelViewMatrix(), RenderSystem.getProjectionMatrix(), RenderSystem.getShader());
 			VertexBuffer.unbind();
-			RenderType.lines().clearRenderState();
+			LIGHT_OVERLAY.clearRenderState();
 			matrix4fstack.popMatrix();
 			RenderSystem.applyModelViewMatrix();
 			if (restoreType != null) {
