@@ -8,6 +8,7 @@ unimined.minecraft {
 	neoForge {
 		loader("neoforge21_neoforge_version"())
 		mixinConfig("nolijium-common.mixins.json")
+		accessTransformer(rootProject.file("src/main/resources/META-INF/accesstransformer.cfg"))
 	}
 
 	source {

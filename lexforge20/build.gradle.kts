@@ -23,6 +23,7 @@ unimined.minecraft {
 	minecraftForge {
 		loader("lexforge20_lexforge_version"())
 		mixinConfig("nolijium-lexforge20.mixins.json")
+		accessTransformer(rootProject.file("src/main/resources/META-INF/accesstransformer.cfg"))
 	}
 
 	mappings {
