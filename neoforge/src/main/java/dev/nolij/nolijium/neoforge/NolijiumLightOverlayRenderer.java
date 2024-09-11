@@ -73,7 +73,20 @@ public class NolijiumLightOverlayRenderer {
 	 */
 	private static BlockPos lastCameraPosition = BlockPos.ZERO;
 	
-	private static final RenderType LIGHT_OVERLAY = RenderType.create("nolijium_light_overlay", DefaultVertexFormat.POSITION_COLOR_NORMAL, VertexFormat.Mode.LINES, 1536, RenderType.CompositeState.builder().setShaderState(RenderStateShard.RENDERTYPE_LINES_SHADER).setLineState(RenderStateShard.DEFAULT_LINE).setLayeringState(RenderStateShard.VIEW_OFFSET_Z_LAYERING).setTransparencyState(RenderStateShard.NO_TRANSPARENCY).setOutputState(RenderStateShard.MAIN_TARGET).setWriteMaskState(RenderStateShard.COLOR_DEPTH_WRITE).setCullState(RenderStateShard.NO_CULL).createCompositeState(false));
+	private static final RenderType LIGHT_OVERLAY = RenderType.create(
+		"nolijium_light_overlay", 
+		DefaultVertexFormat.POSITION_COLOR_NORMAL, 
+		VertexFormat.Mode.LINES, 
+		1536, 
+		RenderType.CompositeState.builder()
+			.setShaderState(RenderStateShard.RENDERTYPE_LINES_SHADER)
+			.setLineState(RenderStateShard.DEFAULT_LINE)
+			.setLayeringState(RenderStateShard.VIEW_OFFSET_Z_LAYERING)
+			.setTransparencyState(RenderStateShard.NO_TRANSPARENCY)
+			.setOutputState(RenderStateShard.MAIN_TARGET)
+			.setWriteMaskState(RenderStateShard.COLOR_DEPTH_WRITE)
+			.setCullState(RenderStateShard.NO_CULL)
+			.createCompositeState(false));
 	
 	/**
 	 * A small wrapper class holding the current vertex buffer and the marker version it corresponds to.

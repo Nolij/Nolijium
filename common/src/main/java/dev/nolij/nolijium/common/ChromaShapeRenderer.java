@@ -19,12 +19,26 @@ public class ChromaShapeRenderer {
 	
 	private static final INolijiumSubImplementation NOLIJIUM_IMPL = Objects.requireNonNull(NolijiumCommon.getImplementation());
 	
-	private static final RenderType CHROMA_OVERLAY = RenderType.create("nolijium_chroma_overlay", DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.TRIANGLE_STRIP, 1536, false, true, RenderType.CompositeState.builder().setShaderState(RenderStateShard.POSITION_COLOR_SHADER).setLayeringState(RenderStateShard.VIEW_OFFSET_Z_LAYERING).setOutputState(RenderStateShard.ITEM_ENTITY_TARGET).setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY).setWriteMaskState(RenderStateShard.COLOR_DEPTH_WRITE).setCullState(RenderStateShard.CULL).createCompositeState(false));
+	private static final RenderType CHROMA_OVERLAY = RenderType.create(
+		"nolijium_chroma_overlay", 
+		DefaultVertexFormat.POSITION_COLOR, 
+		VertexFormat.Mode.TRIANGLE_STRIP, 
+		1536, 
+		false, 
+		true, 
+		RenderType.CompositeState.builder()
+			.setShaderState(RenderStateShard.POSITION_COLOR_SHADER)
+			.setLayeringState(RenderStateShard.VIEW_OFFSET_Z_LAYERING)
+			.setOutputState(RenderStateShard.ITEM_ENTITY_TARGET)
+			.setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
+			.setWriteMaskState(RenderStateShard.COLOR_DEPTH_WRITE)
+			.setCullState(RenderStateShard.CULL)
+			.createCompositeState(false));
 	
 	private static void renderInnerOverlay(PoseStack poseStack, MultiBufferSource bufferSource, VoxelShape shape, float red, float green, float blue, float alpha) {
 		VertexConsumer boxConsumer = bufferSource.getBuffer(CHROMA_OVERLAY);
 		shape.forAllBoxes((x1, y1, z1, x2, y2, z2) -> 
-			LevelRenderer.addChainedFilledBoxVertices(poseStack, boxConsumer, x1 - 0.5, y1 - 0.5, z1 - 0.5, x2 - 0.5, y2 - 0.5, z2 - 0.5, red, green, blue, alpha));
+			LevelRenderer.addChainedFilledBoxVertices(poseStack, boxConsumer, x1, y1, z1, x2, y2, z2, red, green, blue, alpha));
 	}
 	
 	private static void renderOuterOverlay(PoseStack poseStack, MultiBufferSource bufferSource, VoxelShape shape, float red, float green, float blue, float alpha) {
@@ -39,14 +53,14 @@ public class ChromaShapeRenderer {
 			nx /= norm;
 			ny /= norm;
 			nz /= norm;
-			NOLIJIUM_IMPL.addLineVertex(pose, lineConsumer, (float) (x1 - 0.5), (float) (y1 - 0.5), (float) (z1 - 0.5), color, nx, ny, nz);
-			NOLIJIUM_IMPL.addLineVertex(pose, lineConsumer, (float) (x2 - 0.5), (float) (y2 - 0.5), (float) (z2 - 0.5), color, nx, ny, nz);
+			NOLIJIUM_IMPL.addLineVertex(pose, lineConsumer, (float) x1, (float) y1, (float) z1, color, nx, ny, nz);
+			NOLIJIUM_IMPL.addLineVertex(pose, lineConsumer, (float) x2, (float) y2, (float) z2, color, nx, ny, nz);
 		});
 	}
 	
 	public static void render(PoseStack poseStack, VoxelShape shape, double x, double y, double z, float red, float green, float blue, float alpha) {
 		poseStack.pushPose();
-		poseStack.translate(x + 0.5, y + 0.5, z + 0.5);
+		poseStack.translate(x, y, z);
 		
 		var bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
 		renderInnerOverlay(poseStack, bufferSource, shape, red, green, blue, Nolijium.config.chromaBlockShapeOverlay);
