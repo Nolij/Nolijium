@@ -4,21 +4,24 @@
 	"package": "dev.nolij.nolijium.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
+		"common.ChatScreenMixin",
 		"common.ClientLevelMixin",
+		"common.ClientPacketListenerMixin",
 		"common.FontMixin",
-		"neoforge.ChatComponentMixin",
 		"common.GameRendererMixin",
 		"common.GuiGraphicsMixin",
+		"common.GuiMixin",
 		"common.ItemMixin",
 		"common.LevelLightEngineMixin",
 		"common.LevelRendererAccessor",
 		"common.LevelRendererMixin",
 		"common.LightTextureMixin",
 		"common.LightTextureAccessor",
-		"neoforge.LevelRendererMixin",
-		"neoforge.LivingEntityMixin",
 		"common.MobEffectMixin",
-		"common.TextureAtlasMixin"
+		"common.TextureAtlasMixin",
+		"neoforge.ChatComponentMixin",
+		"neoforge.LevelRendererMixin",
+		"neoforge.LivingEntityMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

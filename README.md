@@ -8,9 +8,10 @@ A collection of various QoL enhancements with (optional) Embeddium support and i
 
 # Features
 
-- Maximum chat history customization
-- Advanced tooltip info toggle
 - Light level overlay toggle (NeoForge 21+ exclusive)
+- Maximum chat history customization
+- Miscellaneous chat enhancements
+- Advanced tooltip info toggle
 - Star renderer customization options
 - Fog customization options
 - HUD with accurate & efficient FPS tracking including 0.1% lows

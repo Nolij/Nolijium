@@ -45,6 +45,7 @@ repositories {
 dependencies {
 	compileOnly(project(":stubs"))
 	compileOnly("io.github.llamalad7:mixinextras-common:${"mixinextras_version"()}")
+	runtimeOnly("io.github.llamalad7:mixinextras-forge:${"mixinextras_version"()}")
 
 	minecraftLibraries("dev.nolij:zson:${"zson_version"()}")
 	

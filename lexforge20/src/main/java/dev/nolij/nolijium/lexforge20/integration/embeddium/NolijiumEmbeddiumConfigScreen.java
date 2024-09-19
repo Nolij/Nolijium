@@ -2,6 +2,7 @@ package dev.nolij.nolijium.lexforge20.integration.embeddium;
 
 import com.google.common.collect.ImmutableList;
 import dev.nolij.nolijium.common.ResourceLocationComparator;
+import dev.nolij.nolijium.impl.config.NolijiumConfigImpl;
 import dev.nolij.nolijium.impl.util.Alignment;
 import dev.nolij.nolijium.impl.util.DetailLevel;
 import me.jellysquid.mods.sodium.client.gui.options.Option;
@@ -48,7 +49,7 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 		final List<OptionGroup> chromaPage = new ArrayList<>();
 		
 		utilitiesPage.add(OptionGroup.createBuilder()
-			.setId(id("utilities"))
+			.setId(id("chat"))
 			.add(OptionImpl.createBuilder(int.class, storage)
 				.setId(id("max_chat_history", int.class))
 				.setControl(option -> new SliderControl(option, 0, 2000, 100,
@@ -58,6 +59,27 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 				.setBinding(
 					(config, value) -> config.maxChatHistory = value,
 					config -> config.maxChatHistory)
+				.build())
+			.add(OptionImpl.createBuilder(boolean.class, storage)
+				.setId(id("keep_chat_history", boolean.class))
+				.setControl(TickBoxControl::new)
+				.setBinding(
+					(config, value) -> config.keepChatHistory = value,
+					config -> config.keepChatHistory)
+				.build())
+			.add(OptionImpl.createBuilder(boolean.class, storage)
+				.setId(id("keep_chat_bar_open", boolean.class))
+				.setControl(TickBoxControl::new)
+				.setBinding(
+					(config, value) -> config.keepChatBarOpen = value,
+					config -> config.keepChatBarOpen)
+				.build())
+			.add(OptionImpl.createBuilder(NolijiumConfigImpl.RememberChatBarContents.class, storage)
+				.setId(id("remember_chat_bar_contents", NolijiumConfigImpl.RememberChatBarContents.class))
+				.setControl(option -> new CyclingControl<>(option, NolijiumConfigImpl.RememberChatBarContents.class))
+				.setBinding(
+					(config, value) -> config.rememberChatBarContents = value,
+					config -> config.rememberChatBarContents)
 				.build())
 			.add(OptionImpl.createBuilder(boolean.class, storage)
 				.setId(id("enable_tooltip_info", boolean.class))

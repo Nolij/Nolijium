@@ -5,6 +5,7 @@ import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.util.DetailLevel;
 import dev.nolij.zson.Zson;
 import dev.nolij.zson.ZsonField;
+import dev.nolij.zumegradle.proguard.ProGuardKeep;
 
 import java.io.File;
 import java.io.FileReader;
@@ -20,20 +21,46 @@ public class NolijiumConfigImpl implements Cloneable {
 	
 	//region Options
 	@ZsonField(comment = """
+		Show an overlay on blocks if the block light level above them is below 8.
+		Exclusive to NeoForge 21+.
+		DEFAULT: `false`""")
+	public boolean enableLightLevelOverlay = false;
+	
+	@ZsonField(comment = """
 		Changes the number of messages kept in chat history (100 in vanilla).
 		DEFAULT: `100`""")
 	public int maxChatHistory = 100;
 	
 	@ZsonField(comment = """
+		If enabled, the chat history will not be cleared when you leave a server, and instead only be cleared when Minecraft is closed.
+		DEFAULT: `false`""")
+	public boolean keepChatHistory = false;
+	
+	@ZsonField(comment = """
+		If enabled, the server will be ignored if it instructs the client to close the chat bar (for example, if the player is teleported).
+		DEFAULT: `false`""")
+	public boolean keepChatBarOpen = false;
+	
+	@ProGuardKeep.Enum
+	public enum RememberChatBarContents {
+		UNTIL_SENT,
+		UNTIL_USER_CLOSED,
+		NEVER,
+	}
+	
+	@ZsonField(comment = """
+		Controls what happens to the unsent contents of the chat bar if it is closed by clicking escape or by the server.
+		OPTIONS:
+			`UNTIL_SENT`: Will always remember the unsent message/command unless the message was sent.
+			`UNTIL_USER_CLOSED`: Will only remember the unsent message/command if the chat bar was closed by the server.
+			`NEVER`: Will never remember the unsent message/command (same as vanilla).
+		DEFAULT: `UNTIL_ESCAPED`""")
+	public RememberChatBarContents rememberChatBarContents = RememberChatBarContents.UNTIL_USER_CLOSED;
+	
+	@ZsonField(comment = """
 		If enabled, useful information will be shown in the tooltips of links and clickable text in chat and other UIs.
 		DEFAULT: `false`""")
 	public boolean enableToolTipInfo = false;
-	
-	@ZsonField(comment = """
-		Show an overlay on blocks if the block light level above them is below 8.
-		Exclusive to NeoForge 21+.
-		DEFAULT: `false`""")
-	public boolean enableLightLevelOverlay = false;
 	
 	@ZsonField(comment = """
 		Overrides the number of stars rendered.
