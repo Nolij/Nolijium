@@ -59,6 +59,9 @@ public class ChromaShapeRenderer {
 	}
 	
 	public static void render(PoseStack poseStack, VoxelShape shape, double x, double y, double z, float red, float green, float blue, float alpha) {
+		if (alpha == 0)
+			return;
+		
 		poseStack.pushPose();
 		poseStack.translate(x, y, z);
 		
