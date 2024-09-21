@@ -87,7 +87,12 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 				.build())
 			.add(OptionImpl.createBuilder(NolijiumConfigImpl.RememberChatBarContents.class, storage)
 				.setId(id("remember_chat_bar_contents", NolijiumConfigImpl.RememberChatBarContents.class))
-				.setControl(option -> new CyclingControl<>(option, NolijiumConfigImpl.RememberChatBarContents.class))
+				.setControl(option -> new CyclingControl<>(option, NolijiumConfigImpl.RememberChatBarContents.class,
+					new Component[] {
+						Component.translatable("nolijium.remember_chat_bar_contents.until_sent"),
+						Component.translatable("nolijium.remember_chat_bar_contents.until_user_closed"),
+						Component.translatable("nolijium.remember_chat_bar_contents.never"),
+				}))
 				.setBinding(
 					(config, value) -> config.rememberChatBarContents = value,
 					config -> config.rememberChatBarContents)
@@ -179,7 +184,11 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 				.build())
 			.add(OptionImpl.createBuilder(Alignment.X.class, storage)
 				.setId(id("hud_alignment_x", Alignment.X.class))
-				.setControl(option -> new CyclingControl<>(option, Alignment.X.class))
+				.setControl(option -> new CyclingControl<>(option, Alignment.X.class,
+					new Component[] {
+						Component.translatable("nolijium.alignment.x.left"),
+						Component.translatable("nolijium.alignment.x.right"),
+					}))
 				.setBinding(
 					(config, value) -> config.hudAlignmentX = value,
 					config -> config.hudAlignmentX)
@@ -187,7 +196,11 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 				.build())
 			.add(OptionImpl.createBuilder(Alignment.Y.class, storage)
 				.setId(id("hud_alignment_y", Alignment.Y.class))
-				.setControl(option -> new CyclingControl<>(option, Alignment.Y.class))
+				.setControl(option -> new CyclingControl<>(option, Alignment.Y.class,
+					new Component[] {
+						Component.translatable("nolijium.alignment.y.top"),
+						Component.translatable("nolijium.alignment.y.bottom"),
+					}))
 				.setBinding(
 					(config, value) -> config.hudAlignmentY = value,
 					config -> config.hudAlignmentY)
@@ -243,7 +256,12 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 				.build())
 			.add(hudShowFPSOption = OptionImpl.createBuilder(DetailLevel.class, storage)
 				.setId(id("hud_show_fps", DetailLevel.class))
-				.setControl(option -> new CyclingControl<>(option, DetailLevel.class))
+				.setControl(option -> new CyclingControl<>(option, DetailLevel.class,
+					new Component[] {
+						Component.translatable("nolijium.detail_level.none"),
+						Component.translatable("nolijium.detail_level.simple"),
+						Component.translatable("nolijium.detail_level.extended"),
+					}))
 				.setBinding(
 					(config, value) -> config.hudShowFPS = value,
 					config -> config.hudShowFPS)

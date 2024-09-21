@@ -1,5 +1,6 @@
 - added star renderer customization options
 - added chroma block shape overlay (thanks @embeddedt)
-- fix light level overlay not rendering in fabulous mode (also @embeddedt)
+- fixed light level overlay not rendering in fabulous mode (also @embeddedt)
 - added miscellaneous chat enhancements
+- made enums translatable
 - further improvements to overall system stability and other minor adjustments have been made to enhance the user experience

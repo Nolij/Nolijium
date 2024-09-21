@@ -1,5 +1,16 @@
 operator fun String.invoke(): String = rootProject.properties[this] as? String ?: error("Property $this not found")
 
+val modCompileOnly: Configuration by configurations.creating {
+	configurations.compileClasspath.get().extendsFrom(this)
+}
+val modRuntimeOnly: Configuration by configurations.creating {
+	configurations.runtimeClasspath.get().extendsFrom(this)
+}
+val mod: Configuration by configurations.creating {
+	configurations.compileClasspath.get().extendsFrom(this)
+	configurations.runtimeClasspath.get().extendsFrom(this)
+}
+
 unimined.minecraft {
 	version("neoforge21_minecraft_version"())
 	
@@ -18,6 +29,12 @@ unimined.minecraft {
 	mappings {
 		mojmap()
 		parchment(mcVersion = "1.21", version = "neoforge21_parchment_version"())
+	}
+
+	mods {
+		remap(modCompileOnly)
+		remap(modRuntimeOnly)
+		remap(mod)
 	}
 }
 
