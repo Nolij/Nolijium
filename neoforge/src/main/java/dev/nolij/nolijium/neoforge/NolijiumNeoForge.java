@@ -177,18 +177,31 @@ public class NolijiumNeoForge implements INolijiumSubImplementation {
 			if (NolijiumCommon.focusedBlockPosition == null || NolijiumCommon.focusedBlockShape == null)
 				return;
 			
-			final double timestamp = System.nanoTime() * 1E-9D;
-			
-			ChromaShapeRenderer.render(
-				event.getPoseStack(), 
-				NolijiumCommon.focusedBlockShape, 
-				NolijiumCommon.focusedBlockPosition.x,
-				NolijiumCommon.focusedBlockPosition.y,
-				NolijiumCommon.focusedBlockPosition.z,
-				(float) RGBHelper.chromaRed(timestamp, Nolijium.config.chromaSpeed, 0),
-				(float) RGBHelper.chromaGreen(timestamp, Nolijium.config.chromaSpeed, 0),
-				(float) RGBHelper.chromaBlue(timestamp, Nolijium.config.chromaSpeed, 0), 
-				1F);
+			if (Nolijium.config.blockShapeOverlayOverride != 0) {
+				ChromaShapeRenderer.render(
+					event.getPoseStack(),
+					NolijiumCommon.focusedBlockShape,
+					NolijiumCommon.focusedBlockPosition.x,
+					NolijiumCommon.focusedBlockPosition.y,
+					NolijiumCommon.focusedBlockPosition.z,
+					(float) RGBHelper.getRed(Nolijium.config.blockShapeOverlayOverride),
+					(float) RGBHelper.getGreen(Nolijium.config.blockShapeOverlayOverride),
+					(float) RGBHelper.getBlue(Nolijium.config.blockShapeOverlayOverride),
+					(float) RGBHelper.getAlpha(Nolijium.config.blockShapeOverlayOverride));
+			} else {
+				final double timestamp = System.nanoTime() * 1E-9D;
+				
+				ChromaShapeRenderer.render(
+					event.getPoseStack(),
+					NolijiumCommon.focusedBlockShape,
+					NolijiumCommon.focusedBlockPosition.x,
+					NolijiumCommon.focusedBlockPosition.y,
+					NolijiumCommon.focusedBlockPosition.z,
+					(float) RGBHelper.chromaRed(timestamp, Nolijium.config.chromaSpeed, 0),
+					(float) RGBHelper.chromaGreen(timestamp, Nolijium.config.chromaSpeed, 0),
+					(float) RGBHelper.chromaBlue(timestamp, Nolijium.config.chromaSpeed, 0),
+					Nolijium.config.chromaBlockShapeOverlay);
+			}
 			
 			NolijiumCommon.focusedBlockPosition = null;
 			NolijiumCommon.focusedBlockShape = null;

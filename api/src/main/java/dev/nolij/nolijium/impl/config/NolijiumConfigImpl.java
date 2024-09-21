@@ -302,6 +302,13 @@ public class NolijiumConfigImpl implements Cloneable {
 	
 	@ZsonField
 	public int tooltipBackgroundEnd = 0;
+	
+	@ZsonField(comment = """
+		Intended for advanced users and developers only. Colour format is 0xAARRGGBB.
+		Alpha will only be applied to block faces. Outline will always be fully opaque when enabled.
+		A value of `0` disables this setting.
+		DEFAULT: `0`""")
+	public int blockShapeOverlayOverride = 0;
 	//endregion
 	
 	private static final int EXPECTED_VERSION = 1;

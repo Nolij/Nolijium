@@ -168,7 +168,7 @@ public class NolijiumLexForge20 implements INolijiumSubImplementation {
 				(float) RGBHelper.chromaRed(timestamp, Nolijium.config.chromaSpeed, 0),
 				(float) RGBHelper.chromaGreen(timestamp, Nolijium.config.chromaSpeed, 0),
 				(float) RGBHelper.chromaBlue(timestamp, Nolijium.config.chromaSpeed, 0),
-				1F);
+				Nolijium.config.chromaBlockShapeOverlay);
 			
 			NolijiumCommon.focusedBlockPosition = null;
 			NolijiumCommon.focusedBlockShape = null;

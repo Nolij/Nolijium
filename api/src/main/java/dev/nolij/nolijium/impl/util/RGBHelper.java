@@ -8,6 +8,22 @@ public final class RGBHelper {
 		return ((int) (alpha * 255D) << 24) | ((int) (red * 255D) << 16) | ((int) (green * 255D) << 8) | (int) (blue * 255D);
 	}
 	
+	public static double getAlpha(int colour) {
+		return (colour >> 24 & 0xFF) / 255D;
+	}
+	
+	public static double getRed(int colour) {
+		return (colour >> 16 & 0xFF) / 255D;
+	}
+	
+	public static double getGreen(int colour) {
+		return (colour >> 8 & 0xFF) / 255D;
+	}
+	
+	public static double getBlue(int colour) {
+		return (colour & 0xFF) / 255D;
+	}
+	
 	private static double chromaInternal(double speed, double shift, int offset) {
 		return (1D + Math.sin(speed * shift + offset)) * 0.5D;
 	}

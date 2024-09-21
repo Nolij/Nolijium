@@ -55,20 +55,24 @@ public class LevelRendererMixin {
 		)
 	)
 	public void nolijium$renderHitOutline$renderShape(PoseStack poseStack, VertexConsumer vertexConsumer, VoxelShape shape, double x, double y, double z, float red, float green, float blue, float alpha, Operation<Void> original) {
-		if (Nolijium.config.chromaBlockShapeOverlay > 0) {
+		if (Nolijium.config.blockShapeOverlayOverride != 0 || Nolijium.config.chromaBlockShapeOverlay > 0) {
 			NolijiumCommon.focusedBlockPosition = new Vec3(x, y, z);
 			NolijiumCommon.focusedBlockShape = shape;
+			alpha = 1F;
+		} else if (Nolijium.config.enableOpaqueBlockOutlines) {
+			alpha = 1F;
 		}
 		
-		if (Nolijium.config.enableChromaBlockOutlines || Nolijium.config.chromaBlockShapeOverlay > 0) {
+		if (Nolijium.config.blockShapeOverlayOverride != 0) {
+			red = (float) RGBHelper.getRed(Nolijium.config.blockShapeOverlayOverride);
+			green = (float) RGBHelper.getGreen(Nolijium.config.blockShapeOverlayOverride);
+			blue = (float) RGBHelper.getBlue(Nolijium.config.blockShapeOverlayOverride);
+		} else if (Nolijium.config.enableChromaBlockOutlines || Nolijium.config.chromaBlockShapeOverlay > 0) {
 			final double timestamp = System.nanoTime() * 1E-9D;
 			
 			red = (float) RGBHelper.chromaRed(timestamp, Nolijium.config.chromaSpeed, 0);
 			green = (float) RGBHelper.chromaGreen(timestamp, Nolijium.config.chromaSpeed, 0);
 			blue = (float) RGBHelper.chromaBlue(timestamp, Nolijium.config.chromaSpeed, 0);
-			alpha = 1F;
-		} else if (Nolijium.config.enableOpaqueBlockOutlines) {
-			alpha = 1F;
 		}
 		
 		original.call(poseStack, vertexConsumer, shape, x, y, z, red, green, blue, alpha);
