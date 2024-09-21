@@ -1,9 +1,11 @@
 package dev.nolij.nolijium.common;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import dev.nolij.nolijium.impl.INolijiumImplementation;
 import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.config.NolijiumConfigImpl;
+import dev.nolij.nolijium.impl.util.RGBHelper;
 import dev.nolij.nolijium.mixin.common.LevelRendererAccessor;
 import dev.nolij.nolijium.mixin.common.LightTextureAccessor;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
@@ -165,5 +167,39 @@ public class NolijiumCommon implements INolijiumImplementation {
 	
 	public static volatile Vec3 focusedBlockPosition = null;
 	public static volatile VoxelShape focusedBlockShape = null;
+	
+	public static void renderAfterTranslucentBlocks(PoseStack poseStack) {
+		if (NolijiumCommon.focusedBlockPosition == null || NolijiumCommon.focusedBlockShape == null)
+			return;
+		
+		if (Nolijium.config.blockShapeOverlayOverride != 0) {
+			ChromaShapeRenderer.render(
+				poseStack,
+				NolijiumCommon.focusedBlockShape,
+				NolijiumCommon.focusedBlockPosition.x,
+				NolijiumCommon.focusedBlockPosition.y,
+				NolijiumCommon.focusedBlockPosition.z,
+				(float) RGBHelper.getRed(Nolijium.config.blockShapeOverlayOverride),
+				(float) RGBHelper.getGreen(Nolijium.config.blockShapeOverlayOverride),
+				(float) RGBHelper.getBlue(Nolijium.config.blockShapeOverlayOverride),
+				(float) RGBHelper.getAlpha(Nolijium.config.blockShapeOverlayOverride));
+		} else {
+			final double timestamp = System.nanoTime() * 1E-9D;
+			
+			ChromaShapeRenderer.render(
+				poseStack,
+				NolijiumCommon.focusedBlockShape,
+				NolijiumCommon.focusedBlockPosition.x,
+				NolijiumCommon.focusedBlockPosition.y,
+				NolijiumCommon.focusedBlockPosition.z,
+				(float) RGBHelper.chromaRed(timestamp, Nolijium.config.chromaSpeed, 0),
+				(float) RGBHelper.chromaGreen(timestamp, Nolijium.config.chromaSpeed, 0),
+				(float) RGBHelper.chromaBlue(timestamp, Nolijium.config.chromaSpeed, 0),
+				Nolijium.config.chromaBlockShapeOverlay);
+		}
+		
+		NolijiumCommon.focusedBlockPosition = null;
+		NolijiumCommon.focusedBlockShape = null;
+	}
 	
 }
