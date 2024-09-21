@@ -114,7 +114,7 @@
 	"nolijium.options.enable_chroma_block_outlines.name": "Enable Chroma Block Outlines",
 	"nolijium.options.enable_chroma_block_outlines.tooltip": "Enable Chroma on block outlines.",
 	"nolijium.options.chroma_block_shape_overlay.name": "Enable Chroma Block Shape Overlay",
-	"nolijium.options.chroma_block_shape_overlay.tooltip": "If set, a chroma overlay will be drawn on block surfaces with the specified value used for transparency.",
+	"nolijium.options.chroma_block_shape_overlay.tooltip": "If set, a chroma overlay will be drawn on block surfaces with the specified value used for transparency.\nMay look buggy on some blocks when §oFabulous!§r rendering is enabled.",
 	"nolijium.options.enable_chroma_tooltips.name": "Enable Chroma Tool Tips",
 	"nolijium.options.enable_chroma_tooltips.tooltip": "Enable Chroma on tool tips.",
 	"nolijium.options.enable_chroma_hud.name": "Enable Chroma HUD",

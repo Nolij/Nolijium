@@ -265,6 +265,7 @@ public class NolijiumConfigImpl implements Cloneable {
 	
 	@ZsonField(comment = """
 		If set, a chroma overlay will be drawn on block surfaces with the specified value used for transparency.
+		May look buggy on some blocks when `Fabulous!` rendering is enabled.
 		Set to `0` to disable.
 		DEFAULT: `0`""")
 	public float chromaBlockShapeOverlay = 0F;
