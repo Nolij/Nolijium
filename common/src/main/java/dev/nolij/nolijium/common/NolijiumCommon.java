@@ -169,16 +169,16 @@ public class NolijiumCommon implements INolijiumImplementation {
 	public static volatile VoxelShape focusedBlockShape = null;
 	
 	public static void renderAfterTranslucentBlocks(PoseStack poseStack) {
-		if (NolijiumCommon.focusedBlockPosition == null || NolijiumCommon.focusedBlockShape == null)
+		if (focusedBlockPosition == null || focusedBlockShape == null)
 			return;
 		
 		if (Nolijium.config.blockShapeOverlayOverride != 0) {
 			ChromaShapeRenderer.render(
 				poseStack,
-				NolijiumCommon.focusedBlockShape,
-				NolijiumCommon.focusedBlockPosition.x,
-				NolijiumCommon.focusedBlockPosition.y,
-				NolijiumCommon.focusedBlockPosition.z,
+				focusedBlockShape,
+				focusedBlockPosition.x,
+				focusedBlockPosition.y,
+				focusedBlockPosition.z,
 				(float) RGBHelper.getRed(Nolijium.config.blockShapeOverlayOverride),
 				(float) RGBHelper.getGreen(Nolijium.config.blockShapeOverlayOverride),
 				(float) RGBHelper.getBlue(Nolijium.config.blockShapeOverlayOverride),
@@ -188,18 +188,18 @@ public class NolijiumCommon implements INolijiumImplementation {
 			
 			ChromaShapeRenderer.render(
 				poseStack,
-				NolijiumCommon.focusedBlockShape,
-				NolijiumCommon.focusedBlockPosition.x,
-				NolijiumCommon.focusedBlockPosition.y,
-				NolijiumCommon.focusedBlockPosition.z,
+				focusedBlockShape,
+				focusedBlockPosition.x,
+				focusedBlockPosition.y,
+				focusedBlockPosition.z,
 				(float) RGBHelper.chromaRed(timestamp, Nolijium.config.chromaSpeed, 0),
 				(float) RGBHelper.chromaGreen(timestamp, Nolijium.config.chromaSpeed, 0),
 				(float) RGBHelper.chromaBlue(timestamp, Nolijium.config.chromaSpeed, 0),
 				Nolijium.config.chromaBlockShapeOverlay);
 		}
 		
-		NolijiumCommon.focusedBlockPosition = null;
-		NolijiumCommon.focusedBlockShape = null;
+		focusedBlockPosition = null;
+		focusedBlockShape = null;
 	}
 	
 }
