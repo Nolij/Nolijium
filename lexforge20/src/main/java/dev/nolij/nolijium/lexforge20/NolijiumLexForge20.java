@@ -154,24 +154,7 @@ public class NolijiumLexForge20 implements INolijiumSubImplementation {
 	
 	private void renderLevelStage(RenderLevelStageEvent event) {
 		if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
-			if (NolijiumCommon.focusedBlockPosition == null || NolijiumCommon.focusedBlockShape == null)
-				return;
-			
-			final double timestamp = System.nanoTime() * 1E-9D;
-			
-			ChromaShapeRenderer.render(
-				event.getPoseStack(),
-				NolijiumCommon.focusedBlockShape,
-				NolijiumCommon.focusedBlockPosition.x,
-				NolijiumCommon.focusedBlockPosition.y,
-				NolijiumCommon.focusedBlockPosition.z,
-				(float) RGBHelper.chromaRed(timestamp, Nolijium.config.chromaSpeed, 0),
-				(float) RGBHelper.chromaGreen(timestamp, Nolijium.config.chromaSpeed, 0),
-				(float) RGBHelper.chromaBlue(timestamp, Nolijium.config.chromaSpeed, 0),
-				Nolijium.config.chromaBlockShapeOverlay);
-			
-			NolijiumCommon.focusedBlockPosition = null;
-			NolijiumCommon.focusedBlockShape = null;
+			NolijiumCommon.renderAfterTranslucentBlocks(event.getPoseStack());
 		}
 	}
 	

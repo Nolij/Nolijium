@@ -59,7 +59,7 @@ public class LevelRendererMixin {
 			NolijiumCommon.focusedBlockPosition = new Vec3(x, y, z);
 			NolijiumCommon.focusedBlockShape = shape;
 			alpha = 1F;
-		} else if (Nolijium.config.enableOpaqueBlockOutlines) {
+		} else if (Nolijium.config.enableOpaqueBlockOutlines || Nolijium.config.enableChromaBlockOutlines) {
 			alpha = 1F;
 		}
 		
