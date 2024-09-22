@@ -82,8 +82,8 @@
     "nolijium.options.revert_potions.tooltip": "Повертає оригінальні частинки зіль. Для застосування може знадобитися перезавантаження.",
     "nolijium.options.enable_opaque_block_outlines.name": "Вимкнути прозорі контури блоків",
     "nolijium.options.enable_opaque_block_outlines.tooltip": "Вимикає прозорість контурів блоків.",
-    "nolijium.options.chroma_block_shape_overlay.name": "Увімкнути оверлей хроматичної форми блоків",
-    "nolijium.options.chroma_block_shape_overlay.tooltip": "Якщо встановлено, оверлей хроматичної форми буде намальовано на поверхнях блоків із зазначеним значенням, використаним для прозорості.\nМоже виглядати багатим на деяких блоках, коли увімкнено рендеринг §oКазкова!§r.",
+    "nolijium.options.chroma_block_shape_overlay.name": "Хроматичний оверлей блоків",
+    "nolijium.options.chroma_block_shape_overlay.tooltip": "Якщо встановлено, на блоках буде відображатися хроматичний оверлей із зазначеним значенням прозорості.\nМоже виглядати забаговано при використанні налаштувань графіки §oКазкова!§r.",
     "nolijium.options.disable_block_light_flicker.name": "Вимкнути мерехтіння освітлення",
     "nolijium.options.disable_block_light_flicker.tooltip": "Вимикає ванільне мерехтіння освітлення блоків.",
     "nolijium.options.disable_block_animations.name": "Вимкнути анімації блоків",
@@ -116,7 +116,7 @@
     "nolijium.options.enable_chroma_block_outlines.name": "Хроматичні контури блоків",
     "nolijium.options.enable_chroma_block_outlines.tooltip": "Увімкнути переливання кольорів для контурів блоків.",
     "nolijium.options.enable_chroma_tooltips.name": "Хроматичні підказки",
-    "nolijium.options.enable_chroma_tooltips.tooltip": "Увімкнути переливання кольорів для спливаючих підказок над предметами в інвентарі.",
+    "nolijium.options.enable_chroma_tooltips.tooltip": "Увімкнути переливання кольорів для спливаючих підказок.",
     "nolijium.options.enable_chroma_hud.name": "Хроматичний HUD",
     "nolijium.options.enable_chroma_hud.tooltip": "Увімкнути переливання кольорів для тексту HUD."
 }
