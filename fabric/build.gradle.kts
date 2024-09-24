@@ -14,21 +14,20 @@ val mod: Configuration by configurations.creating {
 unimined.minecraft {
 	combineWith(project(":common").sourceSets.main.get())
 	
-	version("lexforge20_minecraft_version"())
+	version("fabric_minecraft_version"())
 	
-	runs.config("client") {
-		javaVersion = JavaVersion.VERSION_21
+	fabric {
+		loader("fabric_loader_version"())
 	}
-	
-	minecraftForge {
-		loader("lexforge20_lexforge_version"())
-		mixinConfig("nolijium-lexforge20.mixins.json")
-		accessTransformer(rootProject.file("src/main/resources/META-INF/accesstransformer.cfg"))
+
+	source {
+		sourceGenerator.jvmArgs = listOf("-Xmx4G")
 	}
 
 	mappings {
+		intermediary()
 		mojmap()
-		parchment(mcVersion = "lexforge20_minecraft_version"(), version = "lexforge20_parchment_version"())
+		parchment(mcVersion = "1.21", version = "neoforge21_parchment_version"())
 	}
 
 	mods {
@@ -39,17 +38,20 @@ unimined.minecraft {
 }
 
 repositories {
+	maven("https://maven.terraformersmc.com/releases/")
 	maven("https://maven.blamejared.com")
 }
 
 dependencies {
 	compileOnly(project(":stubs"))
-	compileOnly("io.github.llamalad7:mixinextras-common:${"mixinextras_version"()}")
-	runtimeOnly("io.github.llamalad7:mixinextras-forge:${"mixinextras_version"()}")
-
+	
 	minecraftLibraries("dev.nolij:zson:${"zson_version"()}")
+
+	modCompileOnly(fabricApi.fabricModule("fabric-lifecycle-events-v1", "fabric_api_version"()))
+	modCompileOnly(fabricApi.fabricModule("fabric-rendering-v1", "fabric_api_version"()))
+	modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:${"fabric_api_version"()}")
 	
-	modCompileOnly("org.embeddedt:embeddium-1.20.1:${"lexforge20_embeddium_version"()}")
-	
-	modRuntimeOnly("dev.nolij:zume:${"zume_version"()}")
+	mod("com.terraformersmc:modmenu:${"modmenu_version"()}")
+
+//	modRuntimeOnly("dev.nolij:zume:${"zume_version"()}")
 }

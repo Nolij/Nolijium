@@ -2,7 +2,6 @@ package dev.nolij.nolijium.lexforge20;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import dev.nolij.nolijium.common.ChromaShapeRenderer;
 import dev.nolij.nolijium.common.INolijiumSubImplementation;
 import dev.nolij.nolijium.common.NolijiumCommon;
 import dev.nolij.nolijium.impl.Nolijium;
@@ -12,11 +11,6 @@ import dev.nolij.nolijium.impl.util.MethodHandleHelper;
 import dev.nolij.nolijium.impl.util.RGBHelper;
 import dev.nolij.nolijium.lexforge20.integration.embeddium.NolijiumEmbeddiumConfigScreen;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.toasts.AdvancementToast;
-import net.minecraft.client.gui.components.toasts.RecipeToast;
-import net.minecraft.client.gui.components.toasts.SystemToast;
-import net.minecraft.client.gui.components.toasts.Toast;
-import net.minecraft.client.gui.components.toasts.TutorialToast;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.network.chat.ClickEvent;
@@ -76,22 +70,8 @@ public class NolijiumLexForge20 implements INolijiumSubImplementation {
 		if (event.isCanceled())
 			return;
 		
-		if (Nolijium.config.hideAllToasts) {
+		if (NolijiumCommon.shouldHideToast(event.getToast()))
 			event.setCanceled(true);
-			return;
-		}
-		
-		final Toast toast = event.getToast();
-		
-		//noinspection IfCanBeSwitch
-		if (toast instanceof AdvancementToast)
-			event.setCanceled(Nolijium.config.hideAdvancementToasts);
-		else if (toast instanceof RecipeToast)
-			event.setCanceled(Nolijium.config.hideRecipeToasts);
-		else if (toast instanceof SystemToast)
-			event.setCanceled(Nolijium.config.hideSystemToasts);
-		else if (toast instanceof TutorialToast)
-			event.setCanceled(Nolijium.config.hideTutorialToasts);
 	}
 	
 	private void onRenderTooltip(RenderTooltipEvent.Color event) {

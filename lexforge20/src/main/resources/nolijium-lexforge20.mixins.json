@@ -4,7 +4,6 @@
 	"package": "dev.nolij.nolijium.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"client": [
-		"common.ChatScreenMixin",
 		"common.ClientLevelMixin",
 		"common.ClientPacketListenerMixin",
 		"common.FontMixin",
@@ -20,6 +19,7 @@
 		"common.MobEffectMixin",
 		"common.TextureAtlasMixin",
 		"lexforge20.ChatComponentMixin",
+		"lexforge20.ChatScreenMixin",
 		"lexforge20.LevelRendererMixin",
 		"lexforge20.LivingEntityMixin"
 	],

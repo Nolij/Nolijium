@@ -1,4 +1,4 @@
-package dev.nolij.nolijium.mixin.common;
+package dev.nolij.nolijium.mixin.neoforge;
 
 import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.config.NolijiumConfigImpl;
@@ -52,18 +52,8 @@ public class ChatScreenMixin {
 		}
 	}
 	
-	// neoforge
-	@Group(name = "nolijium$handleChatInput", min = 1, max = 2)
-	@Inject(method = "handleChatInput(Ljava/lang/String;Z)V", at = @At("RETURN"), require = 0)
-	public void nolijium$handleChatInput$RETURN(CallbackInfo ci) {
-		nolijium$rememberedMessage = null;
-	}
-	
-	// lexforge20
-	@Group(name = "nolijium$handleChatInput")
-	@Dynamic
-	@Inject(method = {"m_241797_(Ljava/lang/String;Z)Z", "handleChatInput(Ljava/lang/String;Z)Z"}, at = @At("RETURN"), require = 0)
-	public void nolijium$handleChatInput$RETURN(CallbackInfoReturnable<Boolean> cir) {
+	@Inject(method = "handleChatInput(Ljava/lang/String;Z)V", at = @At("HEAD"))
+	public void nolijium$handleChatInput$HEAD(CallbackInfo ci) {
 		nolijium$rememberedMessage = null;
 	}
 	

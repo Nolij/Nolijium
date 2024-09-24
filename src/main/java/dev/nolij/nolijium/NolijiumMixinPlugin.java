@@ -15,6 +15,7 @@ public final class NolijiumMixinPlugin implements IMixinConfigPlugin {
 	
 	static final String NEOFORGE = "neoforge";
 	static final String LEXFORGE20 = "lexforge20";
+	static final String FABRIC = "fabric";
 	
 	static final String NOLIJIUM_VARIANT;
 	private static final String implementationMixinPackage;
@@ -39,7 +40,10 @@ public final class NolijiumMixinPlugin implements IMixinConfigPlugin {
 				else
 					NOLIJIUM_VARIANT = null;
 			} else {
-				NOLIJIUM_VARIANT = null;
+				if (MethodHandleHelper.PUBLIC.getClassOrNull("net.fabricmc.loader.api.FabricLoader") != null)
+					NOLIJIUM_VARIANT = FABRIC;
+				else
+					NOLIJIUM_VARIANT = null;
 			}
 		}
 		

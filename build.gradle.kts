@@ -143,6 +143,7 @@ val uniminedImpls = arrayOfProjects(
 	"common",
     "neoforge",
 	"lexforge20",
+	"fabric",
 )
 
 allprojects {
@@ -288,7 +289,7 @@ subprojects {
 			    relocate("dev.nolij.nolijium.mixin.common", "dev.nolij.nolijium.mixin.${implName}.common")
 			    relocate("dev.nolij.nolijium.common", "dev.nolij.nolijium.${implName}.common")
 			    
-			    exclude("nolijium-common.mixins.json", "mods.toml", "neoforge.mods.toml")
+			    exclude("nolijium-common.mixins.json", "mods.toml", "neoforge.mods.toml", "fabric.mod.json")
 		    }
 
 		    tasks.assemble {
@@ -469,7 +470,7 @@ afterEvaluate {
         version = ZumeGradle.version
         changelog = getChangelog()
 
-        modLoaders.addAll("neoforge", "forge")
+        modLoaders.addAll("neoforge", "forge", "fabric")
         dryRun = !isRelease
 
         github {

@@ -12,6 +12,11 @@ import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.toasts.AdvancementToast;
+import net.minecraft.client.gui.components.toasts.RecipeToast;
+import net.minecraft.client.gui.components.toasts.SystemToast;
+import net.minecraft.client.gui.components.toasts.Toast;
+import net.minecraft.client.gui.components.toasts.TutorialToast;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
@@ -63,6 +68,23 @@ public class NolijiumCommon implements INolijiumImplementation {
 		this.platformImplementation = platformImplementation;
 		
 		Nolijium.registerImplementation(this, configPath);
+	}
+	
+	public static boolean shouldHideToast(Toast toast) {
+		if (Nolijium.config.hideAllToasts)
+			return true;
+		
+		//noinspection IfCanBeSwitch
+		if (toast instanceof AdvancementToast)
+			return Nolijium.config.hideAdvancementToasts;
+		else if (toast instanceof RecipeToast)
+			return Nolijium.config.hideRecipeToasts;
+		else if (toast instanceof SystemToast)
+			return Nolijium.config.hideSystemToasts;
+		else if (toast instanceof TutorialToast)
+			return Nolijium.config.hideTutorialToasts;
+		
+		return false;
 	}
 	
 	public static Set<ResourceLocation> blockedParticleTypeIDs = Set.of();
