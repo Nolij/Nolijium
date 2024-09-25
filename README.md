@@ -8,25 +8,31 @@ A collection of various QoL enhancements with (optional) Embeddium support and i
 
 # Features
 
-- Light level overlay toggle (NeoForge 21+ exclusive)
-- Maximum chat history customization
-- Miscellaneous chat enhancements
-- Advanced tooltip info toggle
-- Star renderer customization options
-- Fog customization options
-- HUD with accurate & efficient FPS tracking including 0.1% lows
-- [MC-26678](https://bugs.mojang.com/browse/MC-26678) revert
-- Potion revert (adds back potion glint and reverts colours)
-- Opaque block outlines toggle
-- Texture animation toggle
-- Sky rendering toggle
-- Weather toggles
-- Font shadow toggle
-- Toast toggles
-- Particle toggles
-- Chroma block outlines, block shape overlay, tooltips, & HUD
-- Global config file (config is synced between instances on the same machine)
-- Optional Embeddium integration
+|                                                                             | NeoForge 21+   | Fabric 21+                     | LexForge 20.1  |
+|-----------------------------------------------------------------------------|----------------|--------------------------------|----------------|
+| Light Level Overlay                                                         | :green_circle: | :green_circle:                 | :red_circle:   |
+| Maximum chat history customization                                          | :green_circle: | :green_circle:                 | :green_circle: |
+| Miscellaneous chat enhancements                                             | :green_circle: | :green_circle:                 | :green_circle: |
+| Advanced tooltip info toggle                                                | :green_circle: | :green_circle:                 | :green_circle: |
+| Star renderer customization options                                         | :green_circle: | :green_circle:                 | :green_circle: |
+| Fog customization options                                                   | :green_circle: | :red_circle: <sup>[1]</sup>    | :green_circle: |
+| HUD with accurate & efficient FPS tracking including 0.1% lows              | :green_circle: | :green_circle:                 | :green_circle: |
+| [MC-26678](https://bugs.mojang.com/browse/MC-26678) revert                  | :green_circle: | :green_circle:                 | :green_circle: |
+| Potion revert (adds back potion glint and reverts colours)                  | :green_circle: | :green_circle:                 | :green_circle: |
+| Opaque block outlines toggle                                                | :green_circle: | :green_circle:                 | :green_circle: |
+| Texture animation toggle                                                    | :green_circle: | :green_circle:                 | :green_circle: |
+| Sky rendering toggle                                                        | :green_circle: | :green_circle:                 | :green_circle: |
+| Weather toggles                                                             | :green_circle: | :green_circle:                 | :green_circle: |
+| Font shadow toggle                                                          | :green_circle: | :green_circle:                 | :green_circle: |
+| Toast toggles                                                               | :green_circle: | :green_circle:                 | :green_circle: |
+| Particle toggles                                                            | :green_circle: | :green_circle:                 | :green_circle: |
+| Chroma block outlines, block shape overlay, tooltips, & HUD                 | :green_circle: | :yellow_circle: <sup>[2]</sup> | :green_circle: |
+| Global config file (config is synced between instances on the same machine) | :green_circle: | :green_circle:                 | :green_circle: |
+| Optional Embeddium integration                                              | :green_circle: | :red_circle: <sup>[3]</sup>    | :green_circle: |
+
+- <sup>[1]</sup> Coming soon
+- <sup>[2]</sup> Partial support - behaviour may be better on other platforms
+- <sup>[3]</sup> Embeddium does not currently support Fabric 21+
 
 # Credits (in no particular order)
 

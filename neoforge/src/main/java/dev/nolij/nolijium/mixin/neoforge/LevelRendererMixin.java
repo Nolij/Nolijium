@@ -6,7 +6,7 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.MeshData;
 import com.mojang.blaze3d.vertex.Tesselator;
 import dev.nolij.nolijium.impl.Nolijium;
-import dev.nolij.nolijium.neoforge.NolijiumLightOverlayRenderer;
+import dev.nolij.nolijium.common.NolijiumLightOverlayRenderer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.LevelRenderer;
 import org.joml.Matrix4f;

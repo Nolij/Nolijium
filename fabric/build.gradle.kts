@@ -47,6 +47,7 @@ dependencies {
 	
 	minecraftLibraries("dev.nolij:zson:${"zson_version"()}")
 
+	modCompileOnly(fabricApi.fabricModule("fabric-key-binding-api-v1", "fabric_api_version"()))
 	modCompileOnly(fabricApi.fabricModule("fabric-lifecycle-events-v1", "fabric_api_version"()))
 	modCompileOnly(fabricApi.fabricModule("fabric-rendering-v1", "fabric_api_version"()))
 	modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:${"fabric_api_version"()}")

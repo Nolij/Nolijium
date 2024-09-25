@@ -21,6 +21,7 @@
 		"fabric.ChatComponentMixin",
 		"fabric.ChatScreenMixin",
 		"fabric.GuiAccessor",
+		"fabric.TooltipRenderUtilMixin",
 		"fabric.LevelRendererMixin",
 		"fabric.LivingEntityMixin",
 		"fabric.ToastComponentMixin"

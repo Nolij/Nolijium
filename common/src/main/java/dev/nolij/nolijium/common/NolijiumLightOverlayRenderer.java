@@ -1,4 +1,4 @@
-package dev.nolij.nolijium.neoforge;
+package dev.nolij.nolijium.common;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
