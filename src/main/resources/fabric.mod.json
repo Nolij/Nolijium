@@ -24,7 +24,7 @@
 		]
 	},
 	"mixins": [
-		"nolijium-fabric.mixins.json"
+		"nolijium.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=${fabric_loader_version}",
