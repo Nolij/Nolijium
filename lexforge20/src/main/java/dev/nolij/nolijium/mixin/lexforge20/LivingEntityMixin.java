@@ -2,9 +2,9 @@ package dev.nolij.nolijium.mixin.lexforge20;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import dev.nolij.libnolij.util.ColourUtil;
 import dev.nolij.nolijium.common.NolijiumCommon;
 import dev.nolij.nolijium.impl.Nolijium;
-import dev.nolij.nolijium.impl.util.RGBHelper;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
@@ -20,7 +20,7 @@ public class LivingEntityMixin {
 	)
 	private void nolijium$tickEffects$addParticle(Level instance, ParticleOptions particleData, double x, double y, double z, double red, double green, double blue, Operation<Void> original) {
 		if (Nolijium.config.revertPotions) {
-			final int colour = RGBHelper.getColour(
+			final int colour = ColourUtil.getColour(
 				0,
 				red,
 				green,

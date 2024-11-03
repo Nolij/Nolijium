@@ -1,8 +1,8 @@
 package dev.nolij.nolijium.mixin.neoforge;
 
+import dev.nolij.libnolij.util.ColourUtil;
 import dev.nolij.nolijium.common.NolijiumCommon;
 import dev.nolij.nolijium.impl.Nolijium;
-import dev.nolij.nolijium.impl.util.RGBHelper;
 import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,7 +20,7 @@ public class LivingEntityMixin {
 	)
 	private ParticleOptions nolijium$tickEffects$addParticle(ParticleOptions option) {
 		if (Nolijium.config.revertPotions && option instanceof ColorParticleOption colourOption) {
-			final int colour = RGBHelper.getColour(
+			final int colour = ColourUtil.getColour(
 				0,
 				colourOption.getRed(),
 				colourOption.getGreen(),

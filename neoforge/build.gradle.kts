@@ -46,6 +46,7 @@ dependencies {
 	compileOnly(project(":stubs"))
 	
 	minecraftLibraries("dev.nolij:zson:${"zson_version"()}")
+	minecraftLibraries("dev.nolij:libnolij:${"libnolij_version"()}")
 	
 	modCompileOnly("org.embeddedt:embeddium-1.21.1:${"neoforge21_embeddium_version"()}:api")
 	modRuntimeOnly("org.embeddedt:embeddium-1.21.1:${"neoforge21_embeddium_version"()}") {

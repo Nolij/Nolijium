@@ -165,6 +165,7 @@ allprojects {
             }
         }
         maven("https://maven.blamejared.com")
+	    maven("https://maven.taumc.org/releases")
     }
 
     tasks.withType<JavaCompile> {
@@ -227,6 +228,7 @@ subprojects {
 
     dependencies {
         implementation("dev.nolij:zson:${"zson_version"()}")
+	    implementation("dev.nolij:libnolij:${"libnolij_version"()}")
     }
 
     if (implName in uniminedImpls) {
@@ -331,6 +333,7 @@ val shade: Configuration by configurations.creating {
 
 dependencies {
     shade("dev.nolij:zson:${"zson_version"()}:downgraded-17")
+	shade("dev.nolij:libnolij:${"libnolij_version"()}:downgraded-17")
 	shade("io.github.llamalad7:mixinextras-common:${"mixinextras_version"()}")
 
     compileOnly("org.apache.logging.log4j:log4j-core:${"log4j_version"()}")
@@ -388,6 +391,7 @@ tasks.shadowJar {
 
     exclude("*.xcf")
     exclude("LICENSE_zson")
+    exclude("LICENSE_libnolij")
 
     configurations = immutableListOf(shade)
     archiveClassifier = null
@@ -407,6 +411,7 @@ tasks.shadowJar {
     }
 
     relocate("dev.nolij.zson", "dev.nolij.nolijium.zson")
+    relocate("dev.nolij.libnolij", "dev.nolij.nolijium.libnolij")
     if (releaseChannel.proguard) {
         relocate("dev.nolij.nolijium.mixin", "nolijium.mixin")
     }

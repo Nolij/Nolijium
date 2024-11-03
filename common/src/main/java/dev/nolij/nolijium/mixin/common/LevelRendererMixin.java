@@ -5,9 +5,9 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import dev.nolij.libnolij.util.ColourUtil;
 import dev.nolij.nolijium.common.NolijiumCommon;
 import dev.nolij.nolijium.impl.Nolijium;
-import dev.nolij.nolijium.impl.util.RGBHelper;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
@@ -64,15 +64,15 @@ public class LevelRendererMixin {
 		}
 		
 		if (Nolijium.config.blockShapeOverlayOverride != 0) {
-			red = (float) RGBHelper.getRed(Nolijium.config.blockShapeOverlayOverride);
-			green = (float) RGBHelper.getGreen(Nolijium.config.blockShapeOverlayOverride);
-			blue = (float) RGBHelper.getBlue(Nolijium.config.blockShapeOverlayOverride);
+			red = (float) ColourUtil.getRed(Nolijium.config.blockShapeOverlayOverride);
+			green = (float) ColourUtil.getGreen(Nolijium.config.blockShapeOverlayOverride);
+			blue = (float) ColourUtil.getBlue(Nolijium.config.blockShapeOverlayOverride);
 		} else if (Nolijium.config.enableChromaBlockOutlines || Nolijium.config.chromaBlockShapeOverlay > 0) {
 			final double timestamp = System.nanoTime() * 1E-9D;
 			
-			red = (float) RGBHelper.chromaRed(timestamp, Nolijium.config.chromaSpeed, 0);
-			green = (float) RGBHelper.chromaGreen(timestamp, Nolijium.config.chromaSpeed, 0);
-			blue = (float) RGBHelper.chromaBlue(timestamp, Nolijium.config.chromaSpeed, 0);
+			red = (float) ColourUtil.chromaRed(timestamp, Nolijium.config.chromaSpeed, 0);
+			green = (float) ColourUtil.chromaGreen(timestamp, Nolijium.config.chromaSpeed, 0);
+			blue = (float) ColourUtil.chromaBlue(timestamp, Nolijium.config.chromaSpeed, 0);
 		}
 		
 		original.call(poseStack, vertexConsumer, shape, x, y, z, red, green, blue, alpha);

@@ -1,12 +1,12 @@
 package dev.nolij.nolijium.common;
 
 import com.sun.management.OperatingSystemMXBean;
+import dev.nolij.libnolij.collect.SlidingLongBuffer;
+import dev.nolij.libnolij.util.MathUtil;
+import dev.nolij.libnolij.util.ColourUtil;
 import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.util.Alignment;
 import dev.nolij.nolijium.impl.util.DetailLevel;
-import dev.nolij.nolijium.impl.util.MathHelper;
-import dev.nolij.nolijium.impl.util.RGBHelper;
-import dev.nolij.nolijium.impl.util.SlidingLongBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -76,7 +76,7 @@ public abstract class NolijiumHUD {
 		}
 		
 		final long target = (long) (Nolijium.config.hudFrameTimeBufferSize * 1E9);
-		final int newSize = (int) MathHelper.clamp(
+		final int newSize = (int) MathUtil.clamp(
 			(frameTimeBuffer.size() * (double) target / duration),
 			FRAME_TIME_BUFFER_SIZE_MIN,
 			FRAME_TIME_BUFFER_SIZE_MAX);
@@ -254,7 +254,7 @@ public abstract class NolijiumHUD {
 						FONT, line.text,
 						line.posX, linePosY + 2,
 						Nolijium.config.enableChromaHUD 
-							? RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, -i)
+							? ColourUtil.chroma(timestamp, Nolijium.config.chromaSpeed, -i)
 							: TEXT_COLOUR, 
 						Nolijium.config.hudShadow);
 				}

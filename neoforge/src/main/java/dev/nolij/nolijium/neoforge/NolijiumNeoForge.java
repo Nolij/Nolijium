@@ -2,14 +2,14 @@ package dev.nolij.nolijium.neoforge;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import dev.nolij.libnolij.refraction.Refraction;
+import dev.nolij.libnolij.util.MathUtil;
+import dev.nolij.libnolij.util.ColourUtil;
 import dev.nolij.nolijium.common.INolijiumSubImplementation;
 import dev.nolij.nolijium.common.NolijiumCommon;
 import dev.nolij.nolijium.common.NolijiumLightOverlayRenderer;
 import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.config.NolijiumConfigImpl;
-import dev.nolij.nolijium.impl.util.MathHelper;
-import dev.nolij.nolijium.impl.util.MethodHandleHelper;
-import dev.nolij.nolijium.impl.util.RGBHelper;
 import dev.nolij.nolijium.neoforge.integration.embeddium.NolijiumEmbeddiumConfigScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -45,8 +45,8 @@ import static dev.nolij.nolijium.impl.NolijiumConstants.*;
 @Mod(value = MOD_ID, dist = Dist.CLIENT)
 public class NolijiumNeoForge implements INolijiumSubImplementation {
 	
-	private static final MethodHandleHelper METHOD_HANDLE_HELPER =
-		new MethodHandleHelper(NolijiumNeoForge.class.getClassLoader(), MethodHandles.lookup());
+	private static final Refraction METHOD_HANDLE_HELPER =
+		new Refraction(MethodHandles.lookup());
 	
 	public NolijiumNeoForge(IEventBus modEventBus, ModContainer modContainer) {
 		new NolijiumCommon(this, FMLPaths.CONFIGDIR.get());
@@ -108,10 +108,10 @@ public class NolijiumNeoForge implements INolijiumSubImplementation {
 		
 		final double timestamp = System.nanoTime() * 1E-9D;
 		
-		event.setBorderStart(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, 0));
-		event.setBorderEnd(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, -2));
-		event.setBackgroundStart(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, 0, 0.25D));
-		event.setBackgroundEnd(RGBHelper.chroma(timestamp, Nolijium.config.chromaSpeed, -2, 0.25D));
+		event.setBorderStart(ColourUtil.chroma(timestamp, Nolijium.config.chromaSpeed, 0));
+		event.setBorderEnd(ColourUtil.chroma(timestamp, Nolijium.config.chromaSpeed, -2));
+		event.setBackgroundStart(ColourUtil.chroma(timestamp, Nolijium.config.chromaSpeed, 0, 0.25D));
+		event.setBackgroundEnd(ColourUtil.chroma(timestamp, Nolijium.config.chromaSpeed, -2, 0.25D));
 	}
 	
 	private void renderFog(ViewportEvent.RenderFog event) {
@@ -134,7 +134,7 @@ public class NolijiumNeoForge implements INolijiumSubImplementation {
 			final float distance = Nolijium.config.fogOverride * 16;
 			
 			if (event.getMode() != FogRenderer.FogMode.FOG_SKY)
-				event.setNearPlaneDistance(distance - (float) MathHelper.clamp(distance * 0.1D, 4D, 64D));
+				event.setNearPlaneDistance(distance - (float) MathUtil.clamp(distance * 0.1D, 4D, 64D));
 			event.setFarPlaneDistance(distance);
 		} else if (Nolijium.config.fogMultiplier != 1F) {
 			event.setCanceled(true);

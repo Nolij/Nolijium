@@ -26,7 +26,7 @@ tasks.test {
 	useJUnitPlatform()
 }
 
-tasks.build {
+tasks.assemble {
 	dependsOn(tasks.test)
 }
 

@@ -46,6 +46,7 @@ dependencies {
 	compileOnly(project(":stubs"))
 	
 	minecraftLibraries("dev.nolij:zson:${"zson_version"()}")
+	minecraftLibraries("dev.nolij:libnolij:${"libnolij_version"()}")
 
 	modCompileOnly(fabricApi.fabricModule("fabric-key-binding-api-v1", "fabric_api_version"()))
 	modCompileOnly(fabricApi.fabricModule("fabric-lifecycle-events-v1", "fabric_api_version"()))

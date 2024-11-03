@@ -48,6 +48,7 @@ dependencies {
 	runtimeOnly("io.github.llamalad7:mixinextras-forge:${"mixinextras_version"()}")
 
 	minecraftLibraries("dev.nolij:zson:${"zson_version"()}")
+	minecraftLibraries("dev.nolij:libnolij:${"libnolij_version"()}")
 	
 	modCompileOnly("org.embeddedt:embeddium-1.20.1:${"lexforge20_embeddium_version"()}")
 	

@@ -1,7 +1,7 @@
 package dev.nolij.nolijium;
 
 import com.llamalad7.mixinextras.MixinExtrasBootstrap;
-import dev.nolij.nolijium.impl.util.MethodHandleHelper;
+import dev.nolij.libnolij.refraction.Refraction;
 import dev.nolij.zumegradle.proguard.ProGuardKeep;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
@@ -21,14 +21,14 @@ public final class NolijiumMixinPlugin implements IMixinConfigPlugin {
 	private static final String implementationMixinPackage;
 	
 	static {
-		if (MethodHandleHelper.PUBLIC.getClassOrNull("net.neoforged.neoforge.internal.versions.neoforge.NeoForgeVersion") != null) {
+		if (Refraction.safe().getClassOrNull("net.neoforged.neoforge.internal.versions.neoforge.NeoForgeVersion") != null) {
 			NOLIJIUM_VARIANT = NEOFORGE;
 		} else {
 			String lexForgeVersion = null;
 			try {
 				//noinspection DataFlowIssue
-				lexForgeVersion = (String) MethodHandleHelper.PUBLIC.getMethodOrNull(
-					MethodHandleHelper.PUBLIC.getClassOrNull("net.minecraftforge.versions.forge.ForgeVersion"),
+				lexForgeVersion = (String) Refraction.safe().getMethodOrNull(
+					Refraction.safe().getClassOrNull("net.minecraftforge.versions.forge.ForgeVersion"),
 					"getVersion"
 				).invokeExact();
 			} catch (Throwable ignored) { }
@@ -40,7 +40,7 @@ public final class NolijiumMixinPlugin implements IMixinConfigPlugin {
 				else
 					NOLIJIUM_VARIANT = null;
 			} else {
-				if (MethodHandleHelper.PUBLIC.getClassOrNull("net.fabricmc.loader.api.FabricLoader") != null)
+				if (Refraction.safe().getClassOrNull("net.fabricmc.loader.api.FabricLoader") != null)
 					NOLIJIUM_VARIANT = FABRIC;
 				else
 					NOLIJIUM_VARIANT = null;

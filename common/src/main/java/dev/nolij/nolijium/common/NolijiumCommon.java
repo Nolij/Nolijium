@@ -2,10 +2,10 @@ package dev.nolij.nolijium.common;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import dev.nolij.libnolij.util.ColourUtil;
 import dev.nolij.nolijium.impl.INolijiumImplementation;
 import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.config.NolijiumConfigImpl;
-import dev.nolij.nolijium.impl.util.RGBHelper;
 import dev.nolij.nolijium.mixin.common.LevelRendererAccessor;
 import dev.nolij.nolijium.mixin.common.LightTextureAccessor;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
@@ -201,10 +201,10 @@ public class NolijiumCommon implements INolijiumImplementation {
 				focusedBlockPosition.x,
 				focusedBlockPosition.y,
 				focusedBlockPosition.z,
-				(float) RGBHelper.getRed(Nolijium.config.blockShapeOverlayOverride),
-				(float) RGBHelper.getGreen(Nolijium.config.blockShapeOverlayOverride),
-				(float) RGBHelper.getBlue(Nolijium.config.blockShapeOverlayOverride),
-				(float) RGBHelper.getAlpha(Nolijium.config.blockShapeOverlayOverride));
+				(float) ColourUtil.getRed(Nolijium.config.blockShapeOverlayOverride),
+				(float) ColourUtil.getGreen(Nolijium.config.blockShapeOverlayOverride),
+				(float) ColourUtil.getBlue(Nolijium.config.blockShapeOverlayOverride),
+				(float) ColourUtil.getAlpha(Nolijium.config.blockShapeOverlayOverride));
 		} else {
 			final double timestamp = System.nanoTime() * 1E-9D;
 			
@@ -214,9 +214,9 @@ public class NolijiumCommon implements INolijiumImplementation {
 				focusedBlockPosition.x,
 				focusedBlockPosition.y,
 				focusedBlockPosition.z,
-				(float) RGBHelper.chromaRed(timestamp, Nolijium.config.chromaSpeed, 0),
-				(float) RGBHelper.chromaGreen(timestamp, Nolijium.config.chromaSpeed, 0),
-				(float) RGBHelper.chromaBlue(timestamp, Nolijium.config.chromaSpeed, 0),
+				(float) ColourUtil.chromaRed(timestamp, Nolijium.config.chromaSpeed, 0),
+				(float) ColourUtil.chromaGreen(timestamp, Nolijium.config.chromaSpeed, 0),
+				(float) ColourUtil.chromaBlue(timestamp, Nolijium.config.chromaSpeed, 0),
 				Nolijium.config.chromaBlockShapeOverlay);
 		}
 		
