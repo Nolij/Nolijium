@@ -8,7 +8,7 @@
     "nolijium.chunks": "%d 区块",
     "nolijium.percentage": "%d%%",
     "nolijium.pixels": "%d 像素",
-    "nolijium.ticks": "%d tick(s)",
+    "nolijium.ticks": "%d 游戏刻（秒）",
     "nolijium.seconds": "%d 秒",
     "nolijium.tooltip_info": "操作：%s\n值：%s",
     "nolijium.toggle_light_level_overlay": "切换光照级别覆盖",
