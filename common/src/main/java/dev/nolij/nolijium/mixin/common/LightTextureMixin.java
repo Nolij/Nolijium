@@ -8,7 +8,9 @@ import net.minecraft.client.renderer.LightTexture;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LightTexture.class)
@@ -58,6 +60,14 @@ public class LightTextureMixin {
 	)
 	public boolean nolijium$tick$updateLightTexture(LightTexture instance, boolean value) {
 		return !Nolijium.config.enableGamma;
+	}
+	
+	@ModifyConstant(method = "updateLightTexture", constant = @Constant(floatValue = 0.04F))
+	public float nolijium$updateLightTexture$0_04F(float value) {
+		if (Nolijium.config.enablePureDarkness)
+			return 0F;
+		
+		return value;
 	}
 	
 }

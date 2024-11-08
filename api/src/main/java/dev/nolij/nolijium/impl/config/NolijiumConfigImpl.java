@@ -188,6 +188,11 @@ public class NolijiumConfigImpl implements Cloneable {
 	public boolean enableOpaqueBlockOutlines = false;
 	
 	@ZsonField(comment = """
+		If enabled, light level 0 will render as pitch black.
+		DEFAULT: `false`""")
+	public boolean enablePureDarkness = false;
+	
+	@ZsonField(comment = """
 		Disables block light flickering.
 		DEFAULT: `false`""")
 	public boolean disableBlockLightFlicker = false;
