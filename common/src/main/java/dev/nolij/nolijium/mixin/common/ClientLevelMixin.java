@@ -16,7 +16,7 @@ public class ClientLevelMixin {
 		return Nolijium.config.starBrightness;
 	}
 	
-	@ModifyReturnValue(method = "getSkyDarken", at = @At("RETURN"))
+	@ModifyReturnValue(method = "getSkyDarken(F)F", at = @At("RETURN"))
 	public float nolijium$getSkyDarken$RETURN(float original) {
 		if (Nolijium.config.enablePureDarkness)
 			return original - 0.2F / 0.8F;
