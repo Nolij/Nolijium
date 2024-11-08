@@ -171,6 +171,24 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 				.build())
 			.build());
 		
+		utilitiesPage.add(OptionGroup.createBuilder()
+			.setId(id("lighting"))
+			.add(OptionImpl.createBuilder(boolean.class, storage)
+				.setId(id("enable_pure_darkness", boolean.class))
+				.setControl(TickBoxControl::new)
+				.setBinding(
+					(config, value) -> config.enablePureDarkness = value,
+					config -> config.enablePureDarkness)
+				.build())
+			.add(OptionImpl.createBuilder(int.class, storage)
+				.setId(id("minimum_skylight_level", int.class))
+				.setControl(option -> new SliderControl(option, 0, 20, 1, ControlValueFormatter.percentage()))
+				.setBinding(
+					(config, value) -> config.minimumSkyLightLevel = value / 100F,
+					config -> Math.round(config.minimumSkyLightLevel * 100))
+				.build())
+			.build());
+		
 		final Option<Boolean> hudEnabledOption;
 		final Option<DetailLevel> hudShowFPSOption;
 		utilitiesPage.add(OptionGroup.createBuilder()

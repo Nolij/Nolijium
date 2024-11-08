@@ -20,6 +20,7 @@ A collection of various QoL enhancements with (optional) Embeddium support and i
 | [MC-26678](https://bugs.mojang.com/browse/MC-26678) revert                  | :green_circle: | :green_circle:                 | :green_circle: |
 | Potion revert (adds back potion glint and reverts colours)                  | :green_circle: | :green_circle:                 | :green_circle: |
 | Opaque block outlines toggle                                                | :green_circle: | :green_circle:                 | :green_circle: |
+| Pure Darkness                                                               | :green_circle: | :green_circle:                 | :green_circle: |
 | Texture animation toggle                                                    | :green_circle: | :green_circle:                 | :green_circle: |
 | Sky rendering toggle                                                        | :green_circle: | :green_circle:                 | :green_circle: |
 | Weather toggles                                                             | :green_circle: | :green_circle:                 | :green_circle: |
