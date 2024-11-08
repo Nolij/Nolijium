@@ -98,6 +98,16 @@ public class NolijiumConfigImpl implements Cloneable {
 	public float fogStartMultiplier = 1F;
 	
 	@ZsonField(comment = """
+		If enabled, light level 0 will render as pitch black.
+		DEFAULT: `false`""")
+	public boolean enablePureDarkness = false;
+	
+	@ZsonField(comment = """
+		Determines the minimum sky light level (0.2 in vanilla).
+		DEFAULT: `0.2`""")
+	public float minimumSkyLightLevel = 0.2F;
+	
+	@ZsonField(comment = """
 		If enabled, a HUD will be drawn on the screen showing useful performance statistics.
 		DEFAULT: `false`""")
 	public boolean hudEnabled = false;
@@ -186,11 +196,6 @@ public class NolijiumConfigImpl implements Cloneable {
 		Removes transparency from block outlines.
 		DEFAULT: `false`""")
 	public boolean enableOpaqueBlockOutlines = false;
-	
-	@ZsonField(comment = """
-		If enabled, light level 0 will render as pitch black.
-		DEFAULT: `false`""")
-	public boolean enablePureDarkness = false;
 	
 	@ZsonField(comment = """
 		Disables block light flickering.
