@@ -3,6 +3,7 @@ package dev.nolij.nolijium.mixin.common;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import dev.nolij.nolijium.impl.Nolijium;
 import net.minecraft.client.renderer.LightTexture;
 import org.objectweb.asm.Opcodes;
@@ -63,8 +64,8 @@ public class LightTextureMixin {
 	}
 	
 	@ModifyConstant(method = "updateLightTexture", constant = @Constant(floatValue = 0.04F))
-	public float nolijium$updateLightTexture$0_04F(float value) {
-		if (Nolijium.config.enablePureDarkness)
+	public float nolijium$updateLightTexture$0_04F(float value, @Local(ordinal = 2, print = true) float f1, @Local(ordinal = 7) float f5) {
+		if (f1 != 1F && f5 == 0F && Nolijium.config.enablePureDarkness)
 			return 0F;
 		
 		return value;
