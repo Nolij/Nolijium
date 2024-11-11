@@ -64,7 +64,7 @@ public class LightTextureMixin {
 	}
 	
 	@ModifyConstant(method = "updateLightTexture", constant = @Constant(floatValue = 0.04F))
-	public float nolijium$updateLightTexture$0_04F(float value, @Local(ordinal = 2, print = true) float f1, @Local(ordinal = 7) float f5) {
+	public float nolijium$updateLightTexture$0_04F(float value, @Local(ordinal = 2) float f1, @Local(ordinal = 7) float f5) {
 		if (f1 != 1F && // lightning flashes
 			f5 == 0F && // night vision, conduit power, etc. 
 			Nolijium.config.enablePureDarkness && // require option to be enabled in config (weird idea right?)
