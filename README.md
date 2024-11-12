@@ -8,28 +8,28 @@ A collection of various QoL enhancements with (optional) Embeddium support and i
 
 # Features
 
-|                                                                             | NeoForge 21+ | Fabric 21+       | LexForge 20.1 |
-|-----------------------------------------------------------------------------|--------------|------------------|---------------|
-| Light Level Overlay                                                         | ✅            | ✅                | ❌             |
-| Maximum chat history customization                                          | ✅            | ✅                | ✅             |
-| Miscellaneous chat enhancements                                             | ✅            | ✅                | ✅             |
-| Advanced tooltip info toggle                                                | ✅            | ✅                | ✅             |
-| Star renderer customization options                                         | ✅            | ✅                | ✅             |
-| Fog customization options                                                   | ✅            | ❌ [1] | ✅             |
-| HUD with accurate & efficient FPS tracking including 0.1% lows              | ✅            | ✅                | ✅             |
-| [MC-26678](https://bugs.mojang.com/browse/MC-26678) revert                  | ✅            | ✅                | ✅             |
-| Potion revert (adds back potion glint and reverts colours)                  | ✅            | ✅                | ✅             |
-| Opaque block outlines toggle                                                | ✅            | ✅                | ✅             |
-| Pure Darkness                                                               | ✅            | ✅                | ✅             |
-| Texture animation toggle                                                    | ✅            | ✅                | ✅             |
-| Sky rendering toggle                                                        | ✅            | ✅                | ✅             |
-| Weather toggles                                                             | ✅            | ✅                | ✅             |
-| Font shadow toggle                                                          | ✅            | ✅                | ✅             |
-| Toast toggles                                                               | ✅            | ✅                | ✅             |
-| Particle toggles                                                            | ✅            | ✅                | ✅             |
-| Chroma block outlines, block shape overlay, tooltips, & HUD                 | ✅            | ⚠ [2] | ✅             |
-| Global config file (config is synced between instances on the same machine) | ✅            | ✅                | ✅             |
-| Optional Embeddium integration                                              | ✅            | ❌ [3] | ✅             |
+|                                                                             | NeoForge 21+ | Fabric 21+ | LexForge 20.1 |
+|-----------------------------------------------------------------------------|--------------|------------|---------------|
+| Light Level Overlay                                                         | ✅            | ✅          | ❌             |
+| Maximum chat history customization                                          | ✅            | ✅          | ✅             |
+| Miscellaneous chat enhancements                                             | ✅            | ✅          | ✅             |
+| Advanced tooltip info toggle                                                | ✅            | ✅          | ✅             |
+| Star renderer customization options                                         | ✅            | ✅          | ✅             |
+| Fog customization options                                                   | ✅            | ❌ [1]      | ✅             |
+| HUD with accurate & efficient FPS tracking including 0.1% lows              | ✅            | ✅          | ✅             |
+| [MC-26678](https://bugs.mojang.com/browse/MC-26678) revert                  | ✅            | ✅          | ✅             |
+| Potion revert (adds back potion glint and reverts colours)                  | ✅            | ✅          | ✅             |
+| Opaque block outlines toggle                                                | ✅            | ✅          | ✅             |
+| Pure Darkness                                                               | ✅            | ✅          | ✅             |
+| Texture animation toggle                                                    | ✅            | ✅          | ✅             |
+| Sky rendering toggle                                                        | ✅            | ✅          | ✅             |
+| Weather toggles                                                             | ✅            | ✅          | ✅             |
+| Font shadow toggle                                                          | ✅            | ✅          | ✅             |
+| Toast toggles                                                               | ✅            | ✅          | ✅             |
+| Particle toggles                                                            | ✅            | ✅          | ✅             |
+| Chroma block outlines, block shape overlay, tooltips, & HUD                 | ✅            | ⚠ [2]      | ✅             |
+| Global config file (config is synced between instances on the same machine) | ✅            | ✅          | ✅             |
+| Optional Embeddium integration                                              | ✅            | ❌ [3]      | ✅             |
 
 - [1] Coming soon
 - [2] Partial support - behaviour may be better on other platforms
