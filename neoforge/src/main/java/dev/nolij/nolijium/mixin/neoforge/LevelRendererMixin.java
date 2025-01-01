@@ -7,12 +7,16 @@ import com.mojang.blaze3d.vertex.MeshData;
 import com.mojang.blaze3d.vertex.Tesselator;
 import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.common.NolijiumLightOverlayRenderer;
+import dev.nolij.nolijium.neoforge.ChromaMultiBufferSource;
 import net.minecraft.client.Camera;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -47,4 +51,12 @@ public class LevelRendererMixin {
 			bufferBuilder.addVertex(0, 0, 0);
 	}
 	
+	@ModifyArg(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/neoforged/neoforge/client/ClientHooks;onDrawHighlight(Lnet/minecraft/client/renderer/LevelRenderer;Lnet/minecraft/client/Camera;Lnet/minecraft/world/phys/HitResult;Lnet/minecraft/client/DeltaTracker;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)Z"), index = 5)
+	private MultiBufferSource wrapBuffersWithColor(MultiBufferSource original, @Local(ordinal = 0, argsOnly = true) DeltaTracker deltaTracker) {
+		if (Nolijium.config.enableChromaBlockOutlines) {
+			return new ChromaMultiBufferSource(original);
+		} else {
+			return original;
+		}
+	}
 }
