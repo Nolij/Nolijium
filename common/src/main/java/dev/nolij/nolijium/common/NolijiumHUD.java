@@ -90,15 +90,26 @@ public abstract class NolijiumHUD {
 		return (int) (1E9D / frameTime);
 	}
 	
+	private static String getFrameTimeString(long frameTime) {
+		if (frameTime >= 1E7) {
+			return "%dms".formatted((int) (frameTime / 1E6));
+		} else if (frameTime >= 1E4) {
+			return "%dµs".formatted((int) (frameTime / 1E3));
+		} else {
+			return "%dns".formatted(frameTime);
+		}
+	}
+	
 	private List<Line> getLines() {
 		var result = new ArrayList<String>();
 		
 		if (Nolijium.config.hudShowFPS != DetailLevel.NONE) {
 			synchronized (frameTimeBuffer) {
-				final int fps = getFrameTimeFPS(lastFrameTime);
-				result.add("FPS: %d".formatted(fps));
-				
-				if (Nolijium.config.hudShowFPS == DetailLevel.EXTENDED) {
+				if (Nolijium.config.hudShowFPS == DetailLevel.SIMPLE) {
+					result.add("FPS: %d".formatted(getFrameTimeFPS(lastFrameTime)));
+				} else if (Nolijium.config.hudShowFPS == DetailLevel.EXTENDED) {
+					result.add("FPS: %d (%s)".formatted(getFrameTimeFPS(lastFrameTime), getFrameTimeString(lastFrameTime)));
+					
 					final String leftPad = Nolijium.config.hudAlignmentX == Alignment.X.LEFT ? "  " : "";
 					if (!frameTimeBuffer.isEmpty()) {
 						long max = -Long.MAX_VALUE;
@@ -113,9 +124,9 @@ public abstract class NolijiumHUD {
 						}
 						avg /= frameTimeBuffer.size();
 						
-						result.add("%sMIN: %d".formatted(leftPad, getFrameTimeFPS(max)));
-						result.add("%sMAX: %d".formatted(leftPad, getFrameTimeFPS(min)));
-						result.add("%sAVG: %d".formatted(leftPad, getFrameTimeFPS(avg)));
+						result.add("%sMIN: %d (%s)".formatted(leftPad, getFrameTimeFPS(max), getFrameTimeString(max)));
+						result.add("%sMAX: %d (%s)".formatted(leftPad, getFrameTimeFPS(min), getFrameTimeString(min)));
+						result.add("%sAVG: %d (%s)".formatted(leftPad, getFrameTimeFPS(avg), getFrameTimeString(avg)));
 					} else {
 						result.add("%sMIN: ???".formatted(leftPad));
 						result.add("%sMAX: ???".formatted(leftPad));
