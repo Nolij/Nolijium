@@ -1,6 +1,3 @@
-- added pure darkness
-- added minimum skylight level
-- added limited Fabric support (see README.md)
-- translation improvements (thanks @Alexander317 and @OrzMiku)
-- added LibNolij
+- improved chroma block outlines mod compatibility (thanks @embeddedt)
+- added frame times alongside extended FPS in HUD
 - further improvements to overall system stability and other minor adjustments have been made to enhance the user experience
