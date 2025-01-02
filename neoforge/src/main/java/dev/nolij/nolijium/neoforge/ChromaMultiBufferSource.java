@@ -6,10 +6,12 @@ import dev.nolij.nolijium.impl.Nolijium;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.neoforged.neoforge.client.model.pipeline.VertexConsumerWrapper;
+import org.jetbrains.annotations.NotNull;
 
 public class ChromaMultiBufferSource implements MultiBufferSource {
+	
 	private final MultiBufferSource delegate;
-	private final float timestamp;
+	private final double timestamp;
 	
 	public ChromaMultiBufferSource(MultiBufferSource delegate) {
 		this.delegate = delegate;
@@ -17,20 +19,23 @@ public class ChromaMultiBufferSource implements MultiBufferSource {
 	}
 	
 	@Override
-	public VertexConsumer getBuffer(RenderType renderType) {
+	public @NotNull VertexConsumer getBuffer(@NotNull RenderType renderType) {
 		return new VertexConsumerWrapper(this.delegate.getBuffer(renderType)) {
 			@Override
-			public VertexConsumer setColor(int r, int g, int b, int a) {
-				float timestamp = ChromaMultiBufferSource.this.timestamp;
-				double speed = Nolijium.config.chromaSpeed;
+			public @NotNull VertexConsumer setColor(int red, int green, int blue, int alpha) {
+				final double timestamp = ChromaMultiBufferSource.this.timestamp;
+				final double speed = Nolijium.config.chromaSpeed;
+				
 				super.setColor(
-					(int)(ColourUtil.chromaRed(timestamp,speed, 0) * 255),
-					(int)(ColourUtil.chromaGreen(timestamp,speed, 0) * 255),
-					(int)(ColourUtil.chromaBlue(timestamp,speed, 0) * 255),
-					a
+					(int) (ColourUtil.chromaRed(timestamp, speed, 0) * 255),
+					(int) (ColourUtil.chromaGreen(timestamp, speed, 0) * 255),
+					(int) (ColourUtil.chromaBlue(timestamp, speed, 0) * 255),
+					alpha
 				);
+				
 				return this;
 			}
 		};
 	}
+	
 }
