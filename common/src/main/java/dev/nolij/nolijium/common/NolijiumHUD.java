@@ -91,9 +91,9 @@ public abstract class NolijiumHUD {
 	}
 	
 	private static String getFrameTimeString(long frameTime) {
-		if (frameTime >= 1E7) {
+		if (frameTime >= 1E6) {
 			return "%dms".formatted((int) (frameTime / 1E6));
-		} else if (frameTime >= 1E4) {
+		} else if (frameTime >= 1E3) {
 			return "%dµs".formatted((int) (frameTime / 1E3));
 		} else {
 			return "%dns".formatted(frameTime);
