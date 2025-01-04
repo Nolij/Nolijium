@@ -9,7 +9,6 @@ import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.common.NolijiumLightOverlayRenderer;
 import dev.nolij.nolijium.neoforge.ChromaMultiBufferSource;
 import net.minecraft.client.Camera;
-import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import org.joml.Matrix4f;
@@ -52,7 +51,7 @@ public class LevelRendererMixin {
 	}
 	
 	@ModifyArg(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/neoforged/neoforge/client/ClientHooks;onDrawHighlight(Lnet/minecraft/client/renderer/LevelRenderer;Lnet/minecraft/client/Camera;Lnet/minecraft/world/phys/HitResult;Lnet/minecraft/client/DeltaTracker;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)Z"), index = 5)
-	private MultiBufferSource wrapBuffersWithColor(MultiBufferSource original, @Local(ordinal = 0, argsOnly = true) DeltaTracker deltaTracker) {
+	private MultiBufferSource wrapBuffersWithColor(MultiBufferSource original) {
 		if (Nolijium.config.enableChromaBlockOutlines) {
 			return new ChromaMultiBufferSource(original);
 		} else {
