@@ -1,3 +1,2 @@
-- improved chroma block outlines mod compatibility (thanks @embeddedt)
-- added frame times alongside extended FPS in HUD
+- fixed 20.1 crash
 - further improvements to overall system stability and other minor adjustments have been made to enhance the user experience

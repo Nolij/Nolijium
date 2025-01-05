@@ -3,6 +3,7 @@ package dev.nolij.nolijium.lexforge20;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.nolij.libnolij.util.ColourUtil;
 import dev.nolij.nolijium.impl.Nolijium;
+import dev.nolij.zumegradle.proguard.ProGuardKeep;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraftforge.client.model.pipeline.VertexConsumerWrapper;
@@ -18,9 +19,11 @@ public class ChromaMultiBufferSource implements MultiBufferSource {
 		this.timestamp = System.nanoTime() * 1E-9D;
 	}
 	
+	@ProGuardKeep
 	@Override
 	public @NotNull VertexConsumer getBuffer(@NotNull RenderType renderType) {
 		return new VertexConsumerWrapper(this.delegate.getBuffer(renderType)) {
+			@ProGuardKeep
 			@Override
 			public @NotNull VertexConsumer color(int red, int green, int blue, int alpha) {
 				if (red == 0 && green == 0 && blue == 0 && alpha == 102) {
