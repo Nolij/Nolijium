@@ -17,6 +17,7 @@
 		"common.LightTextureAccessor",
 		"common.LightTextureMixin",
 		"common.MobEffectMixin",
+		"common.ParticleEngineMixin",
 		"common.TextureAtlasMixin",
 		"fabric.ChatComponentMixin",
 		"fabric.ChatScreenMixin",
