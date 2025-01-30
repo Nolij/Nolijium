@@ -21,7 +21,7 @@ public class NolijiumConfigImpl implements Cloneable {
 	
 	//region Options
 	@ZsonField(comment = """
-		Show an overlay on blocks if the block light level above them is below 8.
+		Show an overlay on blocks if the block light level above them is below 8 (red for light level 0, yellow for light level 1 - 7).
 		Exclusive to NeoForge 21+.
 		DEFAULT: `false`""")
 	public boolean enableLightLevelOverlay = false;
