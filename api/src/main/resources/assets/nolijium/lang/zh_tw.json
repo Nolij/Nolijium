@@ -24,7 +24,7 @@
   "nolijium.remember_chat_bar_contents.never": "從不",
   "nolijium.utilities": "實用工具",
   "nolijium.options.enable_light_level_overlay.name": "啟用光照級別覆蓋",
-  "nolijium.options.enable_light_level_overlay.tooltip": "如果方塊上方的光照級別低於8，則在方塊上顯示覆蓋層。",
+  "nolijium.options.enable_light_level_overlay.tooltip": "如果方塊上方的光照等級低於 8，則在方塊上顯示覆蓋（光照等級為 0 時顯示§4紅色§r，光照等級為 1 - 7 時顯示§e黃色§r）。",
   "nolijium.options.max_chat_history.name": "最大聊天記錄數量",
   "nolijium.options.max_chat_history.tooltip": "更改聊天記錄中保留的消息數量（原版為100）。",
   "nolijium.options.keep_chat_history.name": "保留聊天記錄",
