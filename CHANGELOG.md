@@ -1,3 +1,4 @@
 - fixed AstroCraft compatibility
 - fixed crash in some sandboxed environments
+- added `zh_tw` translation (thanks @EvanHsieh0415)
 - further improvements to overall system stability and other minor adjustments have been made to enhance the user experience
