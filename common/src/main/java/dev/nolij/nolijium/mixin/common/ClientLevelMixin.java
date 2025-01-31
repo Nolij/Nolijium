@@ -5,15 +5,13 @@ import dev.nolij.nolijium.impl.Nolijium;
 import net.minecraft.client.multiplayer.ClientLevel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 @Mixin(ClientLevel.class)
 public class ClientLevelMixin {
 	
-	@ModifyConstant(method = "getStarBrightness", constant = @Constant(floatValue = 0.5F))
-	public float nolijium$getStarBrightness$0_5F(float constant) {
-		return Nolijium.config.starBrightness;
+	@ModifyReturnValue(method = "getStarBrightness", at = @At("RETURN"))
+	public float nolijium$getStarBrightness(float brightness) {
+		return brightness / 0.5F * Nolijium.config.starBrightness;
 	}
 	
 	@ModifyReturnValue(method = "getSkyDarken(F)F", at = @At("RETURN"))
