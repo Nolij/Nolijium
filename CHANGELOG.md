@@ -1,2 +1,3 @@
-- fixed `minecraft:block` particles not being hidden in some scenarios
+- fixed AstroCraft compatibility
+- fixed crash in some sandboxed environments
 - further improvements to overall system stability and other minor adjustments have been made to enhance the user experience

@@ -6,6 +6,7 @@ import dev.nolij.nolijium.impl.util.DetailLevel;
 import dev.nolij.zson.Zson;
 import dev.nolij.zson.ZsonField;
 import dev.nolij.zumegradle.proguard.ProGuardKeep;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileReader;
@@ -21,7 +22,7 @@ public class NolijiumConfigImpl implements Cloneable {
 	
 	//region Options
 	@ZsonField(comment = """
-		Show an overlay on blocks if the block light level above them is below 8.
+		Show an overlay on blocks if the block light level above them is below 8 (red for light level 0, yellow for light level 1 - 7).
 		Exclusive to NeoForge 21+.
 		DEFAULT: `false`""")
 	public boolean enableLightLevelOverlay = false;
@@ -385,7 +386,7 @@ public class NolijiumConfigImpl implements Cloneable {
 	private static IFileWatcher instanceWatcher;
 	private static IFileWatcher globalWatcher;
 	private static File instanceFile = null;
-	private static File globalFile = null;
+	private static @Nullable File globalFile = null;
 	
 	public static void replace(final NolijiumConfigImpl newConfig) throws InterruptedException {
 		try {
@@ -424,7 +425,7 @@ public class NolijiumConfigImpl implements Cloneable {
 			HOST_PLATFORM = HostPlatform.UNKNOWN;
 	}
 	private static final String CONFIG_PATH_OVERRIDE = System.getProperty("nolijium.configPathOverride");
-	private static final Path GLOBAL_CONFIG_PATH;
+	private static final @Nullable Path GLOBAL_CONFIG_PATH;
 	
 	static {
 		final Path dotMinecraft;
@@ -435,14 +436,18 @@ public class NolijiumConfigImpl implements Cloneable {
 		else
 			dotMinecraft = Paths.get(System.getProperty("user.home"), "Library", "Application Support", "minecraft");
 		
-		GLOBAL_CONFIG_PATH = dotMinecraft.resolve("global");
-		if (Files.notExists(GLOBAL_CONFIG_PATH)) {
+		var globalConfigPath = dotMinecraft.resolve("global");
+		if (Files.notExists(globalConfigPath)) {
             try {
-                Files.createDirectories(GLOBAL_CONFIG_PATH);
+                Files.createDirectories(globalConfigPath);
             } catch (IOException e) {
-                Nolijium.LOGGER.error("Failed to create global config path: ", e);
+				globalConfigPath = null;
             }
         }
+		if (globalConfigPath == null || !Files.isWritable(globalConfigPath))
+			GLOBAL_CONFIG_PATH = null;
+		else
+			GLOBAL_CONFIG_PATH = globalConfigPath;
 	}
 	
 	public static File getConfigFile() {
@@ -450,7 +455,8 @@ public class NolijiumConfigImpl implements Cloneable {
 			return new File(CONFIG_PATH_OVERRIDE);
 		}
 		
-		if (instanceFile != null && instanceFile.exists()) {
+		if ((globalFile == null || !globalFile.canWrite()) || 
+			(instanceFile != null && instanceFile.exists())) {
 			return instanceFile;
 		}
 		
@@ -491,7 +497,8 @@ public class NolijiumConfigImpl implements Cloneable {
 		consumer = configConsumer;
 		if (CONFIG_PATH_OVERRIDE == null) {
 			instanceFile = instanceConfigPath.resolve(fileName).toFile();
-			globalFile = GLOBAL_CONFIG_PATH.resolve(fileName).toFile();
+			if (GLOBAL_CONFIG_PATH != null)
+				globalFile = GLOBAL_CONFIG_PATH.resolve(fileName).toFile();
 		}
 		
 		NolijiumConfigImpl config = readConfigFile();
@@ -506,7 +513,10 @@ public class NolijiumConfigImpl implements Cloneable {
 			
 			if (CONFIG_PATH_OVERRIDE == null) {
 				instanceWatcher = FileWatcher.onFileChange(instanceFile.toPath(), NolijiumConfigImpl::reloadConfig);
-				globalWatcher = FileWatcher.onFileChange(globalFile.toPath(), NolijiumConfigImpl::reloadConfig);
+				if (globalFile != null)
+					globalWatcher = FileWatcher.onFileChange(globalFile.toPath(), NolijiumConfigImpl::reloadConfig);
+				else
+					globalWatcher = nullWatcher;
 			} else {
 				instanceWatcher = nullWatcher;
 				globalWatcher = FileWatcher.onFileChange(getConfigFile().toPath(), NolijiumConfigImpl::reloadConfig);
