@@ -44,6 +44,7 @@ A collection of various QoL enhancements with (optional) Embeddium support and i
 - [AlexSanech](https://github.com/Alexander317): Russian translation
 - [OrzMiku](https://github.com/OrzMiku): Simplified Chinese translation
 - [cutiegin](https://github.com/cutiegin): Ukrainian translation
+- [EvanHsieh0415](https://github.com/EvanHsieh0415): Traditional Chinese (Taiwan) translation
 
 # FAQ
 
