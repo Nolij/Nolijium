@@ -24,7 +24,7 @@
     "nolijium.remember_chat_bar_contents.never": "НІКОЛИ",
     "nolijium.utilities": "Утиліти",
     "nolijium.options.enable_light_level_overlay.name": "Оверлей рівня освітленості",
-    "nolijium.options.enable_light_level_overlay.tooltip": "Показує оверлей на блоках, якщо рівень світла над ними нижче 8.",
+    "nolijium.options.enable_light_level_overlay.tooltip": "Показує оверлей на блоках, якщо рівень освітленості над ними нижче 8 (§4червоний§r - при рівні 0, §eжовтий§r - при рівні від 1 до 7).",
     "nolijium.options.max_chat_history.name": "Макс. історія чату",
     "nolijium.options.max_chat_history.tooltip": "Змінює кількість повідомлень, що зберігаються в історії чату (За замовчуванням - 100).",
     "nolijium.options.keep_chat_history.name": "Зберігати історію чату",
