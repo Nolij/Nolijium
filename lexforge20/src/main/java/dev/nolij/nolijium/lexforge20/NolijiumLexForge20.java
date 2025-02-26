@@ -10,6 +10,7 @@ import dev.nolij.nolijium.common.NolijiumCommon;
 import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.config.NolijiumConfigImpl;
 import dev.nolij.nolijium.lexforge20.integration.embeddium.NolijiumEmbeddiumConfigScreen;
+import dev.nolij.zumegradle.proguard.ProGuardKeep;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.FogRenderer;
@@ -46,6 +47,7 @@ public class NolijiumLexForge20 implements INolijiumSubImplementation {
 		ModLoadingContext.get().registerExtensionPoint(
 			ConfigScreenHandler.ConfigScreenFactory.class,
 			() -> new ConfigScreenHandler.ConfigScreenFactory((minecraft, parent) -> new Screen(Component.nullToEmpty(null)) {
+				@ProGuardKeep
 				@Override
 				public void tick() {
 					NolijiumConfigImpl.openConfigFile();

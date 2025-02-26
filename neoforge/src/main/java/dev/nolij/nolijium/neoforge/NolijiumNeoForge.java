@@ -11,6 +11,7 @@ import dev.nolij.nolijium.common.NolijiumLightOverlayRenderer;
 import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.config.NolijiumConfigImpl;
 import dev.nolij.nolijium.neoforge.integration.embeddium.NolijiumEmbeddiumConfigScreen;
+import dev.nolij.zumegradle.proguard.ProGuardKeep;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.FogRenderer;
@@ -55,6 +56,7 @@ public class NolijiumNeoForge implements INolijiumSubImplementation {
 			IConfigScreenFactory.class, 
 			(minecraft, parent) -> 
 				new Screen(Component.empty()) {
+					@ProGuardKeep
 					@Override
 					protected void init() {
 						NolijiumConfigImpl.openConfigFile();
