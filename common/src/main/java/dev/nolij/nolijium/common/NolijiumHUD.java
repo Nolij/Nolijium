@@ -29,7 +29,17 @@ public abstract class NolijiumHUD {
 	private static final Font FONT = Minecraft.getInstance().font;
 	private static final int LINE_HEIGHT = FONT.lineHeight + 3;
 	
-	private static final OperatingSystemMXBean OS_BEAN = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
+	private static final OperatingSystemMXBean OS_BEAN;
+	
+	static {
+		OperatingSystemMXBean osBean = null;
+		try {
+			osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
+		} catch (Throwable t) {
+			Nolijium.LOGGER.error("Failed to obtain OperatingSystemMXBean", t);
+		}
+		OS_BEAN = osBean;
+	}
 	
 	private static final int FRAME_TIME_BUFFER_SIZE_MAX = 2 << 16;
 	private static final int FRAME_TIME_BUFFER_SIZE_MIN = 2 << 6;
@@ -148,7 +158,11 @@ public abstract class NolijiumHUD {
 			var stats = this.systemStatsThread.getCurrentStats();
 			
 			if (Nolijium.config.hudShowCPU) {
-				result.add("CPU: %2.2f%%".formatted(stats.cpuUsage() * 100D));
+				final var cpuUsage = stats.cpuUsage();
+				if (cpuUsage != -1)
+					result.add("CPU: %2.2f%%".formatted(cpuUsage * 100D));
+				else
+					result.add("CPU: ERROR");
 			}
 			
 			if (Nolijium.config.hudShowMemory) {
@@ -334,8 +348,9 @@ public abstract class NolijiumHUD {
 			while (this.running) {
 				this.statsReference.set(collectStats());
 				try {
+					//noinspection BusyWait
 					Thread.sleep(UPDATE_DELAY_MS);
-				} catch(InterruptedException e) {
+				} catch (InterruptedException e) {
 					return;
 				}
 			}
@@ -343,7 +358,7 @@ public abstract class NolijiumHUD {
 		
 		private Stats collectStats() {
 			double cpuUsage;
-			if(numInvalidCpuUsageValues < MAX_INVALID_CPU_USAGE_VALUES) {
+			if (OS_BEAN != null && numInvalidCpuUsageValues < MAX_INVALID_CPU_USAGE_VALUES) {
 				cpuUsage = OS_BEAN.getProcessCpuLoad();
 				if (cpuUsage < 0) {
 					cpuUsage = OS_BEAN.getCpuLoad();
