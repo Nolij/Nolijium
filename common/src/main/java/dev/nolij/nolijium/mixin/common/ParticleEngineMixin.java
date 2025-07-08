@@ -1,7 +1,10 @@
 package dev.nolij.nolijium.mixin.common;
 
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import dev.nolij.nolijium.common.NolijiumCommon;
 import dev.nolij.nolijium.impl.Nolijium;
 import net.minecraft.client.particle.Particle;
@@ -27,18 +30,24 @@ public class ParticleEngineMixin {
 		original.call(particle);
 	}
 	
+	@WrapWithCondition(method="createParticle", at=@At(value = "INVOKE", target="Lnet/minecraft/client/particle/ParticleEngine;add(Lnet/minecraft/client/particle/Particle;)V"))
+	public boolean nolijium$preventAddingParticle(ParticleEngine instance, Particle effect, @Share(value="mustCreateAndHidden") LocalBooleanRef mustCreateAndHidden) {
+		return !mustCreateAndHidden.get();
+	}
+
 	@WrapMethod(method = "createParticle")
-	public Particle nolijium$createParticle(ParticleOptions particleOptions, double p_107372_, double p_107373_, double p_107374_, double p_107375_, double p_107376_, double p_107377_, Operation<Particle> original) {
-		if (Nolijium.config.hideParticles)
+	public Particle nolijium$createParticle(ParticleOptions particleOptions, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, Operation<Particle> original, @Share("mustCreateAndHidden") LocalBooleanRef mustCreateAndHidden) {
+		final var key = BuiltInRegistries.PARTICLE_TYPE.getKey(particleOptions.getType());
+		final boolean hidden = Nolijium.config.hideParticles || (key != null && NolijiumCommon.blockedParticleTypeIDs.contains(key));
+		final boolean mustReturnNonNull = key != null && NolijiumCommon.mustBeCreatedParticleTypeIDs.contains(key);
+		if (hidden && !mustReturnNonNull)  
 			return null;
-		
-		if (!NolijiumCommon.blockedParticleTypeIDs.isEmpty()) {
-			final var key = BuiltInRegistries.PARTICLE_TYPE.getKey(particleOptions.getType());
-			if (key != null && NolijiumCommon.blockedParticleTypeIDs.contains(key))
-				return null;
-		}
-		
-		return original.call(particleOptions, p_107372_, p_107373_, p_107374_, p_107375_, p_107376_, p_107377_);
+
+		mustCreateAndHidden.set(hidden);
+		Particle p = original.call(particleOptions, x, y, z, xSpeed, ySpeed, zSpeed);
+		if (hidden) p.remove();
+		mustCreateAndHidden.set(false);
+		return p;
 	}
 	
 	@Unique
