@@ -6,6 +6,7 @@
 	"client": [
 		"common.ClientLevelMixin",
 		"common.ClientPacketListenerMixin",
+		"common.FireworkParticlesStarterMixin",
 		"common.FontMixin",
 		"common.GameRendererMixin",
 		"common.GuiGraphicsMixin",
