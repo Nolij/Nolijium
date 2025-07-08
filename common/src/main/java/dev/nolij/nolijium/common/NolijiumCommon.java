@@ -11,6 +11,7 @@ import dev.nolij.nolijium.mixin.common.LightTextureAccessor;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import net.minecraft.ChatFormatting;
+import net.minecraft.ResourceLocationException;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.toasts.AdvancementToast;
 import net.minecraft.client.gui.components.toasts.RecipeToast;
@@ -31,6 +32,7 @@ import net.minecraftforge.fml.common.Mod;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.stream.Collectors;
@@ -88,6 +90,7 @@ public class NolijiumCommon implements INolijiumImplementation {
 	}
 	
 	public static Set<ResourceLocation> blockedParticleTypeIDs = Set.of();
+	public static Set<ResourceLocation> mustBeCreatedParticleTypeIDs = Set.of();
 	
 	@Override
 	public void onConfigReload(NolijiumConfigImpl config) {
@@ -95,6 +98,19 @@ public class NolijiumCommon implements INolijiumImplementation {
 		blockedParticleTypeIDs = config.hideParticlesByID
 			.stream()
 			.map(ResourceLocation::tryParse)
+			.collect(Collectors.toUnmodifiableSet());
+		
+		mustBeCreatedParticleTypeIDs = config.mustBeCreatedParicleIDs
+			.stream()
+			.map(idEntry->{
+				try {
+					return ResourceLocation.parse(idEntry);
+				}catch(ResourceLocationException e) {
+					Nolijium.LOGGER.error("Unable to parse mustBeCreatedParicleIDs entry for particle id: {}", idEntry, e);
+				}
+				return null;
+			})
+			.filter(Objects::nonNull)
 			.collect(Collectors.toUnmodifiableSet());
 		
 		//noinspection ConstantValue

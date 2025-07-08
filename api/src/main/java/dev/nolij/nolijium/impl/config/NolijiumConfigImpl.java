@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class NolijiumConfigImpl implements Cloneable {
@@ -264,6 +265,12 @@ public class NolijiumConfigImpl implements Cloneable {
 		DEFAULT: `[ ]`""")
 	public ArrayList<String> hideParticlesByID = new ArrayList<>();
 	
+	@ZsonField(comment = """
+		Some particles are required to be created to prevent crashes. These particles must be added to this list.
+		Also supports modded particles.
+		DEFAULT: `[ "minecraft:firework" ]`""")
+	public ArrayList<String> mustBeCreatedParicleIDs = new ArrayList<>(List.of("minecraft:firework"));
+
 	@ZsonField(comment = """
 		Higher values cycle faster. Lower values cycle slower.
 		DEFAULT: `0.5`""")
