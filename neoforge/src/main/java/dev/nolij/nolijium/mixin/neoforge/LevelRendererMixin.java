@@ -7,7 +7,7 @@ import com.mojang.blaze3d.vertex.MeshData;
 import com.mojang.blaze3d.vertex.Tesselator;
 import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.common.NolijiumLightOverlayRenderer;
-import dev.nolij.nolijium.neoforge.ChromaMultiBufferSource;
+import dev.nolij.nolijium.neoforge.BlockOutlineMultiBufferSourceWrapper;
 import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -52,8 +52,8 @@ public class LevelRendererMixin {
 	
 	@ModifyArg(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/neoforged/neoforge/client/ClientHooks;onDrawHighlight(Lnet/minecraft/client/renderer/LevelRenderer;Lnet/minecraft/client/Camera;Lnet/minecraft/world/phys/HitResult;Lnet/minecraft/client/DeltaTracker;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)Z"), index = 5)
 	private MultiBufferSource wrapBuffersWithColor(MultiBufferSource original) {
-		if (Nolijium.config.enableChromaBlockOutlines) {
-			return new ChromaMultiBufferSource(original);
+		if (Nolijium.blockChromaProvider != null) {
+			return new BlockOutlineMultiBufferSourceWrapper(original);
 		} else {
 			return original;
 		}

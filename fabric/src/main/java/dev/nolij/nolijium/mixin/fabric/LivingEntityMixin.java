@@ -20,8 +20,7 @@ public class LivingEntityMixin {
 	)
 	private ParticleOptions nolijium$tickEffects$addParticle(ParticleOptions option) {
 		if (Nolijium.config.revertPotions && option instanceof ColorParticleOption colourOption) {
-			final int colour = ColourUtil.getRGBA(
-				0,
+			final int colour = ColourUtil.getRGB(
 				colourOption.getRed(),
 				colourOption.getGreen(),
 				colourOption.getBlue());

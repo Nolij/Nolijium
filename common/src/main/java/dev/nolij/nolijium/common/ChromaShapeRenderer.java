@@ -67,7 +67,7 @@ public class ChromaShapeRenderer {
 		
 		var bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
 		renderInnerOverlay(poseStack, bufferSource, shape, red, green, blue, alpha);
-		if (Nolijium.config.enableChromaBlockOutlines)
+		if (Nolijium.blockChromaProvider != null)
 			renderOuterOverlay(poseStack, bufferSource, shape, red, green, blue, 1F);
 		
 		poseStack.popPose();

@@ -3,7 +3,6 @@ package dev.nolij.nolijium.common;
 import com.sun.management.OperatingSystemMXBean;
 import dev.nolij.libnolij.collect.SlidingLongBuffer;
 import dev.nolij.libnolij.util.MathUtil;
-import dev.nolij.libnolij.util.ColourUtil;
 import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.util.Alignment;
 import dev.nolij.nolijium.impl.util.DetailLevel;
@@ -266,6 +265,7 @@ public abstract class NolijiumHUD {
 			final double timestamp = lastFrameTimestamp * 1E-9D;
 			
 			var linePosY = posY;
+			final var shift = 1D / ((double) lines.size() * 2);
 			for (int i = 0; i < lines.size(); i++) {
 				final Line line = lines.get(i);
 				if (!line.text.isEmpty()) {
@@ -278,8 +278,8 @@ public abstract class NolijiumHUD {
 					guiGraphics.drawString(
 						FONT, line.text,
 						line.posX, linePosY + 2,
-						Nolijium.config.enableChromaHUD 
-							? ColourUtil.chroma(timestamp, Nolijium.config.chromaSpeed, -i)
+						Nolijium.hudChromaProvider != null 
+							? Nolijium.hudChromaProvider.chroma(timestamp, i * shift) | 0xFF000000
 							: TEXT_COLOUR, 
 						Nolijium.config.hudShadow);
 				}

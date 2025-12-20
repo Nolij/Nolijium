@@ -191,34 +191,24 @@ public class NolijiumCommon implements INolijiumImplementation {
 	public static volatile VoxelShape focusedBlockShape = null;
 	
 	public static void renderAfterTranslucentBlocks(PoseStack poseStack) {
-		if (focusedBlockPosition == null || focusedBlockShape == null)
+		if (focusedBlockPosition == null || focusedBlockShape == null || Nolijium.blockChromaProvider == null)
 			return;
 		
-		if (Nolijium.config.blockShapeOverlayOverride != 0) {
-			ChromaShapeRenderer.render(
-				poseStack,
-				focusedBlockShape,
-				focusedBlockPosition.x,
-				focusedBlockPosition.y,
-				focusedBlockPosition.z,
-				(float) ColourUtil.getRed(Nolijium.config.blockShapeOverlayOverride),
-				(float) ColourUtil.getGreen(Nolijium.config.blockShapeOverlayOverride),
-				(float) ColourUtil.getBlue(Nolijium.config.blockShapeOverlayOverride),
-				(float) ColourUtil.getAlpha(Nolijium.config.blockShapeOverlayOverride));
-		} else {
-			final double timestamp = System.nanoTime() * 1E-9D;
-			
-			ChromaShapeRenderer.render(
-				poseStack,
-				focusedBlockShape,
-				focusedBlockPosition.x,
-				focusedBlockPosition.y,
-				focusedBlockPosition.z,
-				(float) ColourUtil.chromaRed(timestamp, Nolijium.config.chromaSpeed, 0),
-				(float) ColourUtil.chromaGreen(timestamp, Nolijium.config.chromaSpeed, 0),
-				(float) ColourUtil.chromaBlue(timestamp, Nolijium.config.chromaSpeed, 0),
-				Nolijium.config.chromaBlockShapeOverlay);
-		}
+		final var timestamp = System.nanoTime() * 1E-9D;
+		final var colour = Nolijium.blockChromaProvider.chroma(timestamp, 0);
+		
+		ChromaShapeRenderer.render(
+			poseStack,
+			focusedBlockShape,
+			focusedBlockPosition.x,
+			focusedBlockPosition.y,
+			focusedBlockPosition.z,
+			(float) ColourUtil.getRedD(colour),
+			(float) ColourUtil.getGreenD(colour),
+			(float) ColourUtil.getBlueD(colour),
+			Nolijium.config.blockShapeOverlayOverride > 0 
+				? Nolijium.config.blockShapeOverlayOverride
+				: Nolijium.config.chromaBlockShapeOverlay);
 		
 		focusedBlockPosition = null;
 		focusedBlockShape = null;

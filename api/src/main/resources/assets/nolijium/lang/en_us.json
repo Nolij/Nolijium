@@ -113,14 +113,12 @@
 	"nolijium.options.disable_particles.tooltip": "Prevents all particles from rendering.",
 	"nolijium.particle_id": "Allow %s particles.",
 	"nolijium.chroma": "Chroma",
-	"nolijium.options.chroma_speed.name": "Chroma Speed",
-	"nolijium.options.chroma_speed.tooltip": "Higher values cycle faster. Lower values cycle slower.",
-	"nolijium.options.enable_chroma_block_outlines.name": "Enable Chroma Block Outlines",
-	"nolijium.options.enable_chroma_block_outlines.tooltip": "Enable Chroma on block outlines.",
+	"nolijium.options.chroma_block_outlines.name": "Block Outlines Chroma Speed",
+	"nolijium.options.chroma_block_outlines.tooltip": "Higher values cycle faster. Lower values cycle slower.",
 	"nolijium.options.chroma_block_shape_overlay.name": "Enable Chroma Block Shape Overlay",
 	"nolijium.options.chroma_block_shape_overlay.tooltip": "If set, a chroma overlay will be drawn on block surfaces with the specified value used for transparency.\nMay look buggy on some blocks when §oFabulous!§r rendering is enabled.",
-	"nolijium.options.enable_chroma_tooltips.name": "Enable Chroma Tool Tips",
-	"nolijium.options.enable_chroma_tooltips.tooltip": "Enable Chroma on tool tips.",
-	"nolijium.options.enable_chroma_hud.name": "Enable Chroma HUD",
-	"nolijium.options.enable_chroma_hud.tooltip": "Enable Chroma on HUD text."
+	"nolijium.options.chroma_tooltips.name": "Tool Tips Chroma Speed",
+	"nolijium.options.chroma_tooltips.tooltip": "Higher values cycle faster. Lower values cycle slower.",
+	"nolijium.options.chroma_hud.name": "HUD Chroma Speed",
+	"nolijium.options.chroma_hud.tooltip": "Higher values cycle faster. Lower values cycle slower."
 }

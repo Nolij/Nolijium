@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.nolij.libnolij.refraction.Refraction;
 import dev.nolij.libnolij.util.MathUtil;
-import dev.nolij.libnolij.util.ColourUtil;
 import dev.nolij.nolijium.common.INolijiumSubImplementation;
 import dev.nolij.nolijium.common.NolijiumCommon;
 import dev.nolij.nolijium.impl.Nolijium;
@@ -88,15 +87,16 @@ public class NolijiumLexForge20 implements INolijiumSubImplementation {
 			return;
 		}
 		
-		if (!Nolijium.config.enableChromaToolTips)
-			return;
-		
 		final double timestamp = System.nanoTime() * 1E-9D;
 		
-		event.setBorderStart(ColourUtil.chroma(timestamp, Nolijium.config.chromaSpeed, 0));
-		event.setBorderEnd(ColourUtil.chroma(timestamp, Nolijium.config.chromaSpeed, -2));
-		event.setBackgroundStart(ColourUtil.chroma(timestamp, Nolijium.config.chromaSpeed, 0, 0.25D));
-		event.setBackgroundEnd(ColourUtil.chroma(timestamp, Nolijium.config.chromaSpeed, -2, 0.25D));
+		if (Nolijium.tooltipBorderChromaProvider != null) {
+			event.setBorderStart(Nolijium.tooltipBorderChromaProvider.chroma(timestamp, 0) | 0xFF000000);
+			event.setBorderEnd(Nolijium.tooltipBorderChromaProvider.chroma(timestamp, 0.2D) | 0xFF000000);
+		}
+		if (Nolijium.tooltipBackgroundChromaProvider != null) {
+			event.setBackgroundStart(Nolijium.tooltipBackgroundChromaProvider.chroma(timestamp, 0, 0.25D) | 0xFF000000);
+			event.setBackgroundEnd(Nolijium.tooltipBackgroundChromaProvider.chroma(timestamp, 0.2D, 0.25D) | 0xFF000000);
+		}
 	}
 	
 	private void renderFog(ViewportEvent.RenderFog event) {

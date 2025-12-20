@@ -172,19 +172,16 @@ allprojects {
         if (name !in arrayOf("compileMcLauncherJava", "compilePatchedMcJava")) {
             options.encoding = "UTF-8"
             sourceCompatibility = "21"
-            options.release = 17
+            options.release = 21
             javaCompiler = javaToolchains.compilerFor {
                 languageVersion = JavaLanguageVersion.of(21)
             }
-            options.compilerArgs.addAll(arrayOf("-Xplugin:Manifold no-bootstrap", "-Xplugin:jabel"))
+            options.compilerArgs.addAll(arrayOf("-Xplugin:Manifold no-bootstrap"))
         }
     }
 
     dependencies {
         compileOnly("org.jetbrains:annotations:${"jetbrains_annotations_version"()}")
-
-	    annotationProcessor("com.pkware.jabel:jabel-javac-plugin:${"jabel_version"()}")
-	    testAnnotationProcessor("com.pkware.jabel:jabel-javac-plugin:${"jabel_version"()}")
 	    
         compileOnly("systems.manifold:manifold-rt:${"manifold_version"()}")
         annotationProcessor("systems.manifold:manifold-exceptions:${"manifold_version"()}")
@@ -332,8 +329,8 @@ val shade: Configuration by configurations.creating {
 }
 
 dependencies {
-    shade("dev.nolij:zson:${"zson_version"()}:downgraded-17")
-	shade("dev.nolij:libnolij:${"libnolij_version"()}:downgraded-17")
+    shade("dev.nolij:zson:${"zson_version"()}")
+	shade("dev.nolij:libnolij:${"libnolij_version"()}")
 	shade("io.github.llamalad7:mixinextras-common:${"mixinextras_version"()}")
 
     compileOnly("org.apache.logging.log4j:log4j-core:${"log4j_version"()}")

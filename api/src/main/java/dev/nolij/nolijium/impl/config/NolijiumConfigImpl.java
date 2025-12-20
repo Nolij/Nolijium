@@ -1,10 +1,19 @@
 package dev.nolij.nolijium.impl.config;
 
+import dev.nolij.libnolij.chroma.IChromaProvider;
+import dev.nolij.libnolij.chroma.MultiChromaProvider;
+import dev.nolij.libnolij.chroma.SineWaveChromaProvider;
+import dev.nolij.libnolij.chroma.StaticChromaProvider;
+import dev.nolij.libnolij.chroma.StaticMultiChromaProvider;
+import dev.nolij.libnolij.collect.Pair;
+import dev.nolij.libnolij.refraction.Refraction;
+import dev.nolij.libnolij.util.ColourUtil;
 import dev.nolij.nolijium.impl.util.Alignment;
 import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.util.DetailLevel;
 import dev.nolij.zson.Zson;
 import dev.nolij.zson.ZsonField;
+import dev.nolij.zson.ZsonValue;
 import dev.nolij.zumegradle.proguard.ProGuardKeep;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,13 +21,306 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.invoke.MethodHandle;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class NolijiumConfigImpl implements Cloneable {
+	
+	public enum ChromaProviderType {
+		
+		DISABLED(DisabledChromaConfig.class),
+		SINE_WAVE(SineWaveChromaConfig.class),
+		STATIC(StaticChromaConfig.class),
+		MULTI(MultiChromaConfig.class),
+		STATIC_MULTI(StaticMultiChromaConfig.class),
+		
+		;
+		
+		public final Class<? extends ChromaConfig> configClass;
+		
+		ChromaProviderType(Class<? extends ChromaConfig> configClass) {
+			this.configClass = configClass;
+		}
+		
+	}
+	
+	public abstract static class ChromaConfig {
+		
+		private static final Map<String, ChromaProviderType> types = 
+			Arrays.stream(ChromaProviderType.values())
+				.collect(Collectors.toMap(Enum::name, Function.identity()));
+		
+		public static ChromaConfig deserialize(ZsonValue zsonValue) {
+			final ChromaProviderType type;
+			if (zsonValue == null || !(
+				zsonValue.value instanceof Map<?, ?> rawMap &&
+				rawMap.containsKey("type") &&
+				rawMap.get("type") instanceof ZsonValue typeValue &&
+				typeValue.value instanceof String typeString &&
+				(type = types.get(typeString.toUpperCase())) != null))
+				return new DisabledChromaConfig();
+			
+			//noinspection unchecked
+			return Zson.map2Obj((Map<String, ZsonValue>) rawMap, type.configClass);
+		}
+		
+		protected static final String TYPE_COMMENT = """
+            OPTIONS: `DISABLED`, `SINE_WAVE`, `STATIC`, `MULTI`, `STATIC_MULTI`
+            DEFAULT: `DISABLED`
+            """;
+		
+		protected static final String COLOUR_COMMENT = """
+             FORMAT: `0xRRGGBB`
+             """;
+		
+		@ZsonField(comment = TYPE_COMMENT, exclude = true)
+		public final ChromaProviderType type;
+		
+		protected ChromaConfig(ChromaProviderType type) {
+			this.type = type;
+		}
+		
+		public abstract IChromaProvider getChromaProvider();
+		
+	}
+	
+	public static class DisabledChromaConfig extends ChromaConfig {
+		
+		public DisabledChromaConfig() {
+			super(type);
+		}
+		
+		@ZsonField(comment = TYPE_COMMENT, serializeOnly = true)
+		public static final ChromaProviderType type = ChromaProviderType.DISABLED;
+		
+		@Override
+		public IChromaProvider getChromaProvider() {
+			return null;
+		}
+		
+		@Override
+		public boolean equals(Object object) {
+			return object instanceof DisabledChromaConfig;
+		}
+		
+	}
+	
+	public static class SineWaveChromaConfig extends ChromaConfig {
+		
+		public SineWaveChromaConfig() {
+			super(type);
+		}
+		
+		public SineWaveChromaConfig(double speed) {
+			super(type);
+			this.speed = speed;
+		}
+		
+		@ZsonField(comment = TYPE_COMMENT, serializeOnly = true)
+		public static final ChromaProviderType type = ChromaProviderType.SINE_WAVE;
+		
+		@ZsonField
+		public double speed = 0.5D;
+		
+		@Override
+		public IChromaProvider getChromaProvider() {
+			return new SineWaveChromaProvider(speed);
+		}
+		
+		@Override
+		public boolean equals(Object object) {
+			if (this == object)
+				return true;
+			
+			if (object instanceof SineWaveChromaConfig sineWaveChromaConfig)
+				return this.speed == sineWaveChromaConfig.speed;
+			
+			return false;
+		}
+		
+	}
+	
+	public static class StaticChromaConfig extends ChromaConfig {
+		
+		public StaticChromaConfig() {
+			super(type);
+		}
+		
+		public StaticChromaConfig(int colour) {
+			super(type);
+			this.colour = colour;
+		}
+		
+		@ZsonField(comment = TYPE_COMMENT, serializeOnly = true)
+		public static final ChromaProviderType type = ChromaProviderType.STATIC;
+		
+		@ZsonField(comment = COLOUR_COMMENT, format = "0x%06X")
+		public int colour = 0x000000;
+		
+		@Override
+		public IChromaProvider getChromaProvider() {
+			return new StaticChromaProvider(colour);
+		}
+		
+		@Override
+		public boolean equals(Object object) {
+			if (this == object)
+				return true;
+			
+			if (object instanceof StaticChromaConfig staticChromaConfig)
+				return this.colour == staticChromaConfig.colour;
+			
+			return false;
+		}
+		
+	}
+	
+	public static class MultiChromaConfig extends ChromaConfig {
+		
+		public MultiChromaConfig() {
+			super(type);
+		}
+		
+		public MultiChromaConfig(int[] colours, double duration) {
+			super(type);
+			this.colours = colours;
+			this.duration = duration;
+		}
+		
+		@ZsonField(comment = TYPE_COMMENT, serializeOnly = true)
+		public static final ChromaProviderType type = ChromaProviderType.MULTI;
+		
+		@ZsonField(comment = COLOUR_COMMENT, format = "0x%06X")
+		public int[] colours = new int[] { };
+		
+		@ZsonField
+		public double duration = 2D;
+		
+		@Override
+		public IChromaProvider getChromaProvider() {
+			if (colours.length == 0)
+				return null;
+			
+			return new MultiChromaProvider(colours, duration);
+		}
+		
+		@Override
+		public boolean equals(Object object) {
+			if (this == object)
+				return true;
+			
+			if (object instanceof MultiChromaConfig multiChromaConfig)
+				return
+					Arrays.equals(this.colours, multiChromaConfig.colours) &&
+					this.duration == multiChromaConfig.duration;
+			
+			return false;
+		}
+	}
+	
+	public static class StaticMultiChromaConfig extends ChromaConfig {
+		
+		public StaticMultiChromaConfig() {
+			super(type);
+		}
+		
+		public StaticMultiChromaConfig(int[] colours) {
+			super(type);
+			this.colours = colours;
+		}
+		
+		@ZsonField(comment = TYPE_COMMENT, serializeOnly = true)
+		public static final ChromaProviderType type = ChromaProviderType.STATIC_MULTI;
+		
+		@ZsonField(comment = COLOUR_COMMENT, format = "0x%06X")
+		public int[] colours = new int[] { };
+		
+		@Override
+		public IChromaProvider getChromaProvider() {
+			if (colours.length == 0)
+				return null;
+			
+			return new StaticMultiChromaProvider(colours);
+		}
+		
+		@Override
+		public boolean equals(Object object) {
+			if (this == object)
+				return true;
+			
+			if (object instanceof StaticMultiChromaConfig staticMultiChromaConfig)
+				return Arrays.equals(this.colours, staticMultiChromaConfig.colours);
+			
+			return false;
+		}
+		
+	}
+	
+	public NolijiumConfigImpl() {}
+	
+	public NolijiumConfigImpl(Map<String, ZsonValue> map) {
+		final var zsonVersion = map.get("configVersion");
+		if (zsonVersion == null ||
+			!(zsonVersion.value instanceof Integer))
+			return;
+		
+		int version = (Integer) zsonVersion.value;
+		
+		if (version == 1) {
+			final var wrappedChromaSpeed = map.get("chromaSpeed");
+			if (wrappedChromaSpeed != null &&
+				wrappedChromaSpeed.value instanceof Double boxedChromaSpeed) {
+				final double chromaSpeed = boxedChromaSpeed;
+				
+				for (final var pair : List.<Pair<String, Consumer<ChromaConfig>>>of(
+					Pair.of("enableChromaBlockOutlines", x -> blockChromaConfig = x),
+					Pair.of("enableChromaToolTips", x -> tooltipChromaConfig = x),
+					Pair.of("enableChromaHUD", x -> hudChromaConfig = x)
+				)) {
+					final var wrappedValue = map.get(pair.value1());
+					if (wrappedValue != null &&
+						wrappedValue.value instanceof Boolean boxedValue &&
+						boxedValue) {
+						pair.value2().accept(new SineWaveChromaConfig(chromaSpeed));
+					}
+				}
+			}
+			
+			final var wrappedBlockShapeOverlayOverride = map.get("blockShapeOverlayOverride");
+			if (wrappedBlockShapeOverlayOverride != null &&
+				wrappedBlockShapeOverlayOverride.value instanceof Long boxedValue) {
+				final var intValue = (boxedValue).intValue();
+				
+				if (intValue != 0L) {
+					final var alpha = ColourUtil.getAlphaD(intValue);
+					final var colour = intValue & ~(0xFF << ColourUtil.ALPHA_SHIFT);
+					
+					blockShapeOverlayOverride = (float) alpha;
+					blockChromaConfig = new StaticChromaConfig(colour);
+					map.remove("blockShapeOverlayOverride");
+				}
+			}
+			
+			version = EXPECTED_VERSION;
+		} else if (version == 2) {
+			blockChromaConfig = ChromaConfig.deserialize(map.get("blockChromaConfig"));
+			tooltipChromaConfig = ChromaConfig.deserialize(map.get("tooltipChromaConfig"));
+			hudChromaConfig = ChromaConfig.deserialize(map.get("hudChromaConfig"));
+		} else {
+			return;
+		}
+		
+		configVersion = version;
+	}
 	
 	//region Options
 	@ZsonField(comment = """
@@ -264,15 +566,8 @@ public class NolijiumConfigImpl implements Cloneable {
 		DEFAULT: `[ ]`""")
 	public ArrayList<String> hideParticlesByID = new ArrayList<>();
 	
-	@ZsonField(comment = """
-		Higher values cycle faster. Lower values cycle slower.
-		DEFAULT: `0.5`""")
-	public double chromaSpeed = 0.5D;
-	
-	@ZsonField(comment = """
-		Enable Chroma on block outlines.
-		DEFAULT: `false`""")
-	public boolean enableChromaBlockOutlines = false;
+	@ZsonField(serializeOnly = true)
+	public ChromaConfig blockChromaConfig = new DisabledChromaConfig();
 	
 	@ZsonField(comment = """
 		If set, a chroma overlay will be drawn on block surfaces with the specified value used for transparency.
@@ -281,15 +576,11 @@ public class NolijiumConfigImpl implements Cloneable {
 		DEFAULT: `0`""")
 	public float chromaBlockShapeOverlay = 0F;
 	
-	@ZsonField(comment = """
-		Enable Chroma on tooltip outlines.
-		DEFAULT: `false`""")
-	public boolean enableChromaToolTips = false;
+	@ZsonField(serializeOnly = true)
+	public ChromaConfig tooltipChromaConfig = new DisabledChromaConfig();
 	
-	@ZsonField(comment = """
-		Enable Chroma on HUD text.
-		DEFAULT: `false`""")
-	public boolean enableChromaHUD = false;
+	@ZsonField(serializeOnly = true)
+	public ChromaConfig hudChromaConfig = new DisabledChromaConfig();
 	
 	@ZsonField(comment = """
 		Removes darkness and all client-side lighting calculations, resulting in a decent performance boost on some systems.
@@ -298,33 +589,32 @@ public class NolijiumConfigImpl implements Cloneable {
 	public boolean enableGamma = false;
 	
 	@ZsonField(comment = """
-		Intended for advanced users and developers only. Colour format is 0xAARRGGBB.
+		Intended for advanced users and developers only. Colour format is `0xAARRGGBB`.
 		DEFAULT: `false`""")
 	public boolean tooltipColourOverride = false;
 	
-	@ZsonField
+	@ZsonField(format = "0x%08X")
 	public int tooltipBorderStart = 0;
 	
-	@ZsonField
+	@ZsonField(format = "0x%08X")
 	public int tooltipBorderEnd = 0;
 	
-	@ZsonField
+	@ZsonField(format = "0x%08X")
 	public int tooltipBackgroundStart = 0;
 	
-	@ZsonField
+	@ZsonField(format = "0x%08X")
 	public int tooltipBackgroundEnd = 0;
 	
 	@ZsonField(comment = """
-		Intended for advanced users and developers only. Colour format is 0xAARRGGBB.
-		Alpha will only be applied to block faces. Outline will always be fully opaque when enabled.
-		A value of `0` disables this setting.
+		For modpack developers. Functionally equivalent to `chromaBlockShapeOverlay`, but cannot be configured via UI.
+		Set to `0` to disable.
 		DEFAULT: `0`""")
-	public int blockShapeOverlayOverride = 0;
+	public float blockShapeOverlayOverride = 0F;
 	//endregion
 	
-	private static final int EXPECTED_VERSION = 1;
+	private static final int EXPECTED_VERSION = 2;
 	
-	@ZsonField(comment = "Used internally. Don't modify this.")
+	@ZsonField(comment = "Used internally. Don't modify this.", serializeOnly = true)
 	public int configVersion = EXPECTED_VERSION;
 	
 	@Override
@@ -469,6 +759,8 @@ public class NolijiumConfigImpl implements Cloneable {
 		final NolijiumConfigImpl newConfig = readConfigFile();
 		
 		consumer.accept(newConfig);
+		
+		newConfig.writeToFile(getConfigFile());
 	}
 	
 	public static void openConfigFile() {

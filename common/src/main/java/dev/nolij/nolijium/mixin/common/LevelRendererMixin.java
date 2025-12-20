@@ -8,19 +8,14 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.nolij.libnolij.util.ColourUtil;
 import dev.nolij.nolijium.common.NolijiumCommon;
 import dev.nolij.nolijium.impl.Nolijium;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LevelRenderer.class)
 public class LevelRendererMixin {
@@ -33,24 +28,18 @@ public class LevelRendererMixin {
 		)
 	)
 	public void nolijium$renderHitOutline$renderShape(PoseStack poseStack, VertexConsumer vertexConsumer, VoxelShape shape, double x, double y, double z, float red, float green, float blue, float alpha, Operation<Void> original) {
-		if (Nolijium.config.blockShapeOverlayOverride != 0 || Nolijium.config.chromaBlockShapeOverlay > 0) {
+		final var colour = Nolijium.transformBlockOutlineColour(System.nanoTime() * 1E-9D, ColourUtil.getARGB(alpha, red, green, blue));
+		
+		alpha = (float) ColourUtil.getAlphaD(colour);
+		red = (float) ColourUtil.getRedD(colour);
+		green = (float) ColourUtil.getGreenD(colour);
+		blue = (float) ColourUtil.getBlueD(colour);
+		
+		if (Nolijium.blockChromaProvider != null && (
+			Nolijium.config.blockShapeOverlayOverride > 0 || 
+			Nolijium.config.chromaBlockShapeOverlay > 0)) {
 			NolijiumCommon.focusedBlockPosition = new Vec3(x, y, z);
 			NolijiumCommon.focusedBlockShape = shape;
-			alpha = 1F;
-		} else if (Nolijium.config.enableOpaqueBlockOutlines || Nolijium.config.enableChromaBlockOutlines) {
-			alpha = 1F;
-		}
-		
-		if (Nolijium.config.blockShapeOverlayOverride != 0) {
-			red = (float) ColourUtil.getRed(Nolijium.config.blockShapeOverlayOverride);
-			green = (float) ColourUtil.getGreen(Nolijium.config.blockShapeOverlayOverride);
-			blue = (float) ColourUtil.getBlue(Nolijium.config.blockShapeOverlayOverride);
-		} else if (Nolijium.config.enableChromaBlockOutlines || Nolijium.config.chromaBlockShapeOverlay > 0) {
-			final double timestamp = System.nanoTime() * 1E-9D;
-			
-			red = (float) ColourUtil.chromaRed(timestamp, Nolijium.config.chromaSpeed, 0);
-			green = (float) ColourUtil.chromaGreen(timestamp, Nolijium.config.chromaSpeed, 0);
-			blue = (float) ColourUtil.chromaBlue(timestamp, Nolijium.config.chromaSpeed, 0);
 		}
 		
 		original.call(poseStack, vertexConsumer, shape, x, y, z, red, green, blue, alpha);

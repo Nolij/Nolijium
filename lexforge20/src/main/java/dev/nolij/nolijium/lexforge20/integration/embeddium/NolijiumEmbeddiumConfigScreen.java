@@ -81,7 +81,7 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 						Component.translatable("nolijium.remember_chat_bar_contents.until_sent"),
 						Component.translatable("nolijium.remember_chat_bar_contents.until_user_closed"),
 						Component.translatable("nolijium.remember_chat_bar_contents.never"),
-					}))
+				}))
 				.setBinding(
 					(config, value) -> config.rememberChatBarContents = value,
 					config -> config.rememberChatBarContents)
@@ -466,19 +466,31 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 		chromaPage.add(OptionGroup.createBuilder()
 			.setId(id("chroma"))
 			.add(OptionImpl.createBuilder(int.class, storage)
-				.setId(id("chroma_speed", int.class))
-				.setControl(option -> 
-					new SliderControl(option, 1, 30, 1, v -> Component.literal("%.1f".formatted(v * 0.1D))))
+				.setId(id("chroma_block_outlines", int.class))
+				.setControl(option ->
+					new SliderControl(option, 0, 30, 1,
+						v -> switch (v) {
+						     case 0 -> Component.translatable("nolijium.disabled");
+							 case -1 -> Component.empty();
+						     default -> Component.literal("%.1f".formatted(v * 0.1D));
+						}))
 				.setBinding(
-					(config, value) -> config.chromaSpeed = value * 0.1D,
-					config -> (int) (config.chromaSpeed * 10))
-				.build())
-			.add(OptionImpl.createBuilder(boolean.class, storage)
-				.setId(id("enable_chroma_block_outlines", boolean.class))
-				.setControl(TickBoxControl::new)
-				.setBinding(
-					(config, value) -> config.enableChromaBlockOutlines = value,
-					config -> config.enableChromaBlockOutlines)
+					(config, value) -> {
+						if (value == -1)
+							return;
+						if (value == 0)
+							config.blockChromaConfig = new NolijiumConfigImpl.DisabledChromaConfig();
+						else
+							config.blockChromaConfig = new NolijiumConfigImpl.SineWaveChromaConfig(value * 0.1D);
+					},
+					config -> switch (config.blockChromaConfig) {
+						case NolijiumConfigImpl.SineWaveChromaConfig sineWaveConfig -> (int) (sineWaveConfig.speed * 10);
+						case NolijiumConfigImpl.DisabledChromaConfig ignored -> 0;
+						default -> -1;
+					})
+				.setEnabledPredicate(() ->
+					storage.getData().blockChromaConfig instanceof NolijiumConfigImpl.SineWaveChromaConfig ||
+					storage.getData().blockChromaConfig instanceof NolijiumConfigImpl.DisabledChromaConfig)
 				.build())
 			.add(OptionImpl.createBuilder(int.class, storage)
 				.setId(id("chroma_block_shape_overlay", int.class))
@@ -491,21 +503,61 @@ public class NolijiumEmbeddiumConfigScreen implements EventHandlerRegistrar.Hand
 					config -> Math.round(config.chromaBlockShapeOverlay * 100F))
 				.setEnabledPredicate(() -> storage.getData().blockShapeOverlayOverride == 0)
 				.build())
-			.add(OptionImpl.createBuilder(boolean.class, storage)
-				.setId(id("enable_chroma_tooltips", boolean.class))
-				.setControl(TickBoxControl::new)
+			.add(OptionImpl.createBuilder(int.class, storage)
+				.setId(id("chroma_tooltips", int.class))
+				.setControl(option ->
+					new SliderControl(option, 0, 30, 1,
+						v -> switch (v) {
+							case 0 -> Component.translatable("nolijium.disabled");
+							case -1 -> Component.empty();
+							default -> Component.literal("%.1f".formatted(v * 0.1D));
+						}))
 				.setBinding(
-					(config, value) -> config.enableChromaToolTips = value,
-					config -> config.enableChromaToolTips)
-				.setEnabledPredicate(() -> !storage.getData().tooltipColourOverride)
+					(config, value) -> {
+						if (value == -1)
+							return;
+						if (value == 0)
+							config.tooltipChromaConfig = new NolijiumConfigImpl.DisabledChromaConfig();
+						else
+							config.tooltipChromaConfig = new NolijiumConfigImpl.SineWaveChromaConfig(value * 0.1D);
+					},
+					config -> switch (config.tooltipChromaConfig) {
+						case NolijiumConfigImpl.SineWaveChromaConfig sineWaveConfig -> (int) (sineWaveConfig.speed * 10);
+						case NolijiumConfigImpl.DisabledChromaConfig ignored -> 0;
+						default -> -1;
+					})
+				.setEnabledPredicate(() ->
+					!storage.getData().tooltipColourOverride && (
+					storage.getData().tooltipChromaConfig instanceof NolijiumConfigImpl.SineWaveChromaConfig ||
+					storage.getData().tooltipChromaConfig instanceof NolijiumConfigImpl.DisabledChromaConfig))
 				.build())
-			.add(OptionImpl.createBuilder(boolean.class, storage)
-				.setId(id("enable_chroma_hud", boolean.class))
-				.setControl(TickBoxControl::new)
+			.add(OptionImpl.createBuilder(int.class, storage)
+				.setId(id("chroma_hud", int.class))
+				.setControl(option ->
+					new SliderControl(option, 0, 30, 1,
+						v -> switch (v) {
+							case 0 -> Component.translatable("nolijium.disabled");
+							case -1 -> Component.empty();
+							default -> Component.literal("%.1f".formatted(v * 0.1D));
+						}))
 				.setBinding(
-					(config, value) -> config.enableChromaHUD = value,
-					config -> config.enableChromaHUD)
-				.setEnabledPredicate(hudEnabledOption::getValue)
+					(config, value) -> {
+						if (value == -1)
+							return;
+						if (value == 0)
+							config.hudChromaConfig = new NolijiumConfigImpl.DisabledChromaConfig();
+						else
+							config.hudChromaConfig = new NolijiumConfigImpl.SineWaveChromaConfig(value * 0.1D);
+					},
+					config -> switch (config.hudChromaConfig) {
+						case NolijiumConfigImpl.SineWaveChromaConfig sineWaveConfig -> (int) (sineWaveConfig.speed * 10);
+						case NolijiumConfigImpl.DisabledChromaConfig ignored -> 0;
+						default -> -1;
+					})
+				.setEnabledPredicate(() ->
+					hudEnabledOption.getValue() && (
+					storage.getData().hudChromaConfig instanceof NolijiumConfigImpl.SineWaveChromaConfig ||
+					storage.getData().hudChromaConfig instanceof NolijiumConfigImpl.DisabledChromaConfig))
 				.build())
 			.build());
 		
