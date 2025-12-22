@@ -2,7 +2,7 @@ package dev.nolij.nolijium.mixin.common;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import dev.nolij.nolijium.common.NolijiumCommon;
+import dev.nolij.nolijium.impl.common.NolijiumCommon;
 import dev.nolij.nolijium.impl.Nolijium;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleEngine;

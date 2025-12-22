@@ -1,4 +1,4 @@
-package dev.nolij.nolijium.common;
+package dev.nolij.nolijium.impl.common;
 
 import com.sun.management.OperatingSystemMXBean;
 import dev.nolij.libnolij.collect.SlidingLongBuffer;

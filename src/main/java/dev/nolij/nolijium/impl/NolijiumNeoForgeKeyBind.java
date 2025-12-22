@@ -1,4 +1,4 @@
-package dev.nolij.nolijium.neoforge;
+package dev.nolij.nolijium.impl;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;

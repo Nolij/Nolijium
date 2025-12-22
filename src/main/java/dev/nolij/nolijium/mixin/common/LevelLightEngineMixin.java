@@ -1,7 +1,7 @@
 package dev.nolij.nolijium.mixin.common;
 
-import dev.nolij.nolijium.common.INolijiumSubImplementation;
-import dev.nolij.nolijium.common.NolijiumCommon;
+import dev.nolij.nolijium.impl.common.INolijiumSubImplementation;
+import dev.nolij.nolijium.impl.common.NolijiumCommon;
 import dev.nolij.nolijium.impl.Nolijium;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;

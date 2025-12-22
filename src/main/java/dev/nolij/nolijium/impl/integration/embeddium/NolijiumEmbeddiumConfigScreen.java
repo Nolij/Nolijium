@@ -1,7 +1,7 @@
-package dev.nolij.nolijium.neoforge.integration.embeddium;
+package dev.nolij.nolijium.impl.integration.embeddium;
 
 import com.google.common.collect.ImmutableList;
-import dev.nolij.nolijium.common.ResourceLocationComparator;
+import dev.nolij.nolijium.impl.common.ResourceLocationComparator;
 import dev.nolij.nolijium.impl.config.NolijiumConfigImpl;
 import dev.nolij.nolijium.impl.util.Alignment;
 import dev.nolij.nolijium.impl.util.DetailLevel;

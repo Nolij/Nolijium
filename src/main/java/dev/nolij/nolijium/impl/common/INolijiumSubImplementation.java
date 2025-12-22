@@ -1,4 +1,4 @@
-package dev.nolij.nolijium.common;
+package dev.nolij.nolijium.impl.common;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

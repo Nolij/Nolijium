@@ -1,7 +1,7 @@
 package dev.nolij.nolijium.mixin;
 
 import dev.nolij.libnolij.util.ColourUtil;
-import dev.nolij.nolijium.common.NolijiumCommon;
+import dev.nolij.nolijium.impl.common.NolijiumCommon;
 import dev.nolij.nolijium.impl.Nolijium;
 import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ParticleOptions;

@@ -1,6 +1,6 @@
-package dev.nolij.nolijium.neoforge;
+package dev.nolij.nolijium.impl;
 
-import dev.nolij.nolijium.common.NolijiumHUD;
+import dev.nolij.nolijium.impl.common.NolijiumHUD;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;

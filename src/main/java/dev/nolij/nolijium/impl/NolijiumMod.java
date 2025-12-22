@@ -1,15 +1,14 @@
-package dev.nolij.nolijium.neoforge;
+package dev.nolij.nolijium.impl;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.nolij.libnolij.refraction.Refraction;
 import dev.nolij.libnolij.util.MathUtil;
-import dev.nolij.nolijium.common.INolijiumSubImplementation;
-import dev.nolij.nolijium.common.NolijiumCommon;
-import dev.nolij.nolijium.common.NolijiumLightOverlayRenderer;
-import dev.nolij.nolijium.impl.Nolijium;
+import dev.nolij.nolijium.impl.common.INolijiumSubImplementation;
+import dev.nolij.nolijium.impl.common.NolijiumCommon;
+import dev.nolij.nolijium.impl.common.NolijiumLightOverlayRenderer;
 import dev.nolij.nolijium.impl.config.NolijiumConfigImpl;
-import dev.nolij.nolijium.neoforge.integration.embeddium.NolijiumEmbeddiumConfigScreen;
+import dev.nolij.nolijium.impl.integration.embeddium.NolijiumEmbeddiumConfigScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.FogRenderer;

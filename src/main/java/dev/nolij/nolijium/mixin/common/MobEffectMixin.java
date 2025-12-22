@@ -1,7 +1,7 @@
 package dev.nolij.nolijium.mixin.common;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import dev.nolij.nolijium.common.NolijiumCommon;
+import dev.nolij.nolijium.impl.common.NolijiumCommon;
 import dev.nolij.nolijium.impl.Nolijium;
 import net.minecraft.world.effect.MobEffect;
 import org.spongepowered.asm.mixin.Mixin;
