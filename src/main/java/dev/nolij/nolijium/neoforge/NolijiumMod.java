@@ -42,12 +42,12 @@ import java.lang.invoke.MethodHandles;
 import static dev.nolij.nolijium.impl.NolijiumConstants.*;
 
 @Mod(value = MOD_ID, dist = Dist.CLIENT)
-public class NolijiumNeoForge implements INolijiumSubImplementation {
+public class NolijiumMod implements INolijiumSubImplementation {
 	
 	private static final Refraction METHOD_HANDLE_HELPER =
 		new Refraction(MethodHandles.lookup());
 	
-	public NolijiumNeoForge(IEventBus modEventBus, ModContainer modContainer) {
+	public NolijiumMod(IEventBus modEventBus, ModContainer modContainer) {
 		new NolijiumCommon(this, FMLPaths.CONFIGDIR.get());
 		
 		modContainer.registerExtensionPoint(
