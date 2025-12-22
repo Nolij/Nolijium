@@ -2,7 +2,6 @@ package dev.nolij.nolijium;
 
 import com.llamalad7.mixinextras.MixinExtrasBootstrap;
 import dev.nolij.libnolij.refraction.Refraction;
-import dev.nolij.zumegradle.proguard.ProGuardKeep;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -10,7 +9,6 @@ import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 import java.util.List;
 import java.util.Set;
 
-@ProGuardKeep.WithObfuscation
 public final class NolijiumMixinPlugin implements IMixinConfigPlugin {
 	
 	static final String NEOFORGE = "neoforge";

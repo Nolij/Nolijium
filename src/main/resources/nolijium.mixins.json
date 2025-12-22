@@ -1,0 +1,30 @@
+{
+	"required": true,
+	"minVersion": "0.8",
+	"package": "dev.nolij.nolijium.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"client": [
+		"ChatComponentMixin",
+		"ChatScreenMixin",
+		"LivingEntityMixin",
+		"LevelRendererNeoMixin",
+		"common.MobEffectMixin",
+		"common.ItemMixin",
+		"common.LevelLightEngineMixin",
+		"common.FontMixin",
+		"common.GameRendererMixin",
+		"common.GuiGraphicsMixin",
+		"common.TextureAtlasMixin",
+		"common.LevelRendererAccessor",
+		"common.LightTextureAccessor",
+		"common.ClientPacketListenerMixin",
+		"common.GuiMixin",
+		"common.LightTextureMixin",
+		"common.ClientLevelMixin",
+		"common.ParticleEngineMixin",
+		"common.LevelRendererMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
