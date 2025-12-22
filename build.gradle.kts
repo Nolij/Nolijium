@@ -21,9 +21,17 @@ buildConfig {
 	buildConfigField("MOD_ID", "mod_id"())
 }
 
+java {
+	toolchain {
+		languageVersion.set(JavaLanguageVersion.of(21))
+	}
+}
+
 tasks.withType<JavaCompile> {
 	options.compilerArgs.addAll(arrayOf("-Xplugin:Manifold no-bootstrap"))
 }
+
+val isLegacyForge = sc.current.parsed <= "1.20.1"
 
 tasks.named<ProcessResources>("processResources") {
 	inputs.file(rootDir.resolve("gradle.properties"))
@@ -37,7 +45,7 @@ tasks.named<ProcessResources>("processResources") {
 		.mapValues { entry -> entry.value as String })
 	props["mod_version"] = project.version.toString()
 	
-	if (sc.current.parsed <= "1.20.1") {
+	if (isLegacyForge) {
 		exclude("META-INF/neoforge.mods.toml")
 	} else {
 		exclude("META-INF/mods.toml")
@@ -50,7 +58,7 @@ tasks.named<ProcessResources>("processResources") {
 
 val disableRecomp = System.getenv("CI") == "true"
 
-val modDevExtension: ModDevExtension = if (sc.current.parsed <= "1.20.1") {
+val modDevExtension: ModDevExtension = if (isLegacyForge) {
 	apply(plugin = "net.neoforged.moddev.legacyforge")
 	val legacyForge = project.extensions.getByName("legacyForge") as LegacyForgeExtension
 	legacyForge.enable {
@@ -120,6 +128,10 @@ dependencies {
 	
 	shade("dev.nolij:zson:${"zson_version"()}")
 	shade("dev.nolij:libnolij:${"libnolij_version"()}")
+	
+	if (isLegacyForge) {
+		shade("io.github.llamalad7:mixinextras-common:${"mixinextras_version"()}")
+	}
 
 	implementation("org.embeddedt:embeddium-${"minecraft_version"()}:${"embeddium_version"()}") {
 		isTransitive = false
