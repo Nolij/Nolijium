@@ -20,20 +20,20 @@ ${mod_description}
 [[dependencies.nolijium]]
 modId="neoforge"
 type="required"
-versionRange="${neoforge21_neoforge_range}"
+versionRange="${neoforge_range}"
 ordering="NONE"
 side="CLIENT"
 
 [[dependencies.nolijium]]
 modId="minecraft"
 type="required"
-versionRange="${neoforge21_minecraft_range}"
+versionRange="${minecraft_range}"
 ordering="NONE"
 side="CLIENT"
 
 [[dependencies.nolijium]]
 modId="embeddium"
 type="optional"
-versionRange="${neoforge21_embeddium_range}"
+versionRange="${embeddium_range}"
 ordering="AFTER"
 side="CLIENT"

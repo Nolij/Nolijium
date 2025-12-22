@@ -1,9 +1,14 @@
+import net.neoforged.moddevgradle.legacyforge.dsl.LegacyForgeExtension
+import net.neoforged.moddevgradle.dsl.ModDevExtension
+import net.neoforged.moddevgradle.dsl.NeoForgeExtension
+
 plugins {
 	id("com.github.gmazzo.buildconfig") version("5.6.7")
-	id("net.neoforged.moddev") version("2.0.134")
+	id("net.neoforged.moddev") version("2.0.134") apply false
+	id("net.neoforged.moddev.legacyforge") version("2.0.134") apply false
 }
 
-operator fun String.invoke(): String = rootProject.properties[this] as? String ?: error("Property $this not found")
+operator fun String.invoke(): String = project.properties[this] as? String ?: error("Property $this not found")
 
 version = "0.3.0"
 
@@ -27,22 +32,50 @@ tasks.named<ProcessResources>("processResources") {
 	filteringCharset = "UTF-8"
 
 	val props = mutableMapOf<String, String>()
-	props.putAll(rootProject.properties
+	props.putAll(project.properties
 		.filterValues { value -> value is String }
 		.mapValues { entry -> entry.value as String })
 	props["mod_version"] = project.version.toString()
-
+	
+	if (sc.current.parsed <= "1.20.1") {
+		exclude("META-INF/neoforge.mods.toml")
+	} else {
+		exclude("META-INF/mods.toml")
+	}
+	
 	filesMatching(listOf("fabric.mod.json", "META-INF/neoforge.mods.toml", "META-INF/mods.toml")) {
 		expand(props)
 	}
 }
 
-neoForge {
-	enable {
-		version = "21.1.217"
-		isDisableRecompilation = System.getenv("CI") == "true"
-	}
+val disableRecomp = System.getenv("CI") == "true"
 
+val modDevExtension: ModDevExtension = if (sc.current.parsed <= "1.20.1") {
+	apply(plugin = "net.neoforged.moddev.legacyforge")
+	val legacyForge = project.extensions.getByName("legacyForge") as LegacyForgeExtension
+	legacyForge.enable {
+		forgeVersion = "minecraft_version"() + "-" + "lexforge_version"()
+		isDisableRecompilation = disableRecomp
+	}
+	legacyForge
+} else {
+	apply(plugin = "net.neoforged.moddev")
+	val neoForge = project.extensions.getByName("neoForge") as NeoForgeExtension
+	neoForge.enable {
+		version = "neoforge_version"()
+		isDisableRecompilation = disableRecomp
+	}
+	neoForge
+}
+
+modDevExtension.apply {
+	project.properties["parchment_version"]?.toString().let { parchmentVer ->
+		parchment {
+			minecraftVersion = "minecraft_version"()
+			mappingsVersion = parchmentVer
+		}
+	}
+	
 	runs {
 		create("client") {
 			client()
@@ -54,6 +87,11 @@ neoForge {
 			sourceSet(sourceSets.main.get())
 		}
 	}
+}
+
+// Required for MDG to work correctly with Stonecutter
+tasks.named("createMinecraftArtifacts") {
+	dependsOn("stonecutterGenerate")
 }
 
 val shade: Configuration by configurations.creating {
@@ -83,7 +121,7 @@ dependencies {
 	shade("dev.nolij:zson:${"zson_version"()}")
 	shade("dev.nolij:libnolij:${"libnolij_version"()}")
 
-	implementation("org.embeddedt:embeddium-1.21.1:${"neoforge21_embeddium_version"()}") {
+	implementation("org.embeddedt:embeddium-${"minecraft_version"()}:${"embeddium_version"()}") {
 		isTransitive = false
 	}
 	//shade("io.github.llamalad7:mixinextras-common:${"mixinextras_version"()}")
