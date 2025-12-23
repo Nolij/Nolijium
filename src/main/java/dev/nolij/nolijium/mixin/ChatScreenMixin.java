@@ -52,9 +52,16 @@ public class ChatScreenMixin {
 		}
 	}
 	
+	//? if >=1.21.1 {
 	@Inject(method = "handleChatInput(Ljava/lang/String;Z)V", at = @At("HEAD"))
 	public void nolijium$handleChatInput$HEAD(CallbackInfo ci) {
 		nolijium$rememberedMessage = null;
 	}
+	//? } else {
+	/*@Inject(method = "handleChatInput", at = @At("HEAD"))
+	private void nolijium$handleChatInput$HEAD(CallbackInfoReturnable<Boolean> cir) {
+		nolijium$rememberedMessage = null;
+	}
+	*///? }
 	
 }

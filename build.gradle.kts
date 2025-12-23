@@ -1,6 +1,8 @@
 import net.neoforged.moddevgradle.legacyforge.dsl.LegacyForgeExtension
 import net.neoforged.moddevgradle.dsl.ModDevExtension
 import net.neoforged.moddevgradle.dsl.NeoForgeExtension
+import net.neoforged.moddevgradle.legacyforge.dsl.MixinExtension
+import kotlin.text.compareTo
 
 plugins {
 	id("com.github.gmazzo.buildconfig") version("5.6.7")
@@ -125,16 +127,44 @@ dependencies {
 
 	testCompileOnly("systems.manifold:manifold-rt:${"manifold_version"()}")
 	testAnnotationProcessor("systems.manifold:manifold-exceptions:${"manifold_version"()}")
+
+	annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
 	
 	shade("dev.nolij:zson:${"zson_version"()}")
 	shade("dev.nolij:libnolij:${"libnolij_version"()}")
 	
 	if (isLegacyForge) {
-		shade("io.github.llamalad7:mixinextras-common:${"mixinextras_version"()}")
+		compileOnly("io.github.llamalad7:mixinextras-common:${"mixinextras_version"()}")
+		annotationProcessor("io.github.llamalad7:mixinextras-common:${"mixinextras_version"()}")
+		implementation("io.github.llamalad7:mixinextras-forge:${"mixinextras_version"()}")
+		"jarJar"("io.github.llamalad7:mixinextras-forge:${"mixinextras_version"()}")
 	}
+	
+	val embeddiumConfig = configurations.named(if (isLegacyForge) { "compileOnly" } else { "implementation" })
 
-	implementation("org.embeddedt:embeddium-${"minecraft_version"()}:${"embeddium_version"()}") {
+	embeddiumConfig("org.embeddedt:embeddium-${"minecraft_version"()}:${"embeddium_version"()}") {
 		isTransitive = false
 	}
 	//shade("io.github.llamalad7:mixinextras-common:${"mixinextras_version"()}")
+}
+
+if (isLegacyForge) {
+	val mixin = project.extensions.getByType(MixinExtension::class)
+	mixin.add(sourceSets.main.get(), "nolijium-refmap.json")
+	mixin.config("nolijium.mixins.json")
+}
+
+stonecutter {
+	replacements.string(current.parsed >= "1.21") {
+		replace("net.minecraftforge.client", "net.neoforged.neoforge.client")
+		replace("net.minecraftforge.eventbus", "net.neoforged.bus")
+		replace("net.minecraftforge.fml", "net.neoforged.fml")
+		replace("net.minecraftforge.event", "net.neoforged.neoforge.event")
+		replace("net.minecraftforge.api.distmarker", "net.neoforged.api.distmarker")
+		replace("me.jellysquid.mods.sodium.client.gui.options.storage.OptionStorage", "org.embeddedt.embeddium.api.options.structure.OptionStorage")
+		replace("org.embeddedt.embeddium.client.gui.options.OptionIdentifier", "org.embeddedt.embeddium.api.options.OptionIdentifier")
+		replace("me.jellysquid.mods.sodium.client.gui.options.binding.", "org.embeddedt.embeddium.api.options.binding.")
+		replace("me.jellysquid.mods.sodium.client.gui.options.control.", "org.embeddedt.embeddium.api.options.control.")
+		replace("me.jellysquid.mods.sodium.client.gui.options.", "org.embeddedt.embeddium.api.options.structure.")
+	}
 }

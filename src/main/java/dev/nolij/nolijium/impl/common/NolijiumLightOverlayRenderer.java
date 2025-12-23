@@ -3,7 +3,7 @@ package dev.nolij.nolijium.impl.common;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.MeshData;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexBuffer;
 import com.mojang.blaze3d.vertex.VertexFormat;
@@ -31,6 +31,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fStack;
+import org.joml.Vector3f;
 
 import java.util.Objects;
 
@@ -38,6 +39,7 @@ import java.util.Objects;
  * The core of the light overlay renderer.
  */
 public class NolijiumLightOverlayRenderer {
+	private static final INolijiumSubImplementation NOLIJIUM_IMPL = Objects.requireNonNull(NolijiumCommon.getImplementation());
 	
 	/**
 	 * The radius of blocks around the camera that a light overlay can be shown on.
@@ -193,10 +195,15 @@ public class NolijiumLightOverlayRenderer {
 	/**
 	 * Renders all light overlays for the current world.
 	 * @param camera the player camera
-	 * @param modelViewMatrix the current model view matrix
 	 * @param restoreType the render type to restore if rendering anything   
 	 */
-	public static void render(Camera camera, Matrix4f modelViewMatrix, @Nullable RenderType restoreType) {
+	public static void render(Camera camera,
+							  //? if >=1.21.1 {
+	                          Matrix4f modelViewMatrix,
+							  //? } else
+	                          //PoseStack poseStack,
+	                          @Nullable RenderType restoreType
+	) {
 		// Bail immediately if light overlay is not enabled
 		if (!Nolijium.config.enableLightLevelOverlay) {
 			// Free the GPU-side buffer, we don't need it
@@ -213,7 +220,12 @@ public class NolijiumLightOverlayRenderer {
 		
 		// Check if we can reuse the previously generated GPU vertex buffer
 		if (bufferNeedsUpdate(camera)) {
+			//? if >=1.21.1 {
 			var bufferBuilder = Tesselator.getInstance().begin(LIGHT_OVERLAY.mode(), LIGHT_OVERLAY.format());
+			//? } else {
+			/*var bufferBuilder = Tesselator.getInstance().getBuilder();
+			bufferBuilder.begin(LIGHT_OVERLAY.mode(), LIGHT_OVERLAY.format());
+			*///? }
 			int camPosX = camera.getBlockPosition().getX();
 			int camPosY = camera.getBlockPosition().getY();
 			int camPosZ = camera.getBlockPosition().getZ();
@@ -250,7 +262,11 @@ public class NolijiumLightOverlayRenderer {
 				currentLightOverlayBuffer.close();
 			}
 			
-			MeshData data = bufferBuilder.build();
+			//? if >=1.21.1 {
+			com.mojang.blaze3d.vertex.MeshData data = bufferBuilder.build();
+			//? } else {
+			/*var data = bufferBuilder.end();
+			*///? }
 			if (data == null) {
 				currentLightOverlayBuffer = new RenderedLightOverlays(null, currentUpdateVersion);
 			} else {
@@ -266,19 +282,29 @@ public class NolijiumLightOverlayRenderer {
 			// Render the GPU-side vertex buffer at the appropriate position
 			LIGHT_OVERLAY.setupRenderState();
 			RenderSystem.lineWidth(Math.max(2.5F, (float)Minecraft.getInstance().getWindow().getWidth() / 1920.0F * 2.5F));
+			var camPos = camera.getPosition();
+			Vector3f cameraOffset = new Vector3f((float) (lastCameraPosition.getX() - camPos.x), (float) (lastCameraPosition.getY() - camPos.y), (float) (lastCameraPosition.getZ() - camPos.z));
+			//? if >=1.21.1 {
 			Matrix4fStack matrix4fstack = RenderSystem.getModelViewStack();
 			matrix4fstack.pushMatrix();
 			matrix4fstack.mul(modelViewMatrix);
-			var camPos = camera.getPosition();
-			matrix4fstack.translate((float) (lastCameraPosition.getX() - camPos.x), (float) (lastCameraPosition.getY() - camPos.y), (float) (lastCameraPosition.getZ() - camPos.z));
+			matrix4fstack.translate(cameraOffset);
 			RenderSystem.applyModelViewMatrix();
+			//? } else {
+			/*poseStack.pushPose();
+			poseStack.translate(cameraOffset.x(), cameraOffset.y(), cameraOffset.z());
+			*///? }
 			currentLightOverlayBuffer.buffer.bind();
 			//noinspection DataFlowIssue
 			currentLightOverlayBuffer.buffer.drawWithShader(RenderSystem.getModelViewMatrix(), RenderSystem.getProjectionMatrix(), RenderSystem.getShader());
 			VertexBuffer.unbind();
 			LIGHT_OVERLAY.clearRenderState();
+			//? if >=1.21.1 {
 			matrix4fstack.popMatrix();
 			RenderSystem.applyModelViewMatrix();
+			//? } else {
+			/*poseStack.popPose();
+			*///? }
 			if (restoreType != null) {
 				restoreType.setupRenderState();
 			}
@@ -366,21 +392,12 @@ public class NolijiumLightOverlayRenderer {
 		} else {
 			color = COLOR_BLOCK_LIGHT_1_TO_7;
 		}
-		vConsumer.addVertex(xOff + 0, yOff + 0, zOff + 0);
-		vConsumer.setColor(color);
-		vConsumer.setNormal(OVERLAY_NORMAL_MAGIC_VALUE, 0, OVERLAY_NORMAL_MAGIC_VALUE);
 		
-		vConsumer.addVertex(xOff + 1, yOff + 0, zOff + 1);
-		vConsumer.setColor(color);
-		vConsumer.setNormal(OVERLAY_NORMAL_MAGIC_VALUE, 0, OVERLAY_NORMAL_MAGIC_VALUE);
-		
-		vConsumer.addVertex(xOff + 1, yOff + 0, zOff + 0);
-		vConsumer.setColor(color);
-		vConsumer.setNormal(-OVERLAY_NORMAL_MAGIC_VALUE, 0, OVERLAY_NORMAL_MAGIC_VALUE);
-		
-		vConsumer.addVertex(xOff + 0, yOff + 0, zOff + 1);
-		vConsumer.setColor(color);
-		vConsumer.setNormal(-OVERLAY_NORMAL_MAGIC_VALUE, 0, OVERLAY_NORMAL_MAGIC_VALUE);
+		// New
+		NOLIJIUM_IMPL.addLineVertex(vConsumer, xOff + 0, yOff + 0, zOff + 0, color, OVERLAY_NORMAL_MAGIC_VALUE, 0, OVERLAY_NORMAL_MAGIC_VALUE);
+		NOLIJIUM_IMPL.addLineVertex(vConsumer, xOff + 1, yOff + 0, zOff + 1, color, OVERLAY_NORMAL_MAGIC_VALUE, 0, OVERLAY_NORMAL_MAGIC_VALUE);
+		NOLIJIUM_IMPL.addLineVertex(vConsumer, xOff + 1, yOff + 0, zOff + 0, color, -OVERLAY_NORMAL_MAGIC_VALUE, 0, OVERLAY_NORMAL_MAGIC_VALUE);
+		NOLIJIUM_IMPL.addLineVertex(vConsumer, xOff + 0, yOff + 0, zOff + 1, color, -OVERLAY_NORMAL_MAGIC_VALUE, 0, OVERLAY_NORMAL_MAGIC_VALUE);
 	}
 	
 	/**

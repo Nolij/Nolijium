@@ -11,9 +11,13 @@ public class ChatComponentMixin {
 	
 	@ModifyConstant(
 		method = {
+			//? if >=1.21.1 {
 			"addMessageToDisplayQueue", 
 			"addMessageToQueue",
 			"addRecentChat",
+			//? } else {
+			/*"addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;ILnet/minecraft/client/GuiMessageTag;Z)V"
+			*///? }
 		}, 
 		constant = @Constant(intValue = 100)
 	)

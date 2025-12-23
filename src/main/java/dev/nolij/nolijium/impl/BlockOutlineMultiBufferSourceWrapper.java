@@ -21,7 +21,7 @@ public class BlockOutlineMultiBufferSourceWrapper implements MultiBufferSource {
 	public @NotNull VertexConsumer getBuffer(@NotNull RenderType renderType) {
 		return new VertexConsumerWrapper(this.delegate.getBuffer(renderType)) {
 			@Override
-			public @NotNull VertexConsumer setColor(int red, int green, int blue, int alpha) {
+			public @NotNull VertexConsumer /*? if >=1.21.1 { */ setColor /*?} else {*/ /*color *//*?}*/(int red, int green, int blue, int alpha) {
 				if (red == 0 && green == 0 && blue == 0 && alpha == 102) {
 					final var newColour = Nolijium.transformBlockOutlineColour(timestamp, ColourUtil.getARGB(alpha, red, green, blue));
 					red = ColourUtil.getRedI(newColour);
@@ -30,7 +30,7 @@ public class BlockOutlineMultiBufferSourceWrapper implements MultiBufferSource {
 					alpha = ColourUtil.getAlphaI(newColour);
 				}
 				
-				super.setColor(red, green, blue, alpha);
+				super./*? if >=1.21.1 { */ setColor /*?} else {*/ /*color *//*?}*/(red, green, blue, alpha);
 				
 				return this;
 			}
