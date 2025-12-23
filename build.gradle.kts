@@ -127,13 +127,12 @@ dependencies {
 
 	testCompileOnly("systems.manifold:manifold-rt:${"manifold_version"()}")
 	testAnnotationProcessor("systems.manifold:manifold-exceptions:${"manifold_version"()}")
-
-	annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
 	
 	shade("dev.nolij:zson:${"zson_version"()}")
 	shade("dev.nolij:libnolij:${"libnolij_version"()}")
 	
 	if (isLegacyForge) {
+		annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
 		compileOnly("io.github.llamalad7:mixinextras-common:${"mixinextras_version"()}")
 		annotationProcessor("io.github.llamalad7:mixinextras-common:${"mixinextras_version"()}")
 		implementation("io.github.llamalad7:mixinextras-forge:${"mixinextras_version"()}")
