@@ -295,8 +295,11 @@ public class NolijiumLightOverlayRenderer {
 			poseStack.translate(cameraOffset.x(), cameraOffset.y(), cameraOffset.z());
 			*///? }
 			currentLightOverlayBuffer.buffer.bind();
-			//noinspection DataFlowIssue
+			//? if >=1.21.1 {
 			currentLightOverlayBuffer.buffer.drawWithShader(RenderSystem.getModelViewMatrix(), RenderSystem.getProjectionMatrix(), RenderSystem.getShader());
+			//? } else {
+			/*currentLightOverlayBuffer.buffer.drawWithShader(poseStack.last().pose(), RenderSystem.getProjectionMatrix(), RenderSystem.getShader());
+			*///? }
 			VertexBuffer.unbind();
 			LIGHT_OVERLAY.clearRenderState();
 			//? if >=1.21.1 {
