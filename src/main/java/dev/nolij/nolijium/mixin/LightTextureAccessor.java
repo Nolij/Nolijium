@@ -1,4 +1,4 @@
-package dev.nolij.nolijium.mixin.common;
+package dev.nolij.nolijium.mixin;
 
 import net.minecraft.client.renderer.LightTexture;
 import org.spongepowered.asm.mixin.Mixin;

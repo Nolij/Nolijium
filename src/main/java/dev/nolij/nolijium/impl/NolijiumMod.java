@@ -1,5 +1,23 @@
 package dev.nolij.nolijium.impl;
 
+//? if >=21.1 {
+import net.minecraft.network.chat.contents.PlainTextContents;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.neoforged.neoforge.common.NeoForge;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+//?} else {
+/*import net.minecraftforge.client.ConfigScreenHandler;
+import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.ModList;
+*///?}
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.nolij.libnolij.refraction.Refraction;
@@ -16,58 +34,37 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentContents;
-//? if >=1.21.1
-import net.minecraft.network.chat.contents.PlainTextContents;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.material.FogType;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforge.client.ConfigScreenHandler;
-import net.neoforged.neoforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.bus.api.EventPriority;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.fml.loading.FMLPaths;
-//? if >=1.21.1 {
-import net.neoforged.neoforge.client.event.ClientTickEvent;
-import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
-//? }
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import net.neoforged.neoforge.client.event.ToastAddEvent;
 import net.neoforged.neoforge.client.event.ViewportEvent;
-//? if >=1.21.1 {
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
-import net.neoforged.neoforge.common.NeoForge;
-//? }
 import net.neoforged.neoforge.event.level.ChunkEvent;
 
 import java.lang.invoke.MethodHandles;
 
 import static dev.nolij.nolijium.impl.NolijiumConstants.*;
 
-@Mod(value = MOD_ID/*? if >=1.21.1 { */, dist = Dist.CLIENT/*?}*/)
+@Mod(value = MOD_ID/*? if >=21.1 { */, dist = Dist.CLIENT/*?}*/)
 public class NolijiumMod implements INolijiumSubImplementation {
 	
-	private static final Refraction METHOD_HANDLE_HELPER =
-		new Refraction(MethodHandles.lookup());
+	public static final Refraction REFRACTION = Refraction.safe(MethodHandles.lookup());
 	
-	public NolijiumMod(/*? if >=1.21.1 { */IEventBus modEventBus, ModContainer modContainer/*?}*/) {
+	public NolijiumMod(/*? if >=21.1 { */IEventBus modEventBus, ModContainer modContainer/*?}*/) {
 		new NolijiumCommon(this, FMLPaths.CONFIGDIR.get());
 		
-		//? if >=1.21.1 {
-		modContainer.registerExtensionPoint(IConfigScreenFactory.class, this::configScreenFactory);
+		//? if >=21.1 {
+		modContainer.registerExtensionPoint(IConfigScreenFactory.class, NolijiumMod::configScreenFactory);
 		var gameBus = NeoForge.EVENT_BUS;
 		//? } else {
 		/*var modContainer = ModList.get().getModContainerById(MOD_ID).orElseThrow();
-		var modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		@SuppressWarnings("removal") var modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		var gameBus = MinecraftForge.EVENT_BUS;
-		modContainer.registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory(this::configScreenFactory));
+		modContainer.registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory(NolijiumMod::configScreenFactory));
 		*///? }
 		
 		modEventBus.addListener(this::onRegisterGuiLayers);
@@ -79,11 +76,11 @@ public class NolijiumMod implements INolijiumSubImplementation {
 		gameBus.addListener(this::onChunkUnload);
 		gameBus.addListener(this::onTick);
 		
-		if (METHOD_HANDLE_HELPER.getClassOrNull("org.embeddedt.embeddium.api.OptionGUIConstructionEvent") != null)
+		if (REFRACTION.getClassOrNull("org.embeddedt.embeddium.api.OptionGUIConstructionEvent") != null)
 			new NolijiumEmbeddiumConfigScreen();
 	}
 	
-	private Screen configScreenFactory(Minecraft minecraft, Screen parent) {
+	private static Screen configScreenFactory(Object ignored, Screen parent) {
 		return new Screen(Component.empty()) {
 			@Override
 			protected void init() {
@@ -94,12 +91,12 @@ public class NolijiumMod implements INolijiumSubImplementation {
 	}
 	
 	private void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
-		for (var keyBind : NolijiumNeoForgeKeyBind.values()) {
+		for (var keyBind : NolijiumKeyBind.values()) {
 			event.register(keyBind.value);
 		}
 	}
 	
-	//? if >=1.21.1 {
+	//? if >=21.1 {
 	private void onRegisterGuiLayers(RegisterGuiLayersEvent event) {
 		event.registerAboveAll(ResourceLocation.fromNamespaceAndPath(MOD_ID, "hud"), new NolijiumHUDRenderLayer());
 	}
@@ -178,7 +175,13 @@ public class NolijiumMod implements INolijiumSubImplementation {
 	
 	private void renderLevelStage(RenderLevelStageEvent event) {
 		if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_CUTOUT_BLOCKS) {
-			NolijiumLightOverlayRenderer.render(event.getCamera(), event.getPoseStack(), RenderType.cutout());
+			NolijiumLightOverlayRenderer.render(
+				event.getCamera(),
+				//? if >=21.1 {
+				event.getModelViewMatrix(),
+				//? } else
+				//event.getPoseStack(), 
+				RenderType.cutout());
 		} else if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
 			NolijiumCommon.renderAfterTranslucentBlocks(event.getPoseStack());
 		}
@@ -190,7 +193,7 @@ public class NolijiumMod implements INolijiumSubImplementation {
 		}
 	}
 	
-	//? if >=1.21.1 {
+	//? if >=21.1 {
 	private void onTick(ClientTickEvent.Pre event) {
 		onClientStartTick();
 	}
@@ -203,15 +206,15 @@ public class NolijiumMod implements INolijiumSubImplementation {
 	*///? }
 	
 	private void onClientStartTick() {
-		if (NolijiumNeoForgeKeyBind.TOGGLE_LIGHT_LEVEL_OVERLAY.wasPressed()) {
-			NolijiumNeoForgeKeyBind.TOGGLE_LIGHT_LEVEL_OVERLAY.flush();
+		if (NolijiumKeyBind.TOGGLE_LIGHT_LEVEL_OVERLAY.wasPressed()) {
+			NolijiumKeyBind.TOGGLE_LIGHT_LEVEL_OVERLAY.flush();
 			Nolijium.config.modify(config -> config.enableLightLevelOverlay = !config.enableLightLevelOverlay);
 		}
 	}
 	
 	@Override
 	public String getClickActionName(ClickEvent.Action action) {
-		//? if >=1.21.1 {
+		//? if >=21.1 {
 		return action.getSerializedName();
 		//? } else {
 		/*return action.getName();
@@ -220,7 +223,7 @@ public class NolijiumMod implements INolijiumSubImplementation {
 	
 	@Override
 	public ComponentContents getEmptyComponentContents() {
-		//? if >=1.21.1 {
+		//? if >=21.1 {
 		return PlainTextContents.LiteralContents.EMPTY;
 		//? } else {
 		/*return ComponentContents.EMPTY;
@@ -228,13 +231,8 @@ public class NolijiumMod implements INolijiumSubImplementation {
 	}
 	
 	@Override
-	public boolean supportsLightLevelOverlay() {
-		return true;
-	}
-	
-	@Override
 	public void addLineVertex(PoseStack.Pose pose, VertexConsumer consumer, float x, float y, float z, int color, float nx, float ny, float nz) {
-		//? if >=1.21.1 {
+		//? if >=21.1 {
 		consumer.addVertex(pose, x, y, z).setColor(color).setNormal(pose, nx, ny, nz);
 		//? } else {
 		/*consumer.vertex(pose.pose(), x, y, z).color(color).normal(pose.normal(), nx, ny, nz).endVertex();
@@ -243,7 +241,7 @@ public class NolijiumMod implements INolijiumSubImplementation {
 	
 	@Override
 	public void addLineVertex(VertexConsumer consumer, float x, float y, float z, int color, float nx, float ny, float nz) {
-		//? if >=1.21.1 {
+		//? if >=21.1 {
 		consumer.addVertex(x, y, z).setColor(color).setNormal(nx, ny, nz);
 		 //? } else {
 		/*consumer.vertex(x, y, z).color(color).normal(nx, ny, nz).endVertex();

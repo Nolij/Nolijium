@@ -1,4 +1,4 @@
-package dev.nolij.nolijium.mixin.common;
+package dev.nolij.nolijium.mixin;
 
 import dev.nolij.nolijium.impl.common.INolijiumSubImplementation;
 import dev.nolij.nolijium.impl.common.NolijiumCommon;
@@ -28,13 +28,13 @@ public class LevelLightEngineMixin {
 	
 	@Inject(method = "checkBlock", at = @At("HEAD"), cancellable = true)
 	public void nolijium$checkBlock$HEAD(BlockPos blockPos, CallbackInfo ci) {
-		if (Nolijium.config.enableGamma && !(NOLIJIUM_IMPL.supportsLightLevelOverlay() && Nolijium.config.enableLightLevelOverlay) && levelHeightAccessor instanceof ClientLevel)
+		if (Nolijium.config.enableGamma && !Nolijium.config.enableLightLevelOverlay && levelHeightAccessor instanceof ClientLevel)
 			ci.cancel();
 	}
 	
 	@Inject(method = "runLightUpdates", at = @At("HEAD"), cancellable = true)
 	public void nolijium$runLightUpdates$HEAD(CallbackInfoReturnable<Integer> cir) {
-		if (Nolijium.config.enableGamma && !(NOLIJIUM_IMPL.supportsLightLevelOverlay() && Nolijium.config.enableLightLevelOverlay) && levelHeightAccessor instanceof ClientLevel)
+		if (Nolijium.config.enableGamma && !Nolijium.config.enableLightLevelOverlay && levelHeightAccessor instanceof ClientLevel)
 			cir.setReturnValue(0);
 	}
 	

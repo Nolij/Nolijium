@@ -17,7 +17,7 @@ ${mod_description}
 [[dependencies.nolijium]]
 modId="forge"
 mandatory=true
-versionRange="${lexforge_range}"
+versionRange="${mod_loader_range}"
 ordering="NONE"
 side="CLIENT"
 

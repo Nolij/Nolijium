@@ -198,7 +198,7 @@ public class NolijiumLightOverlayRenderer {
 	 * @param restoreType the render type to restore if rendering anything   
 	 */
 	public static void render(Camera camera,
-							  //? if >=1.21.1 {
+							  //? if >=21.1 {
 	                          Matrix4f modelViewMatrix,
 							  //? } else
 	                          //PoseStack poseStack,
@@ -220,7 +220,7 @@ public class NolijiumLightOverlayRenderer {
 		
 		// Check if we can reuse the previously generated GPU vertex buffer
 		if (bufferNeedsUpdate(camera)) {
-			//? if >=1.21.1 {
+			//? if >=21.1 {
 			var bufferBuilder = Tesselator.getInstance().begin(LIGHT_OVERLAY.mode(), LIGHT_OVERLAY.format());
 			//? } else {
 			/*var bufferBuilder = Tesselator.getInstance().getBuilder();
@@ -262,7 +262,7 @@ public class NolijiumLightOverlayRenderer {
 				currentLightOverlayBuffer.close();
 			}
 			
-			//? if >=1.21.1 {
+			//? if >=21.1 {
 			com.mojang.blaze3d.vertex.MeshData data = bufferBuilder.build();
 			//? } else {
 			/*var data = bufferBuilder.end();
@@ -284,7 +284,7 @@ public class NolijiumLightOverlayRenderer {
 			RenderSystem.lineWidth(Math.max(2.5F, (float)Minecraft.getInstance().getWindow().getWidth() / 1920.0F * 2.5F));
 			var camPos = camera.getPosition();
 			Vector3f cameraOffset = new Vector3f((float) (lastCameraPosition.getX() - camPos.x), (float) (lastCameraPosition.getY() - camPos.y), (float) (lastCameraPosition.getZ() - camPos.z));
-			//? if >=1.21.1 {
+			//? if >=21.1 {
 			Matrix4fStack matrix4fstack = RenderSystem.getModelViewStack();
 			matrix4fstack.pushMatrix();
 			matrix4fstack.mul(modelViewMatrix);
@@ -295,14 +295,14 @@ public class NolijiumLightOverlayRenderer {
 			poseStack.translate(cameraOffset.x(), cameraOffset.y(), cameraOffset.z());
 			*///? }
 			currentLightOverlayBuffer.buffer.bind();
-			//? if >=1.21.1 {
+			//? if >=21.1 {
 			currentLightOverlayBuffer.buffer.drawWithShader(RenderSystem.getModelViewMatrix(), RenderSystem.getProjectionMatrix(), RenderSystem.getShader());
 			//? } else {
 			/*currentLightOverlayBuffer.buffer.drawWithShader(poseStack.last().pose(), RenderSystem.getProjectionMatrix(), RenderSystem.getShader());
 			*///? }
 			VertexBuffer.unbind();
 			LIGHT_OVERLAY.clearRenderState();
-			//? if >=1.21.1 {
+			//? if >=21.1 {
 			matrix4fstack.popMatrix();
 			RenderSystem.applyModelViewMatrix();
 			//? } else {

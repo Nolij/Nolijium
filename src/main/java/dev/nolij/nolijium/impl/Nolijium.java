@@ -2,11 +2,13 @@ package dev.nolij.nolijium.impl;
 
 import dev.nolij.libnolij.chroma.IChromaProvider;
 import dev.nolij.nolijium.impl.config.NolijiumConfigImpl;
+import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
+import java.util.Set;
 
 import static dev.nolij.nolijium.impl.NolijiumConstants.*;
 
@@ -41,6 +43,8 @@ public class Nolijium {
 	public static @Nullable IChromaProvider tooltipBorderChromaProvider = null;
 	public static @Nullable IChromaProvider tooltipBackgroundChromaProvider = null;
 	public static @Nullable IChromaProvider hudChromaProvider = null;
+	
+	public static Set<ResourceLocation> blockedParticleTypeIDs = Set.of();
 	
 	public static int transformBlockOutlineColour(double timestamp, int colour) {
 		if (blockChromaProvider != null)

@@ -1,5 +1,5 @@
 
-//? if >=1.21.1 {
+//? if >=21.1 {
 package dev.nolij.nolijium.impl;
 
 import dev.nolij.nolijium.impl.common.NolijiumHUD;

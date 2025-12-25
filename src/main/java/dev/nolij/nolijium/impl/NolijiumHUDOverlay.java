@@ -1,6 +1,6 @@
 package dev.nolij.nolijium.impl;
 
-//? if <1.21.1 {
+//? if <21.1 {
 /*import dev.nolij.nolijium.impl.common.NolijiumHUD;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;

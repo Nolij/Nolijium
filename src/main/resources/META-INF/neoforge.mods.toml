@@ -20,7 +20,7 @@ ${mod_description}
 [[dependencies.nolijium]]
 modId="neoforge"
 type="required"
-versionRange="${neoforge_range}"
+versionRange="${mod_loader_range}"
 ordering="NONE"
 side="CLIENT"
 

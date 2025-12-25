@@ -1,4 +1,4 @@
-package dev.nolij.nolijium.mixin.common;
+package dev.nolij.nolijium.mixin;
 
 import dev.nolij.nolijium.impl.Nolijium;
 import net.minecraft.client.Minecraft;

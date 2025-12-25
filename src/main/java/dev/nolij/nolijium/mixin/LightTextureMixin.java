@@ -1,4 +1,4 @@
-package dev.nolij.nolijium.mixin.common;
+package dev.nolij.nolijium.mixin;
 
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;

@@ -11,7 +11,7 @@ public class ChatComponentMixin {
 	
 	@ModifyConstant(
 		method = {
-			//? if >=1.21.1 {
+			//? if >=21.1 {
 			"addMessageToDisplayQueue", 
 			"addMessageToQueue",
 			"addRecentChat",

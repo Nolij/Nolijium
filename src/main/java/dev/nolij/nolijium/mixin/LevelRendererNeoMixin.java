@@ -1,10 +1,13 @@
 package dev.nolij.nolijium.mixin;
 
-import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+//? if >=21.1 {
 import com.llamalad7.mixinextras.sugar.Local;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
+//?} else {
+/*import com.mojang.blaze3d.vertex.PoseStack;
+*///?}
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+import com.mojang.blaze3d.vertex.BufferBuilder;
 import dev.nolij.nolijium.impl.Nolijium;
 import dev.nolij.nolijium.impl.common.NolijiumLightOverlayRenderer;
 import dev.nolij.nolijium.impl.BlockOutlineMultiBufferSourceWrapper;
@@ -29,7 +32,7 @@ public class LevelRendererNeoMixin {
 		NolijiumLightOverlayRenderer.invalidateSection(x, y - 1, z);
 	}
 	
-	//? if >=1.21.1 {
+	//? if >=21.1 {
 	@WrapWithCondition(
 		method = "renderLevel",
 		at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;renderSky(Lorg/joml/Matrix4f;Lorg/joml/Matrix4f;FLnet/minecraft/client/Camera;ZLjava/lang/Runnable;)V")
@@ -46,7 +49,7 @@ public class LevelRendererNeoMixin {
 			target = "Lcom/mojang/blaze3d/vertex/BufferBuilder;buildOrThrow()Lcom/mojang/blaze3d/vertex/MeshData;"
 		)
 	)
-	public void nolijium$drawStars$buildOrThrow(Tesselator p_350542_, CallbackInfoReturnable<MeshData> cir, @Local BufferBuilder bufferBuilder) {
+	public void nolijium$drawStars$buildOrThrow(Tesselator p_350542_, CallbackInfoReturnable<?> cir, @Local BufferBuilder bufferBuilder) {
 		for (int i = 0; i < 4; i++)
 			bufferBuilder.addVertex(0, 0, 0);
 	}
