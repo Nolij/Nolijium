@@ -99,6 +99,7 @@ modDevExtension.apply {
 	runs {
 		create("client") {
 			client()
+			jvmArgument("-Dnolijium.configPathOverride=${rootProject.file("nolijium.json5").absolutePath}")
 		}
 	}
 	
@@ -126,6 +127,7 @@ repositories {
 			maven("https://maven.taumc.org/releases")
 		}
 		filter {
+			@Suppress("UnstableApiUsage")
 			includeGroupAndSubgroups("dev.nolij")
 		}
 	}
@@ -142,11 +144,13 @@ dependencies {
 	shade("dev.nolij:libnolij:${"libnolij_version"()}")
 	
 	if (modLoader == ModLoader.LEXFORGE) {
+		val jarJar by configurations.getting
+		
 		annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
 		compileOnly("io.github.llamalad7:mixinextras-common:${"mixinextras_version"()}")
 		annotationProcessor("io.github.llamalad7:mixinextras-common:${"mixinextras_version"()}")
 		implementation("io.github.llamalad7:mixinextras-forge:${"mixinextras_version"()}")
-		"jarJar"("io.github.llamalad7:mixinextras-forge:${"mixinextras_version"()}")
+		jarJar("io.github.llamalad7:mixinextras-forge:${"mixinextras_version"()}")
 	}
 	
 	val embeddiumConfig = configurations.named(if (modLoader == ModLoader.LEXFORGE) { "compileOnly" } else { "implementation" })
@@ -154,7 +158,6 @@ dependencies {
 	embeddiumConfig("org.embeddedt:embeddium-${mcVersion.mojangName}:${"embeddium_version"()}") {
 		isTransitive = false
 	}
-	//shade("io.github.llamalad7:mixinextras-common:${"mixinextras_version"()}")
 }
 
 if (modLoader == ModLoader.LEXFORGE) {

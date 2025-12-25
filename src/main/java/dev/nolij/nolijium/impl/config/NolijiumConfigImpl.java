@@ -605,8 +605,8 @@ public class NolijiumConfigImpl implements Cloneable {
 	
 	@ZsonField(comment = """
 		For modpack developers. Functionally equivalent to `chromaBlockShapeOverlay`, but cannot be configured via UI.
-		Set to `0` to disable.
-		DEFAULT: `0`""")
+		Set to `0.0` to disable.
+		DEFAULT: `0.0`""")
 	public float blockShapeOverlayOverride = 0F;
 	//endregion
 	

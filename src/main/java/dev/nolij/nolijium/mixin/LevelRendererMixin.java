@@ -6,7 +6,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.nolij.libnolij.util.ColourUtil;
-import dev.nolij.nolijium.impl.common.NolijiumCommon;
 import dev.nolij.nolijium.impl.Nolijium;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
@@ -38,8 +37,8 @@ public class LevelRendererMixin {
 		if (Nolijium.blockChromaProvider != null && (
 			Nolijium.config.blockShapeOverlayOverride > 0 || 
 			Nolijium.config.chromaBlockShapeOverlay > 0)) {
-			NolijiumCommon.focusedBlockPosition = new Vec3(x, y, z);
-			NolijiumCommon.focusedBlockShape = shape;
+			Nolijium.focusedBlockPosition = new Vec3(x, y, z);
+			Nolijium.focusedBlockShape = shape;
 		}
 		
 		original.call(poseStack, vertexConsumer, shape, x, y, z, red, green, blue, alpha);

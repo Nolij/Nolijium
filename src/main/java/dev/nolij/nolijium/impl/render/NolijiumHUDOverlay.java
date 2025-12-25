@@ -1,8 +1,7 @@
-package dev.nolij.nolijium.impl;
+package dev.nolij.nolijium.impl.render;
 
 //? if <21.1 {
-/*import dev.nolij.nolijium.impl.common.NolijiumHUD;
-import net.minecraft.client.Minecraft;
+/*import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
@@ -18,4 +17,4 @@ public class NolijiumHUDOverlay extends NolijiumHUD implements IGuiOverlay {
 		this.render(guiGraphics);
 	}
 }
-*///? }
+*///?}

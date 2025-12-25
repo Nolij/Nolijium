@@ -1,4 +1,4 @@
-package dev.nolij.nolijium.impl.common;
+package dev.nolij.nolijium.impl.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
@@ -8,6 +8,7 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexBuffer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import dev.nolij.nolijium.impl.Nolijium;
+import dev.nolij.nolijium.impl.util.PlatformUtil;
 import it.unimi.dsi.fastutil.bytes.ByteArrayList;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
@@ -39,7 +40,6 @@ import java.util.Objects;
  * The core of the light overlay renderer.
  */
 public class NolijiumLightOverlayRenderer {
-	private static final INolijiumSubImplementation NOLIJIUM_IMPL = Objects.requireNonNull(NolijiumCommon.getImplementation());
 	
 	/**
 	 * The radius of blocks around the camera that a light overlay can be shown on.
@@ -397,10 +397,10 @@ public class NolijiumLightOverlayRenderer {
 		}
 		
 		// New
-		NOLIJIUM_IMPL.addLineVertex(vConsumer, xOff + 0, yOff + 0, zOff + 0, color, OVERLAY_NORMAL_MAGIC_VALUE, 0, OVERLAY_NORMAL_MAGIC_VALUE);
-		NOLIJIUM_IMPL.addLineVertex(vConsumer, xOff + 1, yOff + 0, zOff + 1, color, OVERLAY_NORMAL_MAGIC_VALUE, 0, OVERLAY_NORMAL_MAGIC_VALUE);
-		NOLIJIUM_IMPL.addLineVertex(vConsumer, xOff + 1, yOff + 0, zOff + 0, color, -OVERLAY_NORMAL_MAGIC_VALUE, 0, OVERLAY_NORMAL_MAGIC_VALUE);
-		NOLIJIUM_IMPL.addLineVertex(vConsumer, xOff + 0, yOff + 0, zOff + 1, color, -OVERLAY_NORMAL_MAGIC_VALUE, 0, OVERLAY_NORMAL_MAGIC_VALUE);
+		PlatformUtil.addLineVertex(vConsumer, xOff + 0, yOff + 0, zOff + 0, color, OVERLAY_NORMAL_MAGIC_VALUE, 0, OVERLAY_NORMAL_MAGIC_VALUE);
+		PlatformUtil.addLineVertex(vConsumer, xOff + 1, yOff + 0, zOff + 1, color, OVERLAY_NORMAL_MAGIC_VALUE, 0, OVERLAY_NORMAL_MAGIC_VALUE);
+		PlatformUtil.addLineVertex(vConsumer, xOff + 1, yOff + 0, zOff + 0, color, -OVERLAY_NORMAL_MAGIC_VALUE, 0, OVERLAY_NORMAL_MAGIC_VALUE);
+		PlatformUtil.addLineVertex(vConsumer, xOff + 0, yOff + 0, zOff + 1, color, -OVERLAY_NORMAL_MAGIC_VALUE, 0, OVERLAY_NORMAL_MAGIC_VALUE);
 	}
 	
 	/**

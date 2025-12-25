@@ -1,8 +1,7 @@
 
 //? if >=21.1 {
-package dev.nolij.nolijium.impl;
+package dev.nolij.nolijium.impl.render;
 
-import dev.nolij.nolijium.impl.common.NolijiumHUD;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;

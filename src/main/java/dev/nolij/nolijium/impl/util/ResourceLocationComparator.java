@@ -1,4 +1,4 @@
-package dev.nolij.nolijium.impl.common;
+package dev.nolij.nolijium.impl.util;
 
 
 import net.minecraft.resources.ResourceLocation;

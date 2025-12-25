@@ -9,7 +9,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.world.level.Level;
 *///?}
 import dev.nolij.libnolij.util.ColourUtil;
-import dev.nolij.nolijium.impl.common.NolijiumCommon;
 import dev.nolij.nolijium.impl.Nolijium;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.entity.LivingEntity;
@@ -65,7 +64,7 @@ public class LivingEntityMixin {
 			color.z());
 		
 		// Avoid allocation + possible overwrite of custom ColorParticleOption subclass if color hasn't changed
-		int newColor = NolijiumCommon.oldPotionColours.getOrDefault(colour, colour);
+		int newColor = Nolijium.oldPotionColours.getOrDefault(colour, colour);
 		
 		if (colour == newColor) {
 			return false;

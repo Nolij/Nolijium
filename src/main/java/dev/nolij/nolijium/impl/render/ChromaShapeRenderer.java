@@ -1,10 +1,11 @@
-package dev.nolij.nolijium.impl.common;
+package dev.nolij.nolijium.impl.render;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import dev.nolij.nolijium.impl.Nolijium;
+import dev.nolij.nolijium.impl.util.PlatformUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -13,11 +14,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import java.util.Objects;
-
 public class ChromaShapeRenderer {
-	
-	private static final INolijiumSubImplementation NOLIJIUM_IMPL = Objects.requireNonNull(NolijiumCommon.getImplementation());
 	
 	private static final RenderType CHROMA_OVERLAY = RenderType.create(
 		"nolijium_chroma_overlay", 
@@ -53,8 +50,8 @@ public class ChromaShapeRenderer {
 			nx /= norm;
 			ny /= norm;
 			nz /= norm;
-			NOLIJIUM_IMPL.addLineVertex(pose, lineConsumer, (float) x1, (float) y1, (float) z1, color, nx, ny, nz);
-			NOLIJIUM_IMPL.addLineVertex(pose, lineConsumer, (float) x2, (float) y2, (float) z2, color, nx, ny, nz);
+			PlatformUtil.addLineVertex(pose, lineConsumer, (float) x1, (float) y1, (float) z1, color, nx, ny, nz);
+			PlatformUtil.addLineVertex(pose, lineConsumer, (float) x2, (float) y2, (float) z2, color, nx, ny, nz);
 		});
 	}
 	

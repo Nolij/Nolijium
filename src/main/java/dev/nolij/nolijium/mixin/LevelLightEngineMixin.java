@@ -1,7 +1,5 @@
 package dev.nolij.nolijium.mixin;
 
-import dev.nolij.nolijium.impl.common.INolijiumSubImplementation;
-import dev.nolij.nolijium.impl.common.NolijiumCommon;
 import dev.nolij.nolijium.impl.Nolijium;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
@@ -10,19 +8,13 @@ import net.minecraft.world.level.lighting.LevelLightEngine;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Objects;
-
 @Mixin(LevelLightEngine.class)
-public class LevelLightEngineMixin {
-	
-	@Unique
-	private static final INolijiumSubImplementation NOLIJIUM_IMPL = Objects.requireNonNull(NolijiumCommon.getImplementation()); 
+public class LevelLightEngineMixin { 
 	
 	@Shadow @Final protected LevelHeightAccessor levelHeightAccessor;
 	

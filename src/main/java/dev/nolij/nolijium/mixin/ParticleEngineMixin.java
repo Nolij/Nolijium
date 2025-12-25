@@ -2,7 +2,6 @@ package dev.nolij.nolijium.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import dev.nolij.nolijium.impl.common.NolijiumCommon;
 import dev.nolij.nolijium.impl.Nolijium;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleEngine;
@@ -32,9 +31,9 @@ public class ParticleEngineMixin {
 		if (Nolijium.config.hideParticles)
 			return null;
 		
-		if (!NolijiumCommon.blockedParticleTypeIDs.isEmpty()) {
+		if (!Nolijium.blockedParticleTypeIDs.isEmpty()) {
 			final var key = BuiltInRegistries.PARTICLE_TYPE.getKey(particleOptions.getType());
-			if (key != null && NolijiumCommon.blockedParticleTypeIDs.contains(key))
+			if (key != null && Nolijium.blockedParticleTypeIDs.contains(key))
 				return null;
 		}
 		
@@ -47,7 +46,7 @@ public class ParticleEngineMixin {
 	@Inject(method = {"crack", "destroy"}, at = @At("HEAD"), cancellable = true)
 	public void nolijium$crack_destroy$HEAD(CallbackInfo ci) {
 		if (Nolijium.config.hideParticles ||
-			NolijiumCommon.blockedParticleTypeIDs.contains(nolijium$blockKey))
+			Nolijium.blockedParticleTypeIDs.contains(nolijium$blockKey))
 			ci.cancel();
 	}
 	

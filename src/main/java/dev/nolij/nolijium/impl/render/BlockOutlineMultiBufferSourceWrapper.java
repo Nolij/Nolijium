@@ -1,7 +1,8 @@
-package dev.nolij.nolijium.impl;
+package dev.nolij.nolijium.impl.render;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.nolij.libnolij.util.ColourUtil;
+import dev.nolij.nolijium.impl.Nolijium;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.neoforged.neoforge.client.model.pipeline.VertexConsumerWrapper;
