@@ -69,7 +69,7 @@ tasks.named<ProcessResources>("processResources") {
 		else -> throw AssertionError()
 	})
 	
-	filesMatching(listOf("fabric.mod.json", "META-INF/neoforge.mods.toml", "META-INF/mods.toml")) {
+	filesMatching(listOf("META-INF/neoforge.mods.toml", "META-INF/mods.toml")) {
 		expand(props)
 	}
 }
