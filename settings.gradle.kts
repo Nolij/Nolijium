@@ -20,6 +20,7 @@ pluginManagement {
 		id("com.github.gmazzo.buildconfig") version(property("buildconfig_version"))
 		id("net.neoforged.moddev") version(property("neogradle_version"))
 		id("net.neoforged.moddev.legacyforge") version(property("neogradle_version"))
+		id("xyz.wagyourtail.jvmdowngrader") version(property("jvmdg_version"))
 	}
 }
 

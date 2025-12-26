@@ -11,6 +11,7 @@ plugins {
 	id("org.taumc.gradle.publishing")
 	id("net.neoforged.moddev") apply(false)
 	id("net.neoforged.moddev.legacyforge") apply(false)
+	id("xyz.wagyourtail.jvmdowngrader")
 }
 
 operator fun String.invoke(): String = project.properties[this] as? String ?: error("Property $this not found")
@@ -19,8 +20,13 @@ val mcVersion = MinecraftVersion.get("minecraft_version"()) ?: error("Invalid `m
 val modLoader = ModLoader.get("mod_loader"()) ?: error("Invalid `mod_loader`!")
 val javaVersion = JavaVersion.valueOf("java_version"())
 
+project.group = "maven_group"()
 project.version = tau.versioning.subVersion("mc.${mcVersion.conciseName}")
 println("Nolijium Version: ${tau.versioning.version}")
+
+base {
+	archivesName = "mod_id"()
+}
 
 buildConfig {
 	className("NolijiumConstants")
@@ -115,7 +121,7 @@ tasks.named("createMinecraftArtifacts") {
 	dependsOn("stonecutterGenerate")
 }
 
-val shade: Configuration by configurations.creating {
+val lib: Configuration by configurations.creating {
 	listOf("compileClasspath", "runtimeClasspath", "additionalRuntimeClasspath")
 		.map { configurations.named(it).get() }.forEach { it.extendsFrom(this) }
 }
@@ -140,13 +146,15 @@ dependencies {
 	testCompileOnly("systems.manifold:manifold-rt:${"manifold_version"()}")
 	testAnnotationProcessor("systems.manifold:manifold-exceptions:${"manifold_version"()}")
 	
-	shade("dev.nolij:zson:${"zson_version"()}")
-	shade("dev.nolij:libnolij:${"libnolij_version"()}")
+	val jarJar by configurations.getting
+	
+	listOf("dev.nolij:zson:${"zson_version"()}", "dev.nolij:libnolij:${"libnolij_version"()}").forEach { 
+		lib(it)
+		jarJar(it)
+	}
 	
 	if (modLoader == ModLoader.LEXFORGE) {
-		val jarJar by configurations.getting
-		
-		annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
+		annotationProcessor("org.spongepowered:mixin:${"mixin_version"()}:processor")
 		compileOnly("io.github.llamalad7:mixinextras-common:${"mixinextras_version"()}")
 		annotationProcessor("io.github.llamalad7:mixinextras-common:${"mixinextras_version"()}")
 		implementation("io.github.llamalad7:mixinextras-forge:${"mixinextras_version"()}")
@@ -164,6 +172,53 @@ if (modLoader == ModLoader.LEXFORGE) {
 	val mixin = project.extensions.getByType(MixinExtension::class)
 	mixin.add(sourceSets.main.get(), "nolijium-refmap.json")
 	mixin.config("nolijium.mixins.json")
+}
+
+jvmdg.defaultShadeTask {
+	enabled = false
+}
+
+val outputJar = if (javaVersion < JavaVersion.current()) {
+	tasks.jar {
+		archiveClassifier = "reobf"
+	}
+	
+	jvmdg.defaultTask {
+		dependsOn(tasks.jar)
+		
+		inputFile = provider { tasks.jar.get().archiveFile.get() }
+		downgradeTo = javaVersion
+		
+		archiveClassifier = ""
+	}
+	
+	jvmdg.defaultTask
+} else {
+	tasks.jar
+}
+
+outputJar {
+	from(rootProject.file("LICENSE")) {
+		rename { "${it}_${"mod_id"()}" }
+	}
+}
+
+val sourcesJar by tasks.registering(Jar::class) {
+	group = "build"
+
+	archiveClassifier = "sources"
+
+	from(rootProject.file("LICENSE")) {
+		rename { "${it}_${"mod_id"()}" }
+	}
+	
+	project.sourceSets.forEach { 
+		from(it.allSource) { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
+	}
+}
+
+tasks.assemble {
+	dependsOn(outputJar, sourcesJar)
 }
 
 stonecutter {
