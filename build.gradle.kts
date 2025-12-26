@@ -3,7 +3,10 @@ import net.neoforged.moddevgradle.dsl.ModDevExtension
 import net.neoforged.moddevgradle.dsl.NeoForgeExtension
 import net.neoforged.moddevgradle.legacyforge.dsl.MixinExtension
 import org.taumc.gradle.minecraft.MinecraftVersion
+import org.taumc.gradle.minecraft.ModEnvironment
 import org.taumc.gradle.minecraft.ModLoader
+import org.taumc.gradle.publishing.api.artifact.Relation
+import org.taumc.gradle.publishing.publishing
 
 plugins {
 	id("com.github.gmazzo.buildconfig")
@@ -12,6 +15,7 @@ plugins {
 	id("net.neoforged.moddev") apply(false)
 	id("net.neoforged.moddev.legacyforge") apply(false)
 	id("xyz.wagyourtail.jvmdowngrader")
+	`maven-publish`
 }
 
 operator fun String.invoke(): String = project.properties[this] as? String ?: error("Property $this not found")
@@ -234,4 +238,33 @@ stonecutter {
 		replace("me.jellysquid.mods.sodium.client.gui.options.control.", "org.embeddedt.embeddium.api.options.control.")
 		replace("me.jellysquid.mods.sodium.client.gui.options.", "org.embeddedt.embeddium.api.options.structure.")
 	}
+}
+
+publishing {
+	repositories {
+		if (!System.getenv("local_maven_url").isNullOrEmpty())
+			maven(System.getenv("local_maven_url"))
+	}
+
+	publications {
+		create<MavenPublication>("mod_id"()) {
+			artifact(outputJar)
+			artifact(sourcesJar)
+		}
+	}
+}
+
+rootProject.tau.publishing.modArtifact("${modLoader.displayName} ${mcVersion.conciseName}") {
+	files(provider { outputJar.get().archiveFile }, provider { sourcesJar.get().archiveFile })
+
+	version = tau.versioning.version
+
+	minecraftVersionRange = mcVersion.mojangName
+	javaVersions.add(javaVersion)
+
+	environment = ModEnvironment.CLIENT_ONLY
+	modLoaders.add(modLoader)
+
+	relations.add(Relation(id = "zume", type = Relation.Type.INTEGRATES_WITH))
+	relations.add(Relation(id = "embeddium", type = Relation.Type.INTEGRATES_WITH))
 }
