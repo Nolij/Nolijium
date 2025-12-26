@@ -182,6 +182,13 @@ jvmdg.defaultShadeTask {
 	enabled = false
 }
 
+tasks.withType<AbstractArchiveTask>().configureEach {
+	isPreserveFileTimestamps = false
+	isReproducibleFileOrder = true
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	includeEmptyDirs = false
+}
+
 val outputJar = if (javaVersion < JavaVersion.current()) {
 	tasks.jar {
 		archiveClassifier = "reobf"
